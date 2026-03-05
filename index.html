@@ -2,6 +2,17 @@
 <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
 <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
+import{getFirestore,collection,doc,setDoc,onSnapshot,deleteDoc,getDocs}from"https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
+const firebaseConfig={apiKey:"AIzaSyAhPw4zHR364DBbVJKM4hvNKsO-nQ1YMhk",authDomain:"usala-suite.firebaseapp.com",projectId:"usala-suite",storageBucket:"usala-suite.firebasestorage.app",messagingSenderId:"977792381465",appId:"1:977792381465:web:b0e0515836c1971e6d7088"};
+const app=initializeApp(firebaseConfig);
+const db=getFirestore(app);
+window._db=db;
+window._fs={collection,doc,setDoc,onSnapshot,deleteDoc,getDocs};
+window._fbReady=true;
+window.dispatchEvent(new Event("fbready"));
+</script>
 <style>*{margin:0;padding:0;box-sizing:border-box}html,body,#root{height:100%;background:#050812}body{overscroll-behavior:none}::-webkit-scrollbar{width:0}</style>
 </head><body><div id="root"></div><script type="text/babel">
 const{useState,useRef,useEffect,useCallback}=React;
@@ -22,28 +33,76 @@ const G={
 };
 
 // ── DB ─────────────────────────────────────────────────────
+// ── FIREBASE SYNC ──────────────────────────────────────────
+const STORE={productos:[],ventas:[],colaboradores:[],proveedores:[],gastos:[],entradas:[],users:{},brand:{name:"USALA",sub:"SUITE NEGOCIOS",accent:"#00E5A0",accent2:"#4FC3F7",version:"1.0.0",buildDate:"2026-03-03"}};
+const LISTENERS=[];
+function notifyAll(){LISTENERS.forEach(fn=>fn());}
+function useStore(keys){
+  const[,forceUpdate]=useState(0);
+  useEffect(()=>{
+    const fn=()=>forceUpdate(n=>n+1);
+    LISTENERS.push(fn);
+    return()=>{const i=LISTENERS.indexOf(fn);if(i>-1)LISTENERS.splice(i,1);};
+  },[]);
+}
+async function fbSave(col,id,data){
+  try{
+    if(window._db&&window._fs){
+      await window._fs.setDoc(window._fs.doc(window._db,col,id),{data:JSON.stringify(data),ts:Date.now()});
+    }
+  }catch(e){console.warn("FB save error",e);}
+  localStorage.setItem("sn_"+col,JSON.stringify(data));
+}
+async function fbSaveItem(col,item){
+  try{
+    if(window._db&&window._fs){
+      await window._fs.setDoc(window._fs.doc(window._db,col,item.id||col),{...item,ts:Date.now()});
+    }
+  }catch(e){console.warn("FB save error",e);}
+}
+function setupListeners(){
+  if(!window._db||!window._fs)return;
+  const cols=["productos","ventas","colaboradores","proveedores","gastos","entradas"];
+  cols.forEach(col=>{
+    window._fs.onSnapshot(window._fs.collection(window._db,col),snap=>{
+      const items=[];
+      snap.forEach(d=>{const dat=d.data();if(dat.data){try{const parsed=JSON.parse(dat.data);if(Array.isArray(parsed)){items.push(...parsed);}else{STORE[col]=parsed;notifyAll();return;}}catch(e){}}else{items.push({...dat});}});
+      if(items.length>0||snap.size===0){STORE[col]=items;localStorage.setItem("sn_"+col,JSON.stringify(items));notifyAll();}
+    });
+  });
+  // users and brand
+  ["users","brand"].forEach(col=>{
+    window._fs.onSnapshot(window._fs.collection(window._db,col),snap=>{
+      snap.forEach(d=>{
+        const dat=d.data();
+        if(dat.data){try{STORE[col]=JSON.parse(dat.data);localStorage.setItem("sn_"+col,JSON.stringify(STORE[col]));notifyAll();}catch(e){}}
+      });
+    });
+  });
+}
+if(window._fbReady){setupListeners();}else{window.addEventListener("fbready",setupListeners);}
 const DB={
-  get:(k,d)=>{try{return JSON.parse(localStorage.getItem(k))||d;}catch{return d;}},
+  get:(k,d)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch{return d;}},
   set:(k,v)=>localStorage.setItem(k,JSON.stringify(v)),
-  users:()=>DB.get("sn_users",{}),
-  saveUsers:u=>DB.set("sn_users",u),
+  users:()=>STORE.users||DB.get("sn_users",{}),
+  saveUsers:async u=>{STORE.users=u;await fbSave("users","all",u);notifyAll();},
   session:()=>DB.get("sn_session",null),
   saveSession:s=>DB.set("sn_session",s),
   clearSession:()=>localStorage.removeItem("sn_session"),
-  brand:()=>DB.get("sn_brand",{name:"USALA",sub:"SUITE NEGOCIOS",accent:"#00E5A0",accent2:"#4FC3F7",version:"1.0.0",buildDate:"2026-03-03"}),
-  saveBrand:b=>DB.set("sn_brand",b),
-  productos:()=>DB.get("sn_productos",[]),
-  saveProductos:p=>DB.set("sn_productos",p),
-  ventas:()=>DB.get("sn_ventas",[]),
-  saveVentas:v=>DB.set("sn_ventas",v),
-  colaboradores:()=>DB.get("sn_colab",[]),
-  saveColaboradores:c=>DB.set("sn_colab",c),
-  proveedores:()=>DB.get("sn_prov",[]),
-  saveProveedores:p=>DB.set("sn_prov",p),
-  gastos:()=>DB.get("sn_gastos",[]),
-  saveGastos:g=>DB.set("sn_gastos",g),
-  entradas:()=>DB.get("sn_entradas",[]),
-  saveEntradas:e=>DB.set("sn_entradas",e),
+  brand:()=>({...{name:"USALA",sub:"SUITE NEGOCIOS",accent:"#00E5A0",accent2:"#4FC3F7",version:"1.0.0",buildDate:"2026-03-03"},...(STORE.brand||DB.get("sn_brand",{}))}),
+  saveBrand:async b=>{STORE.brand=b;await fbSave("brand","config",b);notifyAll();},
+  productos:()=>STORE.productos.length>0?STORE.productos:DB.get("sn_productos",[]),
+  saveProductos:async p=>{STORE.productos=p;await fbSave("productos","all",p);notifyAll();},
+  ventas:()=>STORE.ventas.length>0?STORE.ventas:DB.get("sn_ventas",[]),
+  saveVentas:async v=>{STORE.ventas=v;await fbSave("ventas","all",v);notifyAll();},
+  colaboradores:()=>STORE.colaboradores.length>0?STORE.colaboradores:DB.get("sn_colab",[]),
+  saveColaboradores:async c=>{STORE.colaboradores=c;await fbSave("colaboradores","all",c);notifyAll();},
+  proveedores:()=>STORE.proveedores.length>0?STORE.proveedores:DB.get("sn_prov",[]),
+  saveProveedores:async p=>{STORE.proveedores=p;await fbSave("proveedores","all",p);notifyAll();},
+  gastos:()=>STORE.gastos.length>0?STORE.gastos:DB.get("sn_gastos",[]),
+  saveGastos:async g=>{STORE.gastos=g;await fbSave("gastos","all",g);notifyAll();},
+  entradas:()=>STORE.entradas.length>0?STORE.entradas:DB.get("sn_entradas",[]),
+  saveEntradas:async e=>{STORE.entradas=e;await fbSave("entradas","all",e);notifyAll();},
 };
 
 // ── HELPERS ────────────────────────────────────────────────
@@ -296,13 +355,14 @@ function Ventas({user}){
   const[pagMethod,setPagMethod]=useState("efectivo");
   const[descuento,setDescuento]=useState("0");
   const[scanner,setScanner]=useState(false);
+  const[busqueda,setBusqueda]=useState("");
   function toast_(m,c){setToast({m,c});setTimeout(()=>setToast(""),3000);}
   function handleScan(codigo){
     setScanner(false);
     const prods=DB.productos();
     const p=prods.find(x=>x.codigo&&x.codigo===codigo);
     if(p){setProd(p.id);setModal(true);toast_(`✓ Producto: ${p.nombre}`);}
-    else{toast_(`⚠ Código no encontrado: ${codigo}`,"#FFCC02");setModal(true);}
+    else{setBusqueda(codigo);setModal(true);toast_(`⚠ Código no registrado — selecciona manualmente`,"#FFCC02");}
   }
   function nuevaVenta(){
     if(!prod||!qty||Number(qty)<1){toast_("⚠ Completa los campos","#ff3d6e");return;}
@@ -385,7 +445,14 @@ function Ventas({user}){
         </Card>)}</>}
     </div>
     {modal&&<Modal title="Nueva Venta" onClose={()=>setModal(false)}>
-      <Sel label="Producto" value={prod} onChange={setProd} options={[{v:"",l:"Seleccionar producto..."},{...DB.productos().map(p=>({v:p.id,l:`${p.nombre} — ${fmt(p.precio)} (stock: ${p.stock})`}))},...DB.productos().map(p=>({v:p.id,l:`${p.nombre} — ${fmt(p.precio)} (stock: ${p.stock})`}))].filter((x,i,a)=>i===0||a.findIndex(y=>y.v===x.v)===i)}/>
+      {(()=>{
+        const allProds=DB.productos();
+        const filteredProds=busqueda?allProds.filter(p=>p.nombre.toLowerCase().includes(busqueda.toLowerCase())||( p.codigo&&p.codigo.includes(busqueda))):allProds;
+        return <>
+          <Inp label="Buscar producto" placeholder="Escribe nombre o código..." value={busqueda} onChange={v=>{setBusqueda(v);setProd("");}} icon="🔍"/>
+          <Sel label="Producto" value={prod} onChange={v=>{setProd(v);}} options={[{v:"",l:filteredProds.length===0?"Sin resultados...":"Seleccionar producto..."},...filteredProds.map(p=>({v:p.id,l:`${p.nombre} — ${fmt(p.precio)} (stock: ${p.stock||0})`}))]}/>
+        </>;
+      })()}
       <Inp label="Cantidad" type="number" value={qty} onChange={setQty}/>
       {user.role==="admin"&&<Sel label="Vendedor" value={vendedorId} onChange={setVendedorId} options={[{v:"",l:"Sin asignar"},...DB.colaboradores().map(c=>({v:c.id,l:c.nombre}))]}/>}
       <Sel label="Método de pago" value={pagMethod} onChange={setPagMethod} options={[{v:"efectivo",l:"💵 Efectivo"},{v:"transferencia",l:"🏦 Transferencia"},{v:"tarjeta",l:"💳 Tarjeta"},{v:"credito",l:"📋 Crédito"}]}/>
@@ -820,6 +887,7 @@ function Entradas(){
   const[toast,setToast]=useState("");
   const[form,setForm]=useState({productoId:"",cantidad:"",costoUnit:"",proveedor:"",fecha:today(),notas:""});
   const[busca,setBusca]=useState("");
+  const[buscaEntrada,setBuscaEntrada]=useState("");
   const[filtro,setFiltro]=useState("mes");
   function toast_(m,c){setToast({m,c});setTimeout(()=>setToast(""),3000);}
   function handleScan(codigo){
@@ -827,10 +895,11 @@ function Entradas(){
     const prods=DB.productos();
     const p=prods.find(x=>x.codigo&&x.codigo===codigo)||prods.find(x=>x.nombre.toLowerCase().includes(codigo.toLowerCase()));
     if(p){
-      setForm(f=>({...f,productoId:p.id,costoUnit:String(p.costo)}));
+      setForm(f=>({...f,productoId:p.id,costoUnit:String(p.costo),proveedor:p.proveedor||""}));
       toast_(`✓ Producto: ${p.nombre}`);
     }else{
-      toast_(`⚠ Código ${codigo} no encontrado. Agrégalo al producto.`,"#FFCC02");
+      setBuscaEntrada(codigo);
+      toast_(`⚠ Código no registrado — selecciona manualmente`,"#FFCC02");
     }
     setModal(true);
   }
@@ -881,7 +950,10 @@ function Entradas(){
     </div>
     {modal&&<Modal title="Nueva Entrada de Inventario" onClose={()=>setModal(false)}>
       <div style={{display:"flex",gap:8,marginBottom:14}}>
-        <div style={{flex:1}}><Sel label="Producto" value={form.productoId} onChange={v=>{setForm(f=>({...f,productoId:v}));const p=productos.find(x=>x.id===v);if(p)setForm(f=>({...f,productoId:v,costoUnit:String(p.costo),proveedor:p.proveedor||""}));}} options={[{v:"",l:"Seleccionar producto..."},...productos.map(p=>({v:p.id,l:`${p.nombre} (stock: ${p.stock||0})`}))]}/></div>
+        <div style={{flex:1}}>
+          <Inp label="Buscar producto" placeholder="Nombre o código..." value={buscaEntrada} onChange={v=>{setBuscaEntrada(v);setForm(f=>({...f,productoId:""}));}} icon="🔍"/>
+          <Sel label="Producto" value={form.productoId} onChange={v=>{setForm(f=>({...f,productoId:v}));const p=productos.find(x=>x.id===v);if(p)setForm(f=>({...f,productoId:v,costoUnit:String(p.costo),proveedor:p.proveedor||""}));}} options={[{v:"",l:(buscaEntrada?productos.filter(p=>p.nombre.toLowerCase().includes(buscaEntrada.toLowerCase())||(p.codigo&&p.codigo.includes(buscaEntrada))):productos).length===0?"Sin resultados...":"Seleccionar..."},...(buscaEntrada?productos.filter(p=>p.nombre.toLowerCase().includes(buscaEntrada.toLowerCase())||(p.codigo&&p.codigo.includes(buscaEntrada))):productos).map(p=>({v:p.id,l:`${p.nombre} (stock: ${p.stock||0})`}))]}/>
+        </div>
         <Btn onClick={()=>setScanner("modal")} color={G.blue} small style={{marginTop:22,height:44}}>📷</Btn>
       </div>
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
