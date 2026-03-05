@@ -296,14 +296,13 @@ function Ventas({user}){
   const[pagMethod,setPagMethod]=useState("efectivo");
   const[descuento,setDescuento]=useState("0");
   const[scanner,setScanner]=useState(false);
-  const[busqueda,setBusqueda]=useState("");
   function toast_(m,c){setToast({m,c});setTimeout(()=>setToast(""),3000);}
   function handleScan(codigo){
     setScanner(false);
     const prods=DB.productos();
     const p=prods.find(x=>x.codigo&&x.codigo===codigo);
     if(p){setProd(p.id);setModal(true);toast_(`✓ Producto: ${p.nombre}`);}
-    else{setBusqueda(codigo);setModal(true);toast_(`⚠ Código no registrado — selecciona manualmente`,"#FFCC02");}
+    else{toast_(`⚠ Código no encontrado: ${codigo}`,"#FFCC02");setModal(true);}
   }
   function nuevaVenta(){
     if(!prod||!qty||Number(qty)<1){toast_("⚠ Completa los campos","#ff3d6e");return;}
@@ -386,14 +385,7 @@ function Ventas({user}){
         </Card>)}</>}
     </div>
     {modal&&<Modal title="Nueva Venta" onClose={()=>setModal(false)}>
-      {(()=>{
-        const allProds=DB.productos();
-        const filteredProds=busqueda?allProds.filter(p=>p.nombre.toLowerCase().includes(busqueda.toLowerCase())||( p.codigo&&p.codigo.includes(busqueda))):allProds;
-        return <>
-          <Inp label="Buscar producto" placeholder="Escribe nombre o código..." value={busqueda} onChange={v=>{setBusqueda(v);setProd("");}} icon="🔍"/>
-          <Sel label="Producto" value={prod} onChange={v=>{setProd(v);}} options={[{v:"",l:filteredProds.length===0?"Sin resultados...":"Seleccionar producto..."},...filteredProds.map(p=>({v:p.id,l:`${p.nombre} — ${fmt(p.precio)} (stock: ${p.stock||0})`}))]}/>
-        </>;
-      })()}
+      <Sel label="Producto" value={prod} onChange={setProd} options={[{v:"",l:"Seleccionar producto..."},{...DB.productos().map(p=>({v:p.id,l:`${p.nombre} — ${fmt(p.precio)} (stock: ${p.stock})`}))},...DB.productos().map(p=>({v:p.id,l:`${p.nombre} — ${fmt(p.precio)} (stock: ${p.stock})`}))].filter((x,i,a)=>i===0||a.findIndex(y=>y.v===x.v)===i)}/>
       <Inp label="Cantidad" type="number" value={qty} onChange={setQty}/>
       {user.role==="admin"&&<Sel label="Vendedor" value={vendedorId} onChange={setVendedorId} options={[{v:"",l:"Sin asignar"},...DB.colaboradores().map(c=>({v:c.id,l:c.nombre}))]}/>}
       <Sel label="Método de pago" value={pagMethod} onChange={setPagMethod} options={[{v:"efectivo",l:"💵 Efectivo"},{v:"transferencia",l:"🏦 Transferencia"},{v:"tarjeta",l:"💳 Tarjeta"},{v:"credito",l:"📋 Crédito"}]}/>
@@ -828,7 +820,6 @@ function Entradas(){
   const[toast,setToast]=useState("");
   const[form,setForm]=useState({productoId:"",cantidad:"",costoUnit:"",proveedor:"",fecha:today(),notas:""});
   const[busca,setBusca]=useState("");
-  const[buscaEntrada,setBuscaEntrada]=useState("");
   const[filtro,setFiltro]=useState("mes");
   function toast_(m,c){setToast({m,c});setTimeout(()=>setToast(""),3000);}
   function handleScan(codigo){
@@ -836,11 +827,10 @@ function Entradas(){
     const prods=DB.productos();
     const p=prods.find(x=>x.codigo&&x.codigo===codigo)||prods.find(x=>x.nombre.toLowerCase().includes(codigo.toLowerCase()));
     if(p){
-      setForm(f=>({...f,productoId:p.id,costoUnit:String(p.costo),proveedor:p.proveedor||""}));
+      setForm(f=>({...f,productoId:p.id,costoUnit:String(p.costo)}));
       toast_(`✓ Producto: ${p.nombre}`);
     }else{
-      setBuscaEntrada(codigo);
-      toast_(`⚠ Código no registrado — selecciona manualmente`,"#FFCC02");
+      toast_(`⚠ Código ${codigo} no encontrado. Agrégalo al producto.`,"#FFCC02");
     }
     setModal(true);
   }
@@ -891,10 +881,7 @@ function Entradas(){
     </div>
     {modal&&<Modal title="Nueva Entrada de Inventario" onClose={()=>setModal(false)}>
       <div style={{display:"flex",gap:8,marginBottom:14}}>
-        <div style={{flex:1}}>
-          <Inp label="Buscar producto" placeholder="Nombre o código..." value={buscaEntrada} onChange={v=>{setBuscaEntrada(v);setForm(f=>({...f,productoId:""}));}} icon="🔍"/>
-          <Sel label="Producto" value={form.productoId} onChange={v=>{setForm(f=>({...f,productoId:v}));const p=productos.find(x=>x.id===v);if(p)setForm(f=>({...f,productoId:v,costoUnit:String(p.costo),proveedor:p.proveedor||""}));}} options={[{v:"",l:(buscaEntrada?productos.filter(p=>p.nombre.toLowerCase().includes(buscaEntrada.toLowerCase())||(p.codigo&&p.codigo.includes(buscaEntrada))):productos).length===0?"Sin resultados...":"Seleccionar..."},...(buscaEntrada?productos.filter(p=>p.nombre.toLowerCase().includes(buscaEntrada.toLowerCase())||(p.codigo&&p.codigo.includes(buscaEntrada))):productos).map(p=>({v:p.id,l:`${p.nombre} (stock: ${p.stock||0})`}))]}/>
-        </div>
+        <div style={{flex:1}}><Sel label="Producto" value={form.productoId} onChange={v=>{setForm(f=>({...f,productoId:v}));const p=productos.find(x=>x.id===v);if(p)setForm(f=>({...f,productoId:v,costoUnit:String(p.costo),proveedor:p.proveedor||""}));}} options={[{v:"",l:"Seleccionar producto..."},...productos.map(p=>({v:p.id,l:`${p.nombre} (stock: ${p.stock||0})`}))]}/></div>
         <Btn onClick={()=>setScanner("modal")} color={G.blue} small style={{marginTop:22,height:44}}>📷</Btn>
       </div>
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
