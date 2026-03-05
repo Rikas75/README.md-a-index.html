@@ -1,0 +1,881 @@
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/><meta name="theme-color" content="#050812"/><meta name="apple-mobile-web-app-capable" content="yes"/><title>USALA · Suite Negocios</title>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>*{margin:0;padding:0;box-sizing:border-box}html,body,#root{height:100%;background:#050812}body{overscroll-behavior:none}::-webkit-scrollbar{width:0}</style>
+</head><body><div id="root"></div><script type="text/babel">
+const{useState,useRef,useEffect,useCallback}=React;
+const fl=document.createElement("link");fl.rel="stylesheet";fl.href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap";document.head.appendChild(fl);
+
+// ── CONSTANTS ──────────────────────────────────────────────
+const ADMIN_EMAILS=["rikaspalos@gmail.com"];
+const APP_VERSION="1.0.0";
+const BUILD_DATE="2026-03-03";
+const TRIAL_DAYS=15;
+
+// ── THEME ──────────────────────────────────────────────────
+const G={
+  bg:"#050812",glass:"rgba(255,255,255,0.04)",gb:"rgba(255,255,255,0.08)",
+  text:"#E8EEFF",dim:"rgba(232,238,255,0.35)",dim2:"rgba(232,238,255,0.12)",
+  font:"'Outfit',sans-serif",mono:"'JetBrains Mono',monospace",
+  green:"#00E5A0",red:"#FF3D6E",yellow:"#FFCC02",blue:"#4FC3F7",purple:"#CE93D8",orange:"#FF8A65"
+};
+
+// ── DB ─────────────────────────────────────────────────────
+const DB={
+  get:(k,d)=>{try{return JSON.parse(localStorage.getItem(k))||d;}catch{return d;}},
+  set:(k,v)=>localStorage.setItem(k,JSON.stringify(v)),
+  users:()=>DB.get("sn_users",{}),
+  saveUsers:u=>DB.set("sn_users",u),
+  session:()=>DB.get("sn_session",null),
+  saveSession:s=>DB.set("sn_session",s),
+  clearSession:()=>localStorage.removeItem("sn_session"),
+  brand:()=>DB.get("sn_brand",{name:"USALA",sub:"SUITE NEGOCIOS",accent:"#00E5A0",accent2:"#4FC3F7",version:"1.0.0",buildDate:"2026-03-03"}),
+  saveBrand:b=>DB.set("sn_brand",b),
+  productos:()=>DB.get("sn_productos",[]),
+  saveProductos:p=>DB.set("sn_productos",p),
+  ventas:()=>DB.get("sn_ventas",[]),
+  saveVentas:v=>DB.set("sn_ventas",v),
+  colaboradores:()=>DB.get("sn_colab",[]),
+  saveColaboradores:c=>DB.set("sn_colab",c),
+  proveedores:()=>DB.get("sn_prov",[]),
+  saveProveedores:p=>DB.set("sn_prov",p),
+  gastos:()=>DB.get("sn_gastos",[]),
+  saveGastos:g=>DB.set("sn_gastos",g),
+};
+
+// ── HELPERS ────────────────────────────────────────────────
+const fmt=n=>`$${Number(n||0).toLocaleString("es-MX",{minimumFractionDigits:2,maximumFractionDigits:2})}`;
+const today=()=>new Date().toISOString().split("T")[0];
+const getDaysLeft=u=>{if(!u||u.role==="admin")return Infinity;if(u.plan==="lifetime")return Infinity;if(!u.approvedAt)return 0;return TRIAL_DAYS-Math.floor((Date.now()-new Date(u.approvedAt))/86400000);};
+const isActive=u=>{if(!u)return false;if(u.role==="admin"||u.plan==="lifetime")return true;return getDaysLeft(u)>0;};
+const uid=()=>Math.random().toString(36).slice(2,10);
+
+// ── AMBIENT BG ─────────────────────────────────────────────
+function Bg({a="#00E5A0",b="#4FC3F7"}){
+  return <div style={{position:"fixed",inset:0,overflow:"hidden",pointerEvents:"none",zIndex:0}}>
+    <div style={{position:"absolute",width:500,height:500,borderRadius:"50%",background:`radial-gradient(circle,${a}12 0%,transparent 70%)`,top:-150,right:-150,animation:"f1 9s ease-in-out infinite"}}/>
+    <div style={{position:"absolute",width:400,height:400,borderRadius:"50%",background:`radial-gradient(circle,${b}10 0%,transparent 70%)`,bottom:50,left:-100,animation:"f2 11s ease-in-out infinite"}}/>
+    <div style={{position:"absolute",inset:0,backgroundImage:`radial-gradient(${a}06 1px,transparent 1px)`,backgroundSize:"28px 28px"}}/>
+    <style>{`@keyframes f1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-30px,30px) scale(1.1)}}@keyframes f2{0%,100%{transform:translate(0,0)}50%{transform:translate(25px,-25px)}}@keyframes su{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}@keyframes si{from{opacity:0;transform:scale(0.93)}to{opacity:1;transform:scale(1)}}@keyframes bn{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}@keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}*{-webkit-tap-highlight-color:transparent}input::placeholder{color:rgba(232,238,255,0.2)}select option{background:#0a0e1e}`}</style>
+  </div>;
+}
+
+// ── COMPONENTS ─────────────────────────────────────────────
+function Card({children,style={},onClick}){
+  return <div onClick={onClick} style={{background:G.glass,border:`1px solid ${G.gb}`,borderRadius:20,backdropFilter:"blur(20px)",WebkitBackdropFilter:"blur(20px)",...style}}>{children}</div>;
+}
+function Btn({children,onClick,color,full,ghost,small,danger,style={}}){
+  const c=color||(danger?G.red:G.green);
+  const[p,setP]=useState(false);
+  return <button onPointerDown={()=>setP(true)} onPointerUp={()=>setP(false)} onPointerLeave={()=>setP(false)} onClick={onClick}
+    style={{width:full?"100%":"auto",padding:small?"8px 16px":"13px 22px",border:ghost?`1px solid ${c}55`:"none",borderRadius:14,
+    background:ghost?`${c}10`:`linear-gradient(135deg,${c}ee,${c}88)`,color:ghost?c:"#050812",
+    fontFamily:G.font,fontWeight:700,fontSize:small?"0.78rem":"0.88rem",cursor:"pointer",
+    transform:p?"scale(0.97)":"scale(1)",transition:"all 0.15s",boxShadow:ghost?"none":`0 0 20px ${c}33`,...style}}>{children}</button>;
+}
+function Inp({label,placeholder,value,onChange,type="text",onEnter,icon,style={}}){
+  const[f,setF]=useState(false);
+  const br=DB.brand();
+  return <div style={{marginBottom:14,...style}}>
+    {label&&<div style={{fontSize:"0.68rem",color:G.dim,letterSpacing:"0.08em",marginBottom:6,textTransform:"uppercase"}}>{label}</div>}
+    <div style={{position:"relative"}}>
+      {icon&&<div style={{position:"absolute",left:14,top:"50%",transform:"translateY(-50%)",color:f?br.accent:G.dim,fontSize:"0.9rem",pointerEvents:"none"}}>{icon}</div>}
+      <input type={type} value={value} onChange={e=>onChange(e.target.value)} placeholder={placeholder}
+        onFocus={()=>setF(true)} onBlur={()=>setF(false)} onKeyDown={e=>e.key==="Enter"&&onEnter?.()}
+        style={{width:"100%",padding:icon?"12px 14px 12px 40px":"12px 14px",background:f?"rgba(255,255,255,0.06)":"rgba(255,255,255,0.03)",
+        border:`1px solid ${f?br.accent+"66":G.gb}`,borderRadius:12,fontFamily:G.font,fontSize:"0.88rem",
+        color:G.text,outline:"none",boxSizing:"border-box"}}/>
+    </div>
+  </div>;
+}
+function Sel({label,value,onChange,options,style={}}){
+  const br=DB.brand();
+  return <div style={{marginBottom:14,...style}}>
+    {label&&<div style={{fontSize:"0.68rem",color:G.dim,letterSpacing:"0.08em",marginBottom:6,textTransform:"uppercase"}}>{label}</div>}
+    <select value={value} onChange={e=>onChange(e.target.value)}
+      style={{width:"100%",padding:"12px 14px",background:"rgba(255,255,255,0.04)",border:`1px solid ${G.gb}`,
+      borderRadius:12,fontFamily:G.font,fontSize:"0.88rem",color:G.text,outline:"none",cursor:"pointer",appearance:"none"}}>
+      {options.map(o=><option key={o.v} value={o.v}>{o.l}</option>)}
+    </select>
+  </div>;
+}
+function Pill({children,color,active,onClick}){
+  return <button onClick={onClick} style={{padding:"7px 14px",borderRadius:50,border:`1px solid ${active?color+"88":G.gb}`,
+    background:active?`${color}22`:G.glass,color:active?color:G.dim,fontFamily:G.font,
+    fontSize:"0.75rem",fontWeight:active?600:400,cursor:"pointer",whiteSpace:"nowrap",flexShrink:0}}>{children}</button>;
+}
+function Modal({title,onClose,children,wide}){
+  return <div style={{position:"fixed",inset:0,zIndex:999}}>
+    <div onClick={onClose} style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.75)",backdropFilter:"blur(6px)"}}/>
+    <div style={{position:"absolute",bottom:0,left:0,right:0,background:"#080c1a",border:`1px solid ${G.gb}`,
+      borderRadius:"24px 24px 0 0",padding:"0 0 50px",maxHeight:"90vh",overflowY:"auto",animation:"su 0.3s ease"}}>
+      <div style={{padding:"16px 20px",borderBottom:`1px solid ${G.gb}`,display:"flex",justifyContent:"space-between",alignItems:"center",position:"sticky",top:0,background:"#080c1a",zIndex:1}}>
+        <div style={{fontWeight:700,fontSize:"1rem",color:G.text}}>{title}</div>
+        <button onClick={onClose} style={{width:32,height:32,borderRadius:10,background:G.glass,border:`1px solid ${G.gb}`,color:G.dim,cursor:"pointer",fontSize:"1rem"}}>✕</button>
+      </div>
+      <div style={{padding:"20px"}}>{children}</div>
+    </div>
+  </div>;
+}
+function Toast({msg,color}){
+  const br=DB.brand();
+  return <div style={{position:"fixed",bottom:90,left:"50%",transform:"translateX(-50%)",background:"rgba(5,8,18,0.95)",
+    backdropFilter:"blur(20px)",border:`1px solid ${(color||br.accent)+"44"}`,color:color||br.accent,
+    padding:"12px 24px",borderRadius:50,fontSize:"0.82rem",fontFamily:G.font,fontWeight:600,zIndex:9999,
+    whiteSpace:"nowrap",animation:"su 0.3s ease"}}>{msg}</div>;
+}
+function StatCard({label,value,sub,color,icon}){
+  return <Card style={{padding:"16px 14px"}}>
+    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:8}}>
+      <div style={{fontSize:"0.65rem",color:G.dim,letterSpacing:"0.08em",textTransform:"uppercase"}}>{label}</div>
+      <div style={{fontSize:"1.1rem"}}>{icon}</div>
+    </div>
+    <div style={{fontWeight:900,fontSize:"1.4rem",color:color||G.text,lineHeight:1}}>{value}</div>
+    {sub&&<div style={{fontSize:"0.7rem",color:G.dim,marginTop:4}}>{sub}</div>}
+  </Card>;
+}
+
+// ── LOGIN ──────────────────────────────────────────────────
+function Login({onAuth}){
+  const br=DB.brand();
+  const[mode,setMode]=useState("login");
+  const[name,setName]=useState("");
+  const[email,setEmail]=useState("");
+  const[pass,setPass]=useState("");
+  const[err,setErr]=useState("");
+  const[ok,setOk]=useState("");
+  const[loading,setL]=useState(false);
+  async function submit(){
+    setErr("");setOk("");setL(true);
+    await new Promise(r=>setTimeout(r,500));
+    const users=DB.users();
+    if(mode==="register"){
+      if(!name||!email||!pass){setErr("Completa todos los campos");setL(false);return;}
+      if(pass.length<6){setErr("Contraseña mínimo 6 caracteres");setL(false);return;}
+      if(users[email]){setErr("Email ya existe");setL(false);return;}
+      const isAdmin=ADMIN_EMAILS.includes(email.toLowerCase());
+      users[email]={name,email,pass,role:isAdmin?"admin":"vendedor",status:isAdmin?"approved":"pending",
+        plan:isAdmin?"lifetime":"trial",registeredAt:new Date().toISOString(),
+        approvedAt:isAdmin?new Date().toISOString():null,comision:10};
+      DB.saveUsers(users);
+      setOk("✓ Cuenta creada. Espera aprobación.");
+      setTimeout(()=>{setMode("login");setOk("");},2000);
+    }else{
+      const u=users[email.toLowerCase()]||users[email];
+      if(!u){setErr("Email no encontrado");setL(false);return;}
+      if(u.pass!==pass){setErr("Contraseña incorrecta");setL(false);return;}
+      if(u.status==="pending"){setErr("Cuenta pendiente de aprobación");setL(false);return;}
+      if(u.status==="rejected"){setErr("Acceso rechazado");setL(false);return;}
+      if(u.role!=="admin"&&!isActive(u)){setErr("Acceso vencido. Contacta al admin.");setL(false);return;}
+      DB.saveSession(u);onAuth(u);
+    }
+    setL(false);
+  }
+  return <div style={{minHeight:"100vh",background:G.bg,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"24px",fontFamily:G.font,position:"relative",overflow:"hidden"}}>
+    <Bg a={br.accent} b={br.accent2}/>
+    <div style={{position:"relative",zIndex:1,width:"100%",maxWidth:400,animation:"si 0.5s ease"}}>
+      <div style={{textAlign:"center",marginBottom:32}}>
+        <div style={{display:"flex",justifyContent:"center",marginBottom:16,animation:"fl 4s ease-in-out infinite",filter:`drop-shadow(0 0 28px ${br.accent}55)`}}>
+          <svg width="90" height="90" viewBox="0 0 140 140" fill="none">
+            <defs>
+              <linearGradient id="lg1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stopColor={br.accent}/><stop offset="100%" stopColor={br.accent2}/></linearGradient>
+              <linearGradient id="lg2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stopColor={br.accent} stopOpacity="0.2"/><stop offset="100%" stopColor={br.accent2} stopOpacity="0.1"/></linearGradient>
+              <filter id="gw2"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+            </defs>
+            <polygon points="70,17 115,42 115,98 70,123 25,98 25,42" fill="url(#lg2)" stroke="url(#lg1)" strokeWidth="1.75" filter="url(#gw2)"/>
+            <path d="M50 38 L50 77 Q50 97 70 97 Q90 97 90 77 L90 38" fill="none" stroke="white" strokeWidth="10" strokeLinecap="round" filter="url(#gw2)"/>
+            <circle cx="98" cy="33" r="6.5" fill={br.accent}/><circle cx="98" cy="33" r="3" fill="white"/>
+          </svg>
+        </div>
+        <div style={{fontWeight:900,letterSpacing:"0.16em",fontSize:"3.2rem",background:`linear-gradient(135deg,#fff 0%,${br.accent} 50%,${br.accent2} 100%)`,WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>{br.name}</div>
+        <div style={{width:40,height:2,background:`linear-gradient(90deg,${br.accent},${br.accent2})`,borderRadius:2,margin:"8px auto"}}/>
+        <div style={{fontSize:"0.58rem",color:G.dim,letterSpacing:"0.45em",textTransform:"uppercase"}}>{br.sub}</div>
+      </div>
+      <Card style={{padding:26}}>
+        <div style={{display:"flex",background:"rgba(255,255,255,0.03)",borderRadius:12,padding:4,marginBottom:22}}>
+          {["login","register"].map(m=><button key={m} onClick={()=>{setMode(m);setErr("");setOk("");}}
+            style={{flex:1,padding:"9px",border:mode===m?`1px solid ${br.accent}44`:"1px solid transparent",borderRadius:10,
+            background:mode===m?`${br.accent}22`:"transparent",color:mode===m?br.accent:G.dim,
+            fontFamily:G.font,fontSize:"0.82rem",fontWeight:mode===m?700:400,cursor:"pointer"}}>
+            {m==="login"?"Iniciar sesión":"Registrarse"}</button>)}
+        </div>
+        {mode==="register"&&<Inp icon="✦" placeholder="Tu nombre completo" value={name} onChange={setName}/>}
+        <Inp icon="@" placeholder="correo@ejemplo.com" value={email} onChange={setEmail} type="email"/>
+        <Inp icon="◈" placeholder="Contraseña" value={pass} onChange={setPass} type="password" onEnter={submit}/>
+        {err&&<div style={{padding:"10px 14px",background:"#ff3d6e14",border:"1px solid #ff3d6e44",borderRadius:10,marginBottom:14,fontSize:"0.8rem",color:G.red}}>⚠ {err}</div>}
+        {ok&&<div style={{padding:"10px 14px",background:`${br.accent}14`,border:`1px solid ${br.accent}44`,borderRadius:10,marginBottom:14,fontSize:"0.8rem",color:br.accent}}>{ok}</div>}
+        <Btn onClick={submit} full color={br.accent} style={{opacity:loading?0.7:1}}>{loading?"···":mode==="login"?"Entrar →":"Crear cuenta →"}</Btn>
+        {mode==="register"&&<div style={{marginTop:14,fontSize:"0.73rem",color:G.dim,textAlign:"center",lineHeight:1.7}}>Tu cuenta será revisada por el administrador.</div>}
+      </Card>
+    </div>
+  </div>;
+}
+
+// ── DASHBOARD ──────────────────────────────────────────────
+function Dashboard({user}){
+  const br=DB.brand();
+  const ventas=DB.ventas();
+  const hoy=today();
+  const ventasHoy=ventas.filter(v=>v.fecha===hoy);
+  const ventasSemana=ventas.filter(v=>{const d=new Date(v.fecha);const s=new Date();s.setDate(s.getDate()-7);return d>=s;});
+  const totalHoy=ventasHoy.reduce((a,v)=>a+Number(v.total||0),0);
+  const utilidadHoy=ventasHoy.reduce((a,v)=>a+Number(v.utilidad||0),0);
+  const totalSemana=ventasSemana.reduce((a,v)=>a+Number(v.total||0),0);
+  const utilidadSemana=ventasSemana.reduce((a,v)=>a+Number(v.utilidad||0),0);
+  const productos=DB.productos();
+  const colaboradores=DB.colaboradores();
+  const stockBajo=productos.filter(p=>Number(p.stock||0)<=5).length;
+  // Gráfica 7 días
+  const dias=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);dias.push(d.toISOString().split("T")[0]);}
+  const maxV=Math.max(...dias.map(d=>ventas.filter(v=>v.fecha===d).reduce((a,v)=>a+Number(v.total||0),0)),1);
+  return <div style={{padding:"16px",paddingBottom:80}}>
+    <div style={{marginBottom:16}}>
+      <div style={{fontSize:"1.3rem",fontWeight:900,color:G.text}}>Buen día, {user.name.split(" ")[0]} 👋</div>
+      <div style={{fontSize:"0.75rem",color:G.dim,marginTop:2}}>{new Date().toLocaleDateString("es-MX",{weekday:"long",day:"numeric",month:"long"})}</div>
+    </div>
+    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:16}}>
+      <StatCard label="Ventas hoy" value={fmt(totalHoy)} sub={`${ventasHoy.length} transacciones`} color={br.accent} icon="💰"/>
+      <StatCard label="Utilidad hoy" value={fmt(utilidadHoy)} sub={utilidadHoy>0?`${Math.round((utilidadHoy/totalHoy)*100)||0}% margen`:"-"} color={G.green} icon="📈"/>
+      <StatCard label="Ventas 7 días" value={fmt(totalSemana)} sub={`${ventasSemana.length} ventas`} color={br.accent2} icon="📊"/>
+      <StatCard label="Utilidad 7d" value={fmt(utilidadSemana)} sub={utilidadSemana>0?`${Math.round((utilidadSemana/totalSemana)*100)||0}% margen`:"-"} color={G.green} icon="💹"/>
+    </div>
+    {stockBajo>0&&<Card style={{padding:"14px 16px",marginBottom:16,background:`${G.yellow}08`,border:`1px solid ${G.yellow}33`}}>
+      <div style={{display:"flex",alignItems:"center",gap:10}}>
+        <div style={{fontSize:"1.2rem"}}>⚠️</div>
+        <div><div style={{fontSize:"0.85rem",fontWeight:600,color:G.yellow}}>{stockBajo} producto{stockBajo>1?"s":""} con stock bajo</div>
+        <div style={{fontSize:"0.72rem",color:G.dim}}>Revisa el módulo de Productos</div></div>
+      </div>
+    </Card>}
+    <Card style={{padding:"16px",marginBottom:16}}>
+      <div style={{fontWeight:700,fontSize:"0.85rem",marginBottom:14,color:G.text}}>Ventas vs Utilidad — 7 días</div>
+      <div style={{display:"flex",alignItems:"flex-end",gap:4,height:80}}>
+        {dias.map(d=>{
+          const vt=ventas.filter(v=>v.fecha===d).reduce((a,v)=>a+Number(v.total||0),0);
+          const ut=ventas.filter(v=>v.fecha===d).reduce((a,v)=>a+Number(v.utilidad||0),0);
+          const hv=(vt/maxV)*100;const hu=(ut/maxV)*100;
+          const label=new Date(d+"T12:00:00").toLocaleDateString("es-MX",{weekday:"short"}).slice(0,3);
+          return <div key={d} style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",gap:2}}>
+            <div style={{width:"100%",display:"flex",gap:2,alignItems:"flex-end",height:64}}>
+              <div style={{flex:1,background:`${br.accent}88`,borderRadius:"4px 4px 0 0",height:`${Math.max(hv,2)}%`,transition:"height 0.5s"}}/>
+              <div style={{flex:1,background:`${G.green}88`,borderRadius:"4px 4px 0 0",height:`${Math.max(hu,2)}%`,transition:"height 0.5s"}}/>
+            </div>
+            <div style={{fontSize:"0.58rem",color:G.dim}}>{label}</div>
+          </div>;
+        })}
+      </div>
+      <div style={{display:"flex",gap:14,marginTop:10}}>
+        <div style={{display:"flex",alignItems:"center",gap:6,fontSize:"0.7rem",color:G.dim}}><div style={{width:10,height:10,borderRadius:2,background:br.accent}}/> Ventas</div>
+        <div style={{display:"flex",alignItems:"center",gap:6,fontSize:"0.7rem",color:G.dim}}><div style={{width:10,height:10,borderRadius:2,background:G.green}}/> Utilidad</div>
+      </div>
+    </Card>
+    <Card style={{padding:"16px"}}>
+      <div style={{fontWeight:700,fontSize:"0.85rem",marginBottom:12,color:G.text}}>Actividad reciente</div>
+      {ventas.slice(-8).reverse().map((v,i)=><div key={i} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"10px 0",borderBottom:i<7?`1px solid ${G.dim2}`:""}}>        <div style={{display:"flex",gap:10,alignItems:"center"}}><div style={{width:34,height:34,borderRadius:11,background:`${br.accent}18`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:"0.9rem"}}>🛍</div><div><div style={{fontSize:"0.82rem",fontWeight:600,color:G.text}}>{v.producto||"Venta"}</div><div style={{fontSize:"0.68rem",color:G.dim}}>{v.vendedor||"—"} · {v.fecha}</div></div></div><div style={{textAlign:"right",flexShrink:0}}><div style={{fontSize:"0.85rem",fontWeight:700,color:br.accent}}>{fmt(v.total)}</div><div style={{fontSize:"0.68rem",color:G.green}}>+{fmt(v.utilidad)}</div></div></div>)}
+      {ventas.length===0&&<div style={{textAlign:"center",padding:"30px 0",color:G.dim,fontSize:"0.82rem"}}>Sin ventas registradas aún</div>}
+    </Card>
+  </div>;
+}
+
+// ── VENTAS ─────────────────────────────────────────────────
+function Ventas({user}){
+  const br=DB.brand();
+  const[tab,setTab]=useState("historial");
+  const[modal,setModal]=useState(false);
+  const[toast,setToast]=useState("");
+  const[ventas,setVentas]=useState(DB.ventas());
+  const[productos]=useState(DB.productos());
+  const[colaboradores]=useState(DB.colaboradores());
+  const[filtro,setFiltro]=useState("hoy");
+  // Form nueva venta
+  const[prod,setProd]=useState("");
+  const[qty,setQty]=useState("1");
+  const[vendedorId,setVendedorId]=useState(user.role==="admin"?"":user.email);
+  const[pagMethod,setPagMethod]=useState("efectivo");
+  const[descuento,setDescuento]=useState("0");
+  function toast_(m,c){setToast({m,c});setTimeout(()=>setToast(""),3000);}
+  function nuevaVenta(){
+    if(!prod||!qty||Number(qty)<1){toast_("⚠ Completa los campos","#ff3d6e");return;}
+    const p=productos.find(x=>x.id===prod);
+    if(!p){toast_("⚠ Producto no encontrado","#ff3d6e");return;}
+    if(Number(p.stock||0)<Number(qty)){toast_("⚠ Stock insuficiente","#ff3d6e");return;}
+    const colabs=DB.colaboradores();const vend=colabs.find(c=>c.id===vendedorId)||{name:user.name,comision:10};
+    const subtotal=Number(p.precio)*Number(qty);
+    const desc=Math.min(Number(descuento||0),subtotal);
+    const total=subtotal-desc;
+    const costo=Number(p.costo)*Number(qty);
+    const utilidad=total-costo;
+    const comisionMonto=total*(Number(vend.comision||10)/100);
+    const v={id:uid(),producto:p.nombre,productoId:p.id,cantidad:Number(qty),precioUnit:p.precio,
+      subtotal,descuento:desc,total,costo,utilidad,comisionMonto,
+      vendedor:vend.name,vendedorId,metodoPago:pagMethod,fecha:today(),hora:new Date().toLocaleTimeString("es-MX")};
+    const nv=[...ventas,v];
+    // actualizar stock
+    const prods=DB.productos().map(x=>x.id===prod?{...x,stock:Number(x.stock)-Number(qty)}:x);
+    DB.saveProductos(prods);DB.saveVentas(nv);setVentas(nv);
+    setModal(false);setProd("");setQty("1");setDescuento("0");
+    toast_(`✓ Venta registrada — ${fmt(total)}`);
+  }
+  const hoy=today();
+  const filtered=ventas.filter(v=>{
+    if(filtro==="hoy")return v.fecha===hoy;
+    if(filtro==="semana"){const d=new Date(v.fecha);const s=new Date();s.setDate(s.getDate()-7);return d>=s;}
+    if(filtro==="mes"){const d=new Date(v.fecha);const m=new Date();m.setDate(m.getDate()-30);return d>=m;}
+    return true;
+  });
+  const totalFiltro=filtered.reduce((a,v)=>a+Number(v.total||0),0);
+  const utilidadFiltro=filtered.reduce((a,v)=>a+Number(v.utilidad||0),0);
+  // informe por vendedor
+  const porVendedor={};filtered.forEach(v=>{if(!porVendedor[v.vendedor])porVendedor[v.vendedor]={ventas:0,total:0,utilidad:0,comision:0};porVendedor[v.vendedor].ventas++;porVendedor[v.vendedor].total+=Number(v.total||0);porVendedor[v.vendedor].utilidad+=Number(v.utilidad||0);porVendedor[v.vendedor].comision+=Number(v.comisionMonto||0);});
+  return <div style={{display:"flex",flexDirection:"column",height:"100%"}}>
+    <div style={{padding:"14px 16px",borderBottom:`1px solid ${G.gb}`,flexShrink:0}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
+        <div><div style={{fontWeight:800,fontSize:"1.1rem"}}>Ventas</div><div style={{fontSize:"0.7rem",color:G.dim}}>{filtered.length} registros</div></div>
+        <Btn onClick={()=>setModal(true)} color={br.accent} small>+ Nueva venta</Btn>
+      </div>
+      <div style={{display:"flex",gap:8,overflowX:"auto"}}>
+        {[["hoy","Hoy"],["semana","7 días"],["mes","30 días"],["todo","Todo"]].map(([f,l])=>
+          <Pill key={f} active={filtro===f} color={br.accent} onClick={()=>setFiltro(f)}>{l}</Pill>)}
+      </div>
+    </div>
+    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,padding:"12px 16px",flexShrink:0}}>
+      <Card style={{padding:"12px 14px"}}><div style={{fontSize:"0.65rem",color:G.dim,marginBottom:4}}>TOTAL</div><div style={{fontWeight:900,fontSize:"1.2rem",color:br.accent}}>{fmt(totalFiltro)}</div></Card>
+      <Card style={{padding:"12px 14px"}}><div style={{fontSize:"0.65rem",color:G.dim,marginBottom:4}}>UTILIDAD</div><div style={{fontWeight:900,fontSize:"1.2rem",color:G.green}}>{fmt(utilidadFiltro)}</div></Card>
+    </div>
+    <div style={{display:"flex",borderBottom:`1px solid ${G.gb}`,flexShrink:0,padding:"0 16px"}}>
+      {[["historial","Historial"],["vendedor","Por vendedor"]].map(([t,l])=>
+        <button key={t} onClick={()=>setTab(t)} style={{flex:1,padding:"10px 4px",border:"none",background:"none",borderBottom:`2px solid ${tab===t?br.accent:"transparent"}`,color:tab===t?br.accent:G.dim,fontFamily:G.font,fontSize:"0.78rem",fontWeight:tab===t?700:400,cursor:"pointer"}}>{l}</button>)}
+    </div>
+    <div style={{flex:1,overflowY:"auto",padding:"12px 16px",paddingBottom:80}}>
+      {tab==="historial"&&<>{filtered.length===0&&<div style={{textAlign:"center",padding:"50px 0",color:G.dim}}>Sin ventas en este período</div>}
+        {filtered.slice().reverse().map((v,i)=><Card key={i} style={{padding:"14px",marginBottom:10}}>
+          <div style={{display:"flex",justifyContent:"space-between",marginBottom:6}}>
+            <div style={{fontWeight:700,fontSize:"0.88rem"}}>{v.producto}</div>
+            <div style={{fontWeight:700,color:br.accent}}>{fmt(v.total)}</div>
+          </div>
+          <div style={{display:"flex",gap:12,fontSize:"0.7rem",color:G.dim}}>
+            <span>x{v.cantidad}</span><span>{v.vendedor}</span><span>{v.metodoPago}</span><span>{v.fecha}</span>
+          </div>
+          <div style={{display:"flex",gap:12,marginTop:6,fontSize:"0.72rem"}}>
+            <span style={{color:G.green}}>Utilidad: {fmt(v.utilidad)}</span>
+            <span style={{color:G.yellow}}>Comisión: {fmt(v.comisionMonto)}</span>
+          </div>
+        </Card>)}</>}
+      {tab==="vendedor"&&<>{Object.keys(porVendedor).length===0&&<div style={{textAlign:"center",padding:"50px 0",color:G.dim}}>Sin datos</div>}
+        {Object.entries(porVendedor).sort((a,b)=>b[1].total-a[1].total).map(([nombre,d],i)=><Card key={i} style={{padding:"16px",marginBottom:10}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
+            <div style={{display:"flex",gap:10,alignItems:"center"}}>
+              <div style={{width:38,height:38,borderRadius:12,background:`${br.accent}18`,border:`1px solid ${br.accent}33`,display:"flex",alignItems:"center",justifyContent:"center",fontWeight:800,color:br.accent,fontSize:"1rem"}}>{nombre[0]}</div>
+              <div><div style={{fontWeight:700}}>{nombre}</div><div style={{fontSize:"0.7rem",color:G.dim}}>{d.ventas} ventas</div></div>
+            </div>
+            <div style={{textAlign:"right"}}><div style={{fontWeight:800,color:br.accent}}>{fmt(d.total)}</div><div style={{fontSize:"0.7rem",color:G.green}}>{fmt(d.utilidad)} util.</div></div>
+          </div>
+          <div style={{height:4,borderRadius:4,background:G.dim2,overflow:"hidden"}}><div style={{height:"100%",width:`${Math.min((d.total/totalFiltro)*100,100)}%`,background:`linear-gradient(90deg,${br.accent},${br.accent2})`,borderRadius:4}}/></div>
+          <div style={{fontSize:"0.7rem",color:G.yellow,marginTop:6}}>Comisiones: {fmt(d.comision)}</div>
+        </Card>)}</>}
+    </div>
+    {modal&&<Modal title="Nueva Venta" onClose={()=>setModal(false)}>
+      <Sel label="Producto" value={prod} onChange={setProd} options={[{v:"",l:"Seleccionar producto..."},{...DB.productos().map(p=>({v:p.id,l:`${p.nombre} — ${fmt(p.precio)} (stock: ${p.stock})`}))},...DB.productos().map(p=>({v:p.id,l:`${p.nombre} — ${fmt(p.precio)} (stock: ${p.stock})`}))].filter((x,i,a)=>i===0||a.findIndex(y=>y.v===x.v)===i)}/>
+      <Inp label="Cantidad" type="number" value={qty} onChange={setQty}/>
+      {user.role==="admin"&&<Sel label="Vendedor" value={vendedorId} onChange={setVendedorId} options={[{v:"",l:"Sin asignar"},...DB.colaboradores().map(c=>({v:c.id,l:c.nombre}))]}/>}
+      <Sel label="Método de pago" value={pagMethod} onChange={setPagMethod} options={[{v:"efectivo",l:"💵 Efectivo"},{v:"transferencia",l:"🏦 Transferencia"},{v:"tarjeta",l:"💳 Tarjeta"},{v:"credito",l:"📋 Crédito"}]}/>
+      <Inp label="Descuento ($)" type="number" value={descuento} onChange={setDescuento}/>
+      {prod&&qty&&<Card style={{padding:"14px",marginBottom:16,background:`${br.accent}08`}}>
+        {(()=>{const p=productos.find(x=>x.id===prod);if(!p)return null;const s=Number(p.precio)*Number(qty||1)-Number(descuento||0);const u=s-Number(p.costo)*Number(qty||1);return <>
+          <div style={{display:"flex",justifyContent:"space-between",fontSize:"0.82rem",marginBottom:6}}><span style={{color:G.dim}}>Subtotal</span><span>{fmt(Number(p.precio)*Number(qty||1))}</span></div>
+          {Number(descuento)>0&&<div style={{display:"flex",justifyContent:"space-between",fontSize:"0.82rem",marginBottom:6}}><span style={{color:G.dim}}>Descuento</span><span style={{color:G.red}}>-{fmt(descuento)}</span></div>}
+          <div style={{display:"flex",justifyContent:"space-between",fontSize:"0.95rem",fontWeight:800,marginBottom:6}}><span>Total</span><span style={{color:br.accent}}>{fmt(s)}</span></div>
+          <div style={{display:"flex",justifyContent:"space-between",fontSize:"0.78rem"}}><span style={{color:G.dim}}>Utilidad est.</span><span style={{color:G.green}}>{fmt(u)}</span></div>
+        </>})()}
+      </Card>}
+      <Btn onClick={nuevaVenta} full color={br.accent}>✓ Registrar venta</Btn>
+    </Modal>}
+    {toast&&<Toast msg={toast.m} color={toast.c}/>}
+  </div>;
+}
+
+// ── PRODUCTOS ──────────────────────────────────────────────
+function Productos(){
+  const br=DB.brand();
+  const[productos,setProductos]=useState(DB.productos());
+  const[modal,setModal]=useState(null);
+  const[toast,setToast]=useState("");
+  const[busca,setBusca]=useState("");
+  const[form,setForm]=useState({nombre:"",costo:"",precio:"",stock:"",categoria:"fundas",proveedor:""});
+  function toast_(m,c){setToast({m,c});setTimeout(()=>setToast(""),3000);}
+  function guardar(){
+    if(!form.nombre||!form.costo||!form.precio){toast_("⚠ Nombre, costo y precio son requeridos","#ff3d6e");return;}
+    const ps=DB.productos();
+    if(modal==="nuevo"){
+      const p={...form,id:uid(),costo:Number(form.costo),precio:Number(form.precio),stock:Number(form.stock||0),createdAt:today()};
+      const nps=[...ps,p];DB.saveProductos(nps);setProductos(nps);toast_("✓ Producto agregado");
+    }else{
+      const nps=ps.map(p=>p.id===modal?{...p,...form,costo:Number(form.costo),precio:Number(form.precio),stock:Number(form.stock||0)}:p);
+      DB.saveProductos(nps);setProductos(nps);toast_("✓ Producto actualizado");
+    }
+    setModal(null);setForm({nombre:"",costo:"",precio:"",stock:"",categoria:"fundas",proveedor:""});
+  }
+  function eliminar(id){const nps=DB.productos().filter(p=>p.id!==id);DB.saveProductos(nps);setProductos(nps);toast_("⊘ Producto eliminado","#ff3d6e");}
+  function editar(p){setForm({nombre:p.nombre,costo:String(p.costo),precio:String(p.precio),stock:String(p.stock||0),categoria:p.categoria||"fundas",proveedor:p.proveedor||""});setModal(p.id);}
+  const filtrados=productos.filter(p=>p.nombre?.toLowerCase().includes(busca.toLowerCase()));
+  const totalInventario=productos.reduce((a,p)=>a+Number(p.precio)*Number(p.stock||0),0);
+  return <div style={{display:"flex",flexDirection:"column",height:"100%"}}>
+    <div style={{padding:"14px 16px",borderBottom:`1px solid ${G.gb}`,flexShrink:0}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
+        <div><div style={{fontWeight:800,fontSize:"1.1rem"}}>Productos</div><div style={{fontSize:"0.7rem",color:G.dim}}>{productos.length} artículos · {fmt(totalInventario)} inventario</div></div>
+        <Btn onClick={()=>{setForm({nombre:"",costo:"",precio:"",stock:"",categoria:"fundas",proveedor:""});setModal("nuevo");}} color={br.accent} small>+ Agregar</Btn>
+      </div>
+      <Inp icon="🔍" placeholder="Buscar producto..." value={busca} onChange={setBusca} style={{marginBottom:0}}/>
+    </div>
+    <div style={{flex:1,overflowY:"auto",padding:"12px 16px",paddingBottom:80}}>
+      {filtrados.length===0&&<div style={{textAlign:"center",padding:"50px 0",color:G.dim}}>Sin productos</div>}
+      {filtrados.map(p=>{
+        const margen=p.precio>0?Math.round(((p.precio-p.costo)/p.precio)*100):0;
+        const stockBajo=Number(p.stock||0)<=5;
+        return <Card key={p.id} style={{padding:"14px",marginBottom:10}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:8}}>
+            <div style={{flex:1,marginRight:12}}>
+              <div style={{fontWeight:700,fontSize:"0.88rem",marginBottom:2}}>{p.nombre}</div>
+              <div style={{fontSize:"0.7rem",color:G.dim}}>{p.categoria} {p.proveedor?`· ${p.proveedor}`:""}</div>
+            </div>
+            <div style={{display:"flex",gap:6}}>
+              <button onClick={()=>editar(p)} style={{width:30,height:30,borderRadius:9,background:`${br.accent}18`,border:`1px solid ${br.accent}33`,color:br.accent,cursor:"pointer",fontSize:"0.75rem"}}>✎</button>
+              <button onClick={()=>eliminar(p.id)} style={{width:30,height:30,borderRadius:9,background:"#ff3d6e18",border:"1px solid #ff3d6e33",color:G.red,cursor:"pointer",fontSize:"0.75rem"}}>✕</button>
+            </div>
+          </div>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr",gap:8}}>
+            <div style={{textAlign:"center",padding:"8px 4px",background:"rgba(255,255,255,0.03)",borderRadius:10}}>
+              <div style={{fontSize:"0.6rem",color:G.dim,marginBottom:2}}>COSTO</div>
+              <div style={{fontSize:"0.82rem",fontWeight:700,color:G.text}}>{fmt(p.costo)}</div>
+            </div>
+            <div style={{textAlign:"center",padding:"8px 4px",background:"rgba(255,255,255,0.03)",borderRadius:10}}>
+              <div style={{fontSize:"0.6rem",color:G.dim,marginBottom:2}}>PRECIO</div>
+              <div style={{fontSize:"0.82rem",fontWeight:700,color:br.accent}}>{fmt(p.precio)}</div>
+            </div>
+            <div style={{textAlign:"center",padding:"8px 4px",background:"rgba(255,255,255,0.03)",borderRadius:10}}>
+              <div style={{fontSize:"0.6rem",color:G.dim,marginBottom:2}}>MARGEN</div>
+              <div style={{fontSize:"0.82rem",fontWeight:700,color:G.green}}>{margen}%</div>
+            </div>
+            <div style={{textAlign:"center",padding:"8px 4px",background:stockBajo?"rgba(255,60,110,0.08)":"rgba(255,255,255,0.03)",borderRadius:10,border:stockBajo?"1px solid #ff3d6e33":"none"}}>
+              <div style={{fontSize:"0.6rem",color:G.dim,marginBottom:2}}>STOCK</div>
+              <div style={{fontSize:"0.82rem",fontWeight:700,color:stockBajo?G.red:G.text}}>{p.stock||0}</div>
+            </div>
+          </div>
+        </Card>;
+      })}
+    </div>
+    {modal&&<Modal title={modal==="nuevo"?"Nuevo Producto":"Editar Producto"} onClose={()=>setModal(null)}>
+      <Inp label="Nombre del producto" placeholder="Ej: Funda iPhone 15 Pro" value={form.nombre} onChange={v=>setForm(f=>({...f,nombre:v}))}/>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
+        <Inp label="Costo ($)" type="number" placeholder="0.00" value={form.costo} onChange={v=>setForm(f=>({...f,costo:v}))}/>
+        <Inp label="Precio venta ($)" type="number" placeholder="0.00" value={form.precio} onChange={v=>setForm(f=>({...f,precio:v}))}/>
+      </div>
+      <Inp label="Stock inicial" type="number" placeholder="0" value={form.stock} onChange={v=>setForm(f=>({...f,stock:v}))}/>
+      <Sel label="Categoría" value={form.categoria} onChange={v=>setForm(f=>({...f,categoria:v}))} options={[{v:"fundas",l:"📱 Fundas"},{v:"micas",l:"🔲 Micas/Hidrogel"},{v:"cargadores",l:"⚡ Cargadores"},{v:"audifonos",l:"🎧 Audífonos"},{v:"accesorios",l:"🔌 Accesorios"},{v:"otros",l:"📦 Otros"}]}/>
+      <Inp label="Proveedor" placeholder="Nombre del proveedor" value={form.proveedor} onChange={v=>setForm(f=>({...f,proveedor:v}))}/>
+      {form.costo&&form.precio&&<Card style={{padding:"12px",marginBottom:14,background:`${br.accent}08`}}>
+        <div style={{display:"flex",justifyContent:"space-between",fontSize:"0.82rem"}}>
+          <span style={{color:G.dim}}>Utilidad por unidad</span>
+          <span style={{color:G.green,fontWeight:700}}>{fmt(Number(form.precio)-Number(form.costo))} ({form.precio>0?Math.round(((form.precio-form.costo)/form.precio)*100):0}%)</span>
+        </div>
+      </Card>}
+      <Btn onClick={guardar} full color={br.accent}>✓ {modal==="nuevo"?"Agregar producto":"Guardar cambios"}</Btn>
+    </Modal>}
+    {toast&&<Toast msg={toast.m} color={toast.c}/>}
+  </div>;
+}
+
+// ── COLABORADORES ──────────────────────────────────────────
+function Colaboradores(){
+  const br=DB.brand();
+  const[colabs,setColabs]=useState(DB.colaboradores());
+  const[users,setUsers]=useState(DB.users());
+  const[modal,setModal]=useState(null);
+  const[toast,setToast]=useState("");
+  const[form,setForm]=useState({nombre:"",email:"",telefono:"",cargo:"vendedor",comision:"10",zona:""});
+  function toast_(m,c){setToast({m,c});setTimeout(()=>setToast(""),3000);}
+  function guardar(){
+    if(!form.nombre){toast_("⚠ Nombre requerido","#ff3d6e");return;}
+    const cs=DB.colaboradores();
+    if(modal==="nuevo"){
+      const c={...form,id:uid(),comision:Number(form.comision||10),activo:true,createdAt:today(),ventas:0,totalVentas:0};
+      DB.saveColaboradores([...cs,c]);setColabs([...cs,c]);toast_("✓ Colaborador agregado");
+    }else{
+      const ncs=cs.map(c=>c.id===modal?{...c,...form,comision:Number(form.comision||10)}:c);
+      DB.saveColaboradores(ncs);setColabs(ncs);toast_("✓ Actualizado");
+    }
+    setModal(null);
+  }
+  function toggleActivo(id){const cs=DB.colaboradores().map(c=>c.id===id?{...c,activo:!c.activo}:c);DB.saveColaboradores(cs);setColabs(cs);}
+  function aprobarUser(email,plan){const u=DB.users();if(!u[email])return;u[email].status="approved";u[email].plan=plan;u[email].approvedAt=new Date().toISOString();DB.saveUsers(u);setUsers({...u});toast_("✓ Usuario aprobado");}
+  function rechazarUser(email){const u=DB.users();if(!u[email])return;u[email].status="rejected";DB.saveUsers(u);setUsers({...u});toast_("✗ Usuario rechazado","#ff3d6e");}
+  const pendientes=Object.values(users).filter(u=>u.status==="pending"&&u.role!=="admin");
+  const ventas=DB.ventas();
+  function statsColab(c){const vs=ventas.filter(v=>v.vendedorId===c.id);return{ventas:vs.length,total:vs.reduce((a,v)=>a+Number(v.total||0),0),comision:vs.reduce((a,v)=>a+Number(v.comisionMonto||0),0)};}
+  return <div style={{display:"flex",flexDirection:"column",height:"100%"}}>
+    <div style={{padding:"14px 16px",borderBottom:`1px solid ${G.gb}`,flexShrink:0}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+        <div><div style={{fontWeight:800,fontSize:"1.1rem"}}>Colaboradores</div><div style={{fontSize:"0.7rem",color:G.dim}}>{colabs.filter(c=>c.activo).length} activos</div></div>
+        <Btn onClick={()=>{setForm({nombre:"",email:"",telefono:"",cargo:"vendedor",comision:"10",zona:""});setModal("nuevo");}} color={br.accent} small>+ Alta</Btn>
+      </div>
+    </div>
+    <div style={{flex:1,overflowY:"auto",padding:"12px 16px",paddingBottom:80}}>
+      {pendientes.length>0&&<><div style={{fontSize:"0.7rem",color:G.yellow,letterSpacing:"0.08em",marginBottom:8,textTransform:"uppercase"}}>⏳ Accesos pendientes ({pendientes.length})</div>
+        {pendientes.map(u=><Card key={u.email} style={{padding:"14px",marginBottom:10,background:`${G.yellow}08`,border:`1px solid ${G.yellow}22`}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+            <div><div style={{fontWeight:600,fontSize:"0.85rem"}}>{u.name}</div><div style={{fontSize:"0.7rem",color:G.dim}}>{u.email}</div></div>
+            <div style={{display:"flex",gap:6}}>
+              <Btn small ghost color={br.accent} onClick={()=>aprobarUser(u.email,"lifetime")}>✓</Btn>
+              <Btn small ghost color={G.red} onClick={()=>rechazarUser(u.email)}>✕</Btn>
+            </div>
+          </div>
+        </Card>)}</>}
+      <div style={{fontSize:"0.7rem",color:G.dim,letterSpacing:"0.08em",marginBottom:8,textTransform:"uppercase"}}>Equipo</div>
+      {colabs.length===0&&<div style={{textAlign:"center",padding:"40px 0",color:G.dim,fontSize:"0.82rem"}}>Sin colaboradores registrados</div>}
+      {colabs.map(c=>{const s=statsColab(c);return <Card key={c.id} style={{padding:"16px",marginBottom:10,opacity:c.activo?1:0.5}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:10}}>
+          <div style={{display:"flex",gap:10,alignItems:"center"}}>
+            <div style={{width:42,height:42,borderRadius:14,background:`${br.accent}18`,border:`1px solid ${br.accent}33`,display:"flex",alignItems:"center",justifyContent:"center",fontWeight:800,color:br.accent,fontSize:"1.1rem"}}>{c.nombre[0]}</div>
+            <div><div style={{fontWeight:700}}>{c.nombre}</div><div style={{fontSize:"0.7rem",color:G.dim}}>{c.cargo} {c.zona?`· ${c.zona}`:""}</div></div>
+          </div>
+          <div style={{display:"flex",gap:6}}>
+            <button onClick={()=>toggleActivo(c.id)} style={{fontSize:"0.65rem",padding:"4px 10px",borderRadius:50,background:c.activo?`${G.green}18`:"rgba(255,255,255,0.05)",border:`1px solid ${c.activo?G.green+"44":G.gb}`,color:c.activo?G.green:G.dim,cursor:"pointer"}}>{c.activo?"Activo":"Inactivo"}</button>
+            <button onClick={()=>{setForm({nombre:c.nombre,email:c.email||"",telefono:c.telefono||"",cargo:c.cargo||"vendedor",comision:String(c.comision||10),zona:c.zona||""});setModal(c.id);}} style={{width:28,height:28,borderRadius:9,background:`${br.accent}18`,border:`1px solid ${br.accent}33`,color:br.accent,cursor:"pointer",fontSize:"0.75rem"}}>✎</button>
+          </div>
+        </div>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8}}>
+          <div style={{textAlign:"center",padding:"8px 4px",background:"rgba(255,255,255,0.03)",borderRadius:10}}>
+            <div style={{fontSize:"0.58rem",color:G.dim,marginBottom:2}}>VENTAS</div>
+            <div style={{fontSize:"0.88rem",fontWeight:700}}>{s.ventas}</div>
+          </div>
+          <div style={{textAlign:"center",padding:"8px 4px",background:"rgba(255,255,255,0.03)",borderRadius:10}}>
+            <div style={{fontSize:"0.58rem",color:G.dim,marginBottom:2}}>TOTAL</div>
+            <div style={{fontSize:"0.82rem",fontWeight:700,color:br.accent}}>{fmt(s.total)}</div>
+          </div>
+          <div style={{textAlign:"center",padding:"8px 4px",background:"rgba(255,255,255,0.03)",borderRadius:10}}>
+            <div style={{fontSize:"0.58rem",color:G.dim,marginBottom:2}}>COMISIÓN {c.comision}%</div>
+            <div style={{fontSize:"0.82rem",fontWeight:700,color:G.yellow}}>{fmt(s.comision)}</div>
+          </div>
+        </div>
+        {c.email&&<div style={{marginTop:8,fontSize:"0.7rem",color:G.dim}}>✉ {c.email} {c.telefono?`· 📞 ${c.telefono}`:""}</div>}
+      </Card>;})}
+    </div>
+    {modal&&<Modal title={modal==="nuevo"?"Alta Colaborador":"Editar Colaborador"} onClose={()=>setModal(null)}>
+      <Inp label="Nombre completo" placeholder="Nombre del colaborador" value={form.nombre} onChange={v=>setForm(f=>({...f,nombre:v}))}/>
+      <Inp label="Email" type="email" placeholder="correo@ejemplo.com" value={form.email} onChange={v=>setForm(f=>({...f,email:v}))}/>
+      <Inp label="Teléfono" type="tel" placeholder="000-000-0000" value={form.telefono} onChange={v=>setForm(f=>({...f,telefono:v}))}/>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
+        <Sel label="Cargo" value={form.cargo} onChange={v=>setForm(f=>({...f,cargo:v}))} options={[{v:"vendedor",l:"Vendedor"},{v:"supervisor",l:"Supervisor"},{v:"gerente",l:"Gerente"},{v:"almacen",l:"Almacén"},{v:"cajero",l:"Cajero"}]}/>
+        <Inp label="Comisión (%)" type="number" placeholder="10" value={form.comision} onChange={v=>setForm(f=>({...f,comision:v}))}/>
+      </div>
+      <Inp label="Zona / Sucursal" placeholder="Ej: Zona Norte, Sucursal 1..." value={form.zona} onChange={v=>setForm(f=>({...f,zona:v}))}/>
+      <Btn onClick={guardar} full color={br.accent}>✓ {modal==="nuevo"?"Dar de alta":"Guardar cambios"}</Btn>
+    </Modal>}
+    {toast&&<Toast msg={toast.m} color={toast.c}/>}
+  </div>;
+}
+
+// ── PROVEEDORES ────────────────────────────────────────────
+function Proveedores(){
+  const br=DB.brand();
+  const[provs,setProvs]=useState(DB.proveedores());
+  const[modal,setModal]=useState(null);
+  const[toast,setToast]=useState("");
+  const[form,setForm]=useState({nombre:"",contacto:"",telefono:"",email:"",categoria:"fundas",credito:"0",notas:""});
+  function toast_(m,c){setToast({m,c});setTimeout(()=>setToast(""),3000);}
+  function guardar(){
+    if(!form.nombre){toast_("⚠ Nombre requerido","#ff3d6e");return;}
+    const ps=DB.proveedores();
+    if(modal==="nuevo"){
+      const p={...form,id:uid(),credito:Number(form.credito||0),createdAt:today(),compras:0,totalCompras:0};
+      DB.saveProveedores([...ps,p]);setProvs([...ps,p]);toast_("✓ Proveedor agregado");
+    }else{
+      const nps=ps.map(p=>p.id===modal?{...p,...form,credito:Number(form.credito||0)}:p);
+      DB.saveProveedores(nps);setProvs(nps);toast_("✓ Actualizado");
+    }
+    setModal(null);
+  }
+  function eliminar(id){const ps=DB.proveedores().filter(p=>p.id!==id);DB.saveProveedores(ps);setProvs(ps);toast_("⊘ Eliminado","#ff3d6e");}
+  return <div style={{display:"flex",flexDirection:"column",height:"100%"}}>
+    <div style={{padding:"14px 16px",borderBottom:`1px solid ${G.gb}`,flexShrink:0}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+        <div><div style={{fontWeight:800,fontSize:"1.1rem"}}>Proveedores</div><div style={{fontSize:"0.7rem",color:G.dim}}>{provs.length} registrados</div></div>
+        <Btn onClick={()=>{setForm({nombre:"",contacto:"",telefono:"",email:"",categoria:"fundas",credito:"0",notas:""});setModal("nuevo");}} color={br.accent} small>+ Agregar</Btn>
+      </div>
+    </div>
+    <div style={{flex:1,overflowY:"auto",padding:"12px 16px",paddingBottom:80}}>
+      {provs.length===0&&<div style={{textAlign:"center",padding:"50px 0",color:G.dim,fontSize:"0.82rem"}}>Sin proveedores registrados</div>}
+      {provs.map(p=><Card key={p.id} style={{padding:"16px",marginBottom:10}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:10}}>
+          <div>
+            <div style={{fontWeight:700,fontSize:"0.92rem"}}>{p.nombre}</div>
+            <div style={{fontSize:"0.7rem",color:G.dim}}>{p.categoria} {p.contacto?`· ${p.contacto}`:""}</div>
+          </div>
+          <div style={{display:"flex",gap:6}}>
+            <button onClick={()=>{setForm({nombre:p.nombre,contacto:p.contacto||"",telefono:p.telefono||"",email:p.email||"",categoria:p.categoria||"fundas",credito:String(p.credito||0),notas:p.notas||""});setModal(p.id);}} style={{width:28,height:28,borderRadius:9,background:`${br.accent}18`,border:`1px solid ${br.accent}33`,color:br.accent,cursor:"pointer",fontSize:"0.75rem"}}>✎</button>
+            <button onClick={()=>eliminar(p.id)} style={{width:28,height:28,borderRadius:9,background:"#ff3d6e18",border:"1px solid #ff3d6e33",color:G.red,cursor:"pointer",fontSize:"0.75rem"}}>✕</button>
+          </div>
+        </div>
+        <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
+          {p.telefono&&<div style={{fontSize:"0.72rem",padding:"4px 10px",borderRadius:50,background:`${br.accent}12`,border:`1px solid ${br.accent}22`,color:br.accent}}>📞 {p.telefono}</div>}
+          {p.email&&<div style={{fontSize:"0.72rem",padding:"4px 10px",borderRadius:50,background:`${br.accent2}12`,border:`1px solid ${br.accent2}22`,color:br.accent2}}>✉ {p.email}</div>}
+          {Number(p.credito)>0&&<div style={{fontSize:"0.72rem",padding:"4px 10px",borderRadius:50,background:`${G.yellow}12`,border:`1px solid ${G.yellow}22`,color:G.yellow}}>Crédito: {fmt(p.credito)}</div>}
+        </div>
+        {p.notas&&<div style={{marginTop:8,fontSize:"0.72rem",color:G.dim,fontStyle:"italic"}}>"{p.notas}"</div>}
+      </Card>)}
+    </div>
+    {modal&&<Modal title={modal==="nuevo"?"Nuevo Proveedor":"Editar Proveedor"} onClose={()=>setModal(null)}>
+      <Inp label="Nombre / Empresa" placeholder="Nombre del proveedor" value={form.nombre} onChange={v=>setForm(f=>({...f,nombre:v}))}/>
+      <Inp label="Contacto" placeholder="Nombre del contacto" value={form.contacto} onChange={v=>setForm(f=>({...f,contacto:v}))}/>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
+        <Inp label="Teléfono" type="tel" value={form.telefono} onChange={v=>setForm(f=>({...f,telefono:v}))}/>
+        <Inp label="Email" type="email" value={form.email} onChange={v=>setForm(f=>({...f,email:v}))}/>
+      </div>
+      <Sel label="Categoría" value={form.categoria} onChange={v=>setForm(f=>({...f,categoria:v}))} options={[{v:"fundas",l:"Fundas"},{v:"micas",l:"Micas/Hidrogel"},{v:"cargadores",l:"Cargadores"},{v:"accesorios",l:"Accesorios"},{v:"general",l:"General"}]}/>
+      <Inp label="Línea de crédito ($)" type="number" placeholder="0" value={form.credito} onChange={v=>setForm(f=>({...f,credito:v}))}/>
+      <Inp label="Notas" placeholder="Condiciones, observaciones..." value={form.notas} onChange={v=>setForm(f=>({...f,notas:v}))}/>
+      <Btn onClick={guardar} full color={br.accent}>✓ {modal==="nuevo"?"Agregar proveedor":"Guardar cambios"}</Btn>
+    </Modal>}
+    {toast&&<Toast msg={toast.m} color={toast.c}/>}
+  </div>;
+}
+
+// ── FINANZAS ───────────────────────────────────────────────
+function Finanzas(){
+  const br=DB.brand();
+  const[gastos,setGastos]=useState(DB.gastos());
+  const[modal,setModal]=useState(false);
+  const[form,setForm]=useState({concepto:"",monto:"",categoria:"operativo",fecha:today(),notas:""});
+  const[toast,setToast]=useState("");
+  const[filtro,setFiltro]=useState("mes");
+  function toast_(m,c){setToast({m,c});setTimeout(()=>setToast(""),3000);}
+  function agregar(){
+    if(!form.concepto||!form.monto){toast_("⚠ Concepto y monto requeridos","#ff3d6e");return;}
+    const g={...form,id:uid(),monto:Number(form.monto)};
+    const ng=[...gastos,g];DB.saveGastos(ng);setGastos(ng);
+    setModal(false);setForm({concepto:"",monto:"",categoria:"operativo",fecha:today(),notas:""});
+    toast_("✓ Gasto registrado");
+  }
+  function eliminar(id){const ng=DB.gastos().filter(g=>g.id!==id);DB.saveGastos(ng);setGastos(ng);}
+  const ventas=DB.ventas();
+  const hoy=today();
+  const filtrar=(items)=>{
+    if(filtro==="hoy")return items.filter(x=>x.fecha===hoy);
+    if(filtro==="semana"){const s=new Date();s.setDate(s.getDate()-7);return items.filter(x=>new Date(x.fecha)>=s);}
+    if(filtro==="mes"){const m=new Date();m.setDate(m.getDate()-30);return items.filter(x=>new Date(x.fecha)>=m);}
+    return items;
+  };
+  const ventasFilt=filtrar(ventas);const gastosFilt=filtrar(gastos);
+  const ingresos=ventasFilt.reduce((a,v)=>a+Number(v.total||0),0);
+  const utilidadBruta=ventasFilt.reduce((a,v)=>a+Number(v.utilidad||0),0);
+  const totalGastos=gastosFilt.reduce((a,g)=>a+Number(g.monto||0),0);
+  const utilidadNeta=utilidadBruta-totalGastos;
+  const comisiones=ventasFilt.reduce((a,v)=>a+Number(v.comisionMonto||0),0);
+  const porCategoria={};gastosFilt.forEach(g=>{if(!porCategoria[g.categoria])porCategoria[g.categoria]=0;porCategoria[g.categoria]+=Number(g.monto||0);});
+  return <div style={{display:"flex",flexDirection:"column",height:"100%"}}>
+    <div style={{padding:"14px 16px",borderBottom:`1px solid ${G.gb}`,flexShrink:0}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
+        <div style={{fontWeight:800,fontSize:"1.1rem"}}>Finanzas</div>
+        <Btn onClick={()=>setModal(true)} color={br.accent} small>+ Gasto</Btn>
+      </div>
+      <div style={{display:"flex",gap:8,overflowX:"auto"}}>
+        {[["hoy","Hoy"],["semana","7 días"],["mes","30 días"],["todo","Todo"]].map(([f,l])=>
+          <Pill key={f} active={filtro===f} color={br.accent} onClick={()=>setFiltro(f)}>{l}</Pill>)}
+      </div>
+    </div>
+    <div style={{flex:1,overflowY:"auto",padding:"12px 16px",paddingBottom:80}}>
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:16}}>
+        <StatCard label="Ingresos" value={fmt(ingresos)} color={br.accent} icon="💰"/>
+        <StatCard label="Ut. Bruta" value={fmt(utilidadBruta)} color={G.green} icon="📈"/>
+        <StatCard label="Gastos" value={fmt(totalGastos)} color={G.red} icon="💸"/>
+        <StatCard label="Ut. Neta" value={fmt(utilidadNeta)} sub={utilidadNeta>=0?"✓ Positivo":"⚠ Negativo"} color={utilidadNeta>=0?G.green:G.red} icon={utilidadNeta>=0?"🎯":"⚠️"}/>
+      </div>
+      <Card style={{padding:"16px",marginBottom:16}}>
+        <div style={{fontWeight:700,fontSize:"0.85rem",marginBottom:12}}>Resumen financiero</div>
+        {[["Ventas brutas",ingresos,br.accent],["Costo de ventas",ingresos-utilidadBruta,G.red],["Utilidad bruta",utilidadBruta,G.green],["Gastos operativos",totalGastos,G.red],["Comisiones pagadas",comisiones,G.yellow],["Utilidad neta",utilidadNeta,utilidadNeta>=0?G.green:G.red]].map(([l,v,c])=>
+          <div key={l} style={{display:"flex",justifyContent:"space-between",padding:"8px 0",borderBottom:`1px solid ${G.dim2}`,fontSize:"0.82rem"}}>
+            <span style={{color:G.dim}}>{l}</span><span style={{fontWeight:700,color:c}}>{fmt(v)}</span>
+          </div>)}
+      </Card>
+      {Object.keys(porCategoria).length>0&&<Card style={{padding:"16px",marginBottom:16}}>
+        <div style={{fontWeight:700,fontSize:"0.85rem",marginBottom:12}}>Gastos por categoría</div>
+        {Object.entries(porCategoria).sort((a,b)=>b[1]-a[1]).map(([cat,monto])=>
+          <div key={cat} style={{marginBottom:10}}>
+            <div style={{display:"flex",justifyContent:"space-between",fontSize:"0.78rem",marginBottom:4}}>
+              <span style={{color:G.dim,textTransform:"capitalize"}}>{cat}</span><span style={{color:G.red}}>{fmt(monto)}</span>
+            </div>
+            <div style={{height:4,borderRadius:4,background:G.dim2}}><div style={{height:"100%",width:`${totalGastos>0?(monto/totalGastos)*100:0}%`,background:`linear-gradient(90deg,${G.red},${G.orange})`,borderRadius:4}}/></div>
+          </div>)}
+      </Card>}
+      <div style={{fontSize:"0.7rem",color:G.dim,letterSpacing:"0.08em",marginBottom:8,textTransform:"uppercase"}}>Gastos recientes</div>
+      {gastosFilt.length===0&&<div style={{textAlign:"center",padding:"30px 0",color:G.dim,fontSize:"0.82rem"}}>Sin gastos en este período</div>}
+      {gastosFilt.slice().reverse().map(g=><Card key={g.id} style={{padding:"12px 14px",marginBottom:8}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+          <div>
+            <div style={{fontWeight:600,fontSize:"0.85rem"}}>{g.concepto}</div>
+            <div style={{fontSize:"0.7rem",color:G.dim}}>{g.categoria} · {g.fecha}</div>
+          </div>
+          <div style={{display:"flex",gap:8,alignItems:"center"}}>
+            <span style={{fontWeight:700,color:G.red}}>{fmt(g.monto)}</span>
+            <button onClick={()=>eliminar(g.id)} style={{width:26,height:26,borderRadius:8,background:"#ff3d6e18",border:"1px solid #ff3d6e33",color:G.red,cursor:"pointer",fontSize:"0.7rem"}}>✕</button>
+          </div>
+        </div>
+        {g.notas&&<div style={{fontSize:"0.7rem",color:G.dim,marginTop:4,fontStyle:"italic"}}>"{g.notas}"</div>}
+      </Card>)}
+    </div>
+    {modal&&<Modal title="Nuevo Gasto" onClose={()=>setModal(false)}>
+      <Inp label="Concepto" placeholder="Ej: Renta, envíos, papelería..." value={form.concepto} onChange={v=>setForm(f=>({...f,concepto:v}))}/>
+      <Inp label="Monto ($)" type="number" placeholder="0.00" value={form.monto} onChange={v=>setForm(f=>({...f,monto:v}))}/>
+      <Sel label="Categoría" value={form.categoria} onChange={v=>setForm(f=>({...f,categoria:v}))} options={[{v:"operativo",l:"Operativo"},{v:"logistica",l:"Logística/Envíos"},{v:"marketing",l:"Marketing"},{v:"renta",l:"Renta"},{v:"nomina",l:"Nómina"},{v:"compras",l:"Compras inventario"},{v:"otros",l:"Otros"}]}/>
+      <Inp label="Fecha" type="date" value={form.fecha} onChange={v=>setForm(f=>({...f,fecha:v}))}/>
+      <Inp label="Notas" placeholder="Descripción adicional..." value={form.notas} onChange={v=>setForm(f=>({...f,notas:v}))}/>
+      <Btn onClick={agregar} full color={br.accent}>✓ Registrar gasto</Btn>
+    </Modal>}
+    {toast&&<Toast msg={toast.m} color={toast.c}/>}
+  </div>;
+}
+
+// ── ADMIN PANEL ────────────────────────────────────────────
+function AdminPanel({onClose}){
+  const br=DB.brand();
+  const[section,setSection]=useState("brand");
+  const[brand,setBrand]=useState(DB.brand());
+  const[toast,setToast]=useState("");
+  const up=(k,v)=>setBrand(p=>({...p,[k]:v}));
+  function saveBrand(){DB.saveBrand(brand);setToast("✓ Guardado");setTimeout(()=>window.location.reload(),1200);}
+  const PRESETS=[{n:"Verde",a:"#00E5A0",b:"#4FC3F7"},{n:"Cyan",a:"#4FC3F7",b:"#00B8D4"},{n:"Púrpura",a:"#CE93D8",b:"#9C27B0"},{n:"Dorado",a:"#FFCC02",b:"#FF9500"},{n:"Rosa",a:"#F48FB1",b:"#FF3D6E"},{n:"Naranja",a:"#FF8A65",b:"#FF5722"}];
+  return <div style={{position:"fixed",inset:0,zIndex:9999,background:"#080c1a",fontFamily:G.font,color:G.text,display:"flex",flexDirection:"column"}}>
+    <Bg a={brand.accent} b={brand.accent2}/>
+    <div style={{position:"relative",zIndex:1,padding:"14px 20px",borderBottom:`1px solid ${G.gb}`,display:"flex",alignItems:"center",gap:14,flexShrink:0}}>
+      <button onClick={onClose} style={{width:34,height:34,borderRadius:11,background:G.glass,border:`1px solid ${G.gb}`,color:G.text,cursor:"pointer",fontSize:"1rem"}}>←</button>
+      <div style={{fontWeight:700,fontSize:"1.05rem"}}>Panel Admin</div>
+    </div>
+    <div style={{position:"relative",zIndex:1,display:"flex",borderBottom:`1px solid ${G.gb}`,flexShrink:0}}>
+      {[["brand","Branding"],["version","Versión"]].map(([s,l])=>
+        <button key={s} onClick={()=>setSection(s)} style={{flex:1,padding:"10px 4px",border:"none",background:"none",borderBottom:`2px solid ${section===s?brand.accent:"transparent"}`,color:section===s?brand.accent:G.dim,fontFamily:G.font,fontSize:"0.78rem",fontWeight:section===s?700:400,cursor:"pointer"}}>{l}</button>)}
+    </div>
+    <div style={{position:"relative",zIndex:1,flex:1,overflowY:"auto",padding:"20px",paddingBottom:100}}>
+      {section==="brand"&&<>
+        <Inp label="Nombre de la app" value={brand.name} onChange={v=>up("name",v)}/>
+        <Inp label="Subtítulo" value={brand.sub} onChange={v=>up("sub",v)}/>
+        <div style={{fontSize:"0.68rem",color:G.dim,letterSpacing:"0.08em",marginBottom:10,textTransform:"uppercase"}}>Presets de color</div>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:10,marginBottom:20}}>
+          {PRESETS.map(p=><button key={p.n} onClick={()=>{up("accent",p.a);up("accent2",p.b);}} style={{padding:"12px 8px",borderRadius:14,background:`linear-gradient(135deg,${p.a}22,${p.b}18)`,border:`1px solid ${brand.accent===p.a?p.a+"88":G.gb}`,cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",gap:6}}>
+            <div style={{display:"flex",gap:4}}><div style={{width:12,height:12,borderRadius:"50%",background:p.a}}/><div style={{width:12,height:12,borderRadius:"50%",background:p.b}}/></div>
+            <span style={{fontSize:"0.7rem",color:p.a,fontFamily:G.font}}>{p.n}</span>
+          </button>)}
+        </div>
+        <div style={{display:"flex",gap:12,alignItems:"center",marginBottom:14}}>
+          <input type="color" value={brand.accent} onChange={e=>up("accent",e.target.value)} style={{width:52,height:44,border:"none",borderRadius:12,cursor:"pointer"}}/>
+          <div style={{flex:1,padding:"12px 14px",background:`${brand.accent}18`,border:`1px solid ${brand.accent}44`,borderRadius:12,color:brand.accent,fontFamily:G.mono,fontSize:"0.82rem"}}>{brand.accent}</div>
+        </div>
+        <div style={{display:"flex",gap:12,alignItems:"center"}}>
+          <input type="color" value={brand.accent2} onChange={e=>up("accent2",e.target.value)} style={{width:52,height:44,border:"none",borderRadius:12,cursor:"pointer"}}/>
+          <div style={{flex:1,padding:"12px 14px",background:`${brand.accent2}18`,border:`1px solid ${brand.accent2}44`,borderRadius:12,color:brand.accent2,fontFamily:G.mono,fontSize:"0.82rem"}}>{brand.accent2}</div>
+        </div>
+      </>}
+      {section==="version"&&<>
+        <Card style={{padding:"16px",marginBottom:20,background:`${brand.accent}08`}}>
+          <div style={{fontSize:"0.65rem",color:G.dim,marginBottom:4}}>VERSIÓN ACTUAL</div>
+          <div style={{fontFamily:G.mono,fontSize:"2rem",fontWeight:900,color:brand.accent}}>v{brand.version||"1.0.0"}</div>
+          <div style={{fontSize:"0.72rem",color:G.dim}}>Build {brand.buildDate||BUILD_DATE}</div>
+        </Card>
+        <div style={{display:"flex",gap:10,marginBottom:16}}>
+          {[0,1,2].map(i=><div key={i} style={{flex:1,textAlign:"center"}}>
+            <div style={{fontSize:"0.6rem",color:G.dim,marginBottom:6}}>{["MAYOR","MENOR","PARCHE"][i]}</div>
+            <div style={{display:"flex",alignItems:"center",background:G.glass,border:`1px solid ${G.gb}`,borderRadius:12,overflow:"hidden"}}>
+              <button onClick={()=>{const p=(brand.version||"1.0.0").split(".");p[i]=Math.max(0,parseInt(p[i])-1);up("version",p.join("."));}} style={{padding:"10px 12px",background:"none",border:"none",color:G.dim,cursor:"pointer"}}>−</button>
+              <div style={{flex:1,textAlign:"center",fontFamily:G.mono,fontWeight:700,color:brand.accent}}>{(brand.version||"1.0.0").split(".")[i]}</div>
+              <button onClick={()=>{const p=(brand.version||"1.0.0").split(".");p[i]=parseInt(p[i])+1;up("version",p.join("."));}} style={{padding:"10px 12px",background:"none",border:"none",color:brand.accent,cursor:"pointer"}}>+</button>
+            </div>
+          </div>)}
+        </div>
+        <div style={{display:"flex",gap:10}}>
+          <input type="date" value={brand.buildDate||BUILD_DATE} onChange={e=>up("buildDate",e.target.value)} style={{flex:1,padding:"12px 14px",background:G.glass,border:`1px solid ${G.gb}`,borderRadius:12,fontFamily:G.mono,fontSize:"0.82rem",color:brand.accent,outline:"none",colorScheme:"dark"}}/>
+          <button onClick={()=>up("buildDate",today())} style={{padding:"12px 14px",background:`${brand.accent}18`,border:`1px solid ${brand.accent}44`,borderRadius:12,color:brand.accent,fontFamily:G.font,fontSize:"0.78rem",fontWeight:600,cursor:"pointer"}}>📅 Hoy</button>
+        </div>
+      </>}
+    </div>
+    <div style={{position:"fixed",bottom:0,left:0,right:0,padding:"14px 20px",background:"rgba(5,8,18,0.95)",backdropFilter:"blur(20px)",borderTop:`1px solid ${G.gb}`,zIndex:2}}>
+      <Btn onClick={saveBrand} full color={brand.accent}>💾 Guardar y aplicar</Btn>
+    </div>
+    {toast&&<div style={{position:"fixed",bottom:80,left:"50%",transform:"translateX(-50%)",background:"rgba(5,8,18,0.9)",border:`1px solid ${brand.accent}44`,color:brand.accent,padding:"10px 20px",borderRadius:50,fontSize:"0.8rem",fontWeight:600,zIndex:9999}}>{toast}</div>}
+  </div>;
+}
+
+// ── MAIN APP ───────────────────────────────────────────────
+function MainApp({user,onLogout}){
+  const br=DB.brand();
+  const[tab,setTab]=useState("dashboard");
+  const[menu,setMenu]=useState(false);
+  const[admin,setAdmin]=useState(false);
+  const dl=getDaysLeft(user);
+  const isAdmin=user.role==="admin";
+  const tabs=[
+    {id:"dashboard",icon:"◈",label:"Inicio"},
+    {id:"ventas",icon:"🛍",label:"Ventas"},
+    {id:"productos",icon:"📦",label:"Productos"},
+    ...(isAdmin?[{id:"colaboradores",icon:"👥",label:"Equipo"}]:[]),
+    ...(isAdmin?[{id:"proveedores",icon:"🏭",label:"Proveed."}]:[]),
+    ...(isAdmin?[{id:"finanzas",icon:"💹",label:"Finanzas"}]:[]),
+  ];
+  if(admin)return <AdminPanel onClose={()=>setAdmin(false)}/>;
+  return <div style={{display:"flex",flexDirection:"column",height:"100vh",background:G.bg,fontFamily:G.font,color:G.text,position:"relative",overflow:"hidden"}}>
+    <Bg a={br.accent} b={br.accent2}/>
+    {/* Header */}
+    <div style={{position:"relative",zIndex:10,padding:"12px 16px",borderBottom:`1px solid ${G.gb}`,display:"flex",alignItems:"center",justifyContent:"space-between",backdropFilter:"blur(20px)",background:"rgba(5,8,18,0.8)",flexShrink:0}}>
+      <div style={{fontWeight:900,fontSize:"1.15rem",letterSpacing:"0.1em",background:`linear-gradient(120deg,#fff,${br.accent},${br.accent2})`,WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>{br.name}</div>
+      <div style={{display:"flex",alignItems:"center",gap:8}}>
+        <div style={{fontSize:"0.6rem",padding:"4px 10px",borderRadius:50,background:`${br.accent}14`,border:`1px solid ${br.accent}33`,color:br.accent,fontWeight:600}}>{isAdmin?"⚙ Admin":"👤 "+user.name.split(" ")[0]}</div>
+        <button onClick={()=>setMenu(true)} style={{width:32,height:32,borderRadius:10,background:G.glass,border:`1px solid ${G.gb}`,color:G.text,cursor:"pointer",fontWeight:700,fontSize:"0.9rem"}}>{user.name[0]}</button>
+      </div>
+    </div>
+    {/* Content */}
+    <div style={{position:"relative",zIndex:1,flex:1,overflow:"hidden",display:"flex",flexDirection:"column"}}>
+      {tab==="dashboard"&&<div style={{flex:1,overflowY:"auto"}}><Dashboard user={user}/></div>}
+      {tab==="ventas"&&<Ventas user={user}/>}
+      {tab==="productos"&&<Productos/>}
+      {tab==="colaboradores"&&isAdmin&&<Colaboradores/>}
+      {tab==="proveedores"&&isAdmin&&<Proveedores/>}
+      {tab==="finanzas"&&isAdmin&&<Finanzas/>}
+    </div>
+    {/* Bottom nav */}
+    <div style={{position:"relative",zIndex:10,display:"flex",borderTop:`1px solid ${G.gb}`,background:"rgba(5,8,18,0.9)",backdropFilter:"blur(20px)",flexShrink:0}}>
+      {tabs.map(t=><button key={t.id} onClick={()=>setTab(t.id)}
+        style={{flex:1,padding:"10px 4px 8px",border:"none",background:"none",cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",gap:3,
+        borderTop:`2px solid ${tab===t.id?br.accent:"transparent"}`,transition:"all 0.2s"}}>
+        <div style={{fontSize:tab===t.id?"1.15rem":"1rem",transition:"all 0.2s"}}>{t.icon}</div>
+        <div style={{fontSize:"0.55rem",color:tab===t.id?br.accent:G.dim,fontWeight:tab===t.id?700:400,letterSpacing:"0.02em"}}>{t.label}</div>
+      </button>)}
+    </div>
+    {/* Menu */}
+    {menu&&<div style={{position:"fixed",inset:0,zIndex:999}}>
+      <div onClick={()=>setMenu(false)} style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.65)",backdropFilter:"blur(4px)"}}/>
+      <div style={{position:"absolute",bottom:0,left:0,right:0,background:"#080c1a",border:`1px solid ${G.gb}`,borderRadius:"24px 24px 0 0",padding:"12px 20px 50px",animation:"su 0.3s ease"}}>
+        <div style={{width:40,height:4,borderRadius:4,background:G.gb,margin:"0 auto 18px"}}/>
+        <div style={{display:"flex",alignItems:"center",gap:12,padding:"0 4px 16px",borderBottom:`1px solid ${G.gb}`,marginBottom:14}}>
+          <div style={{width:44,height:44,borderRadius:14,background:`${br.accent}22`,border:`1px solid ${br.accent}44`,display:"flex",alignItems:"center",justifyContent:"center",fontWeight:800,color:br.accent,fontSize:"1.2rem"}}>{user.name[0]}</div>
+          <div><div style={{fontWeight:700}}>{user.name}</div><div style={{fontSize:"0.72rem",color:G.dim}}>{user.email}</div></div>
+        </div>
+        {isAdmin&&<button onClick={()=>{setMenu(false);setAdmin(true);}} style={{display:"flex",alignItems:"center",gap:14,width:"100%",padding:"14px",background:`${br.accent}08`,border:`1px solid ${br.accent}18`,borderRadius:14,color:G.text,fontFamily:G.font,fontSize:"0.88rem",fontWeight:600,cursor:"pointer",marginBottom:10}}>
+          <span style={{width:36,height:36,borderRadius:11,background:`${br.accent}18`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:"1.1rem"}}>⚙️</span>
+          <div><div>Panel de administración</div><div style={{fontSize:"0.7rem",color:G.dim,fontWeight:400}}>Branding, versión, config.</div></div>
+        </button>}
+        <button onClick={()=>{DB.clearSession();onLogout();}} style={{display:"flex",alignItems:"center",gap:14,width:"100%",padding:"14px",background:"#ff3d6e08",border:"1px solid #ff3d6e22",borderRadius:14,color:G.red,fontFamily:G.font,fontSize:"0.88rem",fontWeight:600,cursor:"pointer"}}>
+          <span style={{width:36,height:36,borderRadius:11,background:"#ff3d6e18",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"1.1rem"}}>↩</span>Cerrar sesión
+        </button>
+        <div style={{textAlign:"center",marginTop:16,fontSize:"0.62rem",color:"rgba(232,238,255,0.12)"}}>{br.name} · {br.sub} · v{br.version||APP_VERSION}</div>
+      </div>
+    </div>}
+  </div>;
+}
+
+// ── ROOT ───────────────────────────────────────────────────
+function App(){
+  const[user,setUser]=useState(()=>DB.session());
+  if(!user)return <Login onAuth={setUser}/>;
+  return <MainApp user={user} onLogout={()=>setUser(null)}/>;
+}
+const root=ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App/>);
+</script></body></html>
