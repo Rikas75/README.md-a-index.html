@@ -293,6 +293,140 @@ body{font-family:'DM Sans',sans-serif;background:var(--void);color:var(--text-1)
 <div class="atm"></div>
 <div class="grain"></div>
 
+<!-- LOGIN SCREEN -->
+<div id="loginScreen" style="position:fixed;inset:0;z-index:9000;display:flex;align-items:center;justify-content:center;background:var(--void);padding:20px;">
+  <div style="width:100%;max-width:400px;animation:fadeUp .5s ease both;">
+    <div style="text-align:center;margin-bottom:28px;">
+      <div style="width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,rgba(201,116,138,0.35),rgba(196,168,130,0.2));border:1px solid rgba(201,116,138,0.3);display:flex;align-items:center;justify-content:center;font-size:20px;margin:0 auto 12px;box-shadow:0 6px 24px rgba(201,116,138,0.18);">&#10022;</div>
+      <div style="font-family:Cormorant Garamond,serif;font-size:24px;font-weight:300;color:var(--text-1);">Obsidiana Rosa</div>
+      <div style="font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--text-3);margin-top:3px;">Finanzas Personales</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:20px;">
+      <div id="roleAdminCard" onclick="selectRole('admin')" style="background:rgba(201,116,138,0.1);border:1px solid rgba(201,116,138,0.3);border-radius:12px;padding:14px;text-align:center;cursor:pointer;transition:all .2s;">
+        <div style="font-size:18px;margin-bottom:4px;">&#128081;</div>
+        <div style="font-family:Cormorant Garamond,serif;font-size:13px;">Administradora</div>
+        <div style="font-size:9px;color:var(--text-3);margin-top:1px;">Control total</div>
+      </div>
+      <div id="roleGuestCard" onclick="selectRole('guest')" style="background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;cursor:pointer;transition:all .2s;">
+        <div style="font-size:18px;margin-bottom:4px;">&#128100;</div>
+        <div style="font-family:Cormorant Garamond,serif;font-size:13px;">Invitada</div>
+        <div style="font-size:9px;color:var(--text-3);margin-top:1px;">Solo lectura</div>
+      </div>
+    </div>
+    <div id="adminLoginForm">
+      <div style="margin-bottom:11px;">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-3);margin-bottom:5px;">Usuario</div>
+        <input id="loginUser" class="form-input" placeholder="admin" value="admin">
+      </div>
+      <div style="margin-bottom:14px;">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-3);margin-bottom:5px;">Contrasena</div>
+        <input id="loginPass" class="form-input" type="password" placeholder="******" onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <div style="font-size:11px;color:#F472B6;min-height:16px;margin-bottom:10px;text-align:center;" id="loginError"></div>
+      <button class="btn btn-rose" style="width:100%;padding:12px;" onclick="doLogin()">Entrar &rarr;</button>
+      <div style="text-align:center;margin-top:10px;font-size:11px;color:var(--text-3);">Primera vez: usuario admin contrasena 1234</div>
+    </div>
+    <div id="guestLoginForm" style="display:none;">
+      <div style="margin-bottom:14px;">
+        <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-3);margin-bottom:5px;">Codigo de Acceso</div>
+        <input id="guestCode" class="form-input" placeholder="Ej: ROSA-2026" onkeydown="if(event.key==='Enter')doGuestLogin()">
+      </div>
+      <div style="font-size:11px;color:#F472B6;min-height:16px;margin-bottom:10px;text-align:center;" id="guestError"></div>
+      <button class="btn btn-rose" style="width:100%;padding:12px;" onclick="doGuestLogin()">Entrar con codigo &rarr;</button>
+      <div style="text-align:center;margin-top:10px;font-size:11px;color:var(--text-3);">Solicita tu codigo a la administradora</div>
+    </div>
+  </div>
+</div>
+
+<!-- TRIAL BANNER -->
+<div id="trialBanner" style="display:none;position:fixed;top:0;left:248px;right:0;z-index:800;padding:8px 20px;align-items:center;justify-content:space-between;font-size:11px;">
+  <div style="display:flex;align-items:center;gap:8px;">
+    <div id="trialDot" style="width:6px;height:6px;border-radius:50%;background:var(--rose);box-shadow:0 0 6px var(--rose);animation:pulse 2s infinite;flex-shrink:0;"></div>
+    <span id="trialText">Cargando...</span>
+  </div>
+  <div style="display:flex;gap:8px;align-items:center;">
+    <button id="trialAdminBtn" onclick="openTrialPanel()" style="display:none;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:16px;padding:4px 12px;font-size:10px;color:rgba(255,255,255,0.5);cursor:pointer;font-family:DM Sans,sans-serif;">Ajustes</button>
+    <button id="trialUpgradeBtn" onclick="openTrialPanel()" style="display:none;background:linear-gradient(135deg,var(--rose),var(--mauve));border:none;border-radius:16px;padding:5px 14px;font-size:10px;font-weight:700;color:var(--ivory);cursor:pointer;font-family:DM Sans,sans-serif;">Activar</button>
+  </div>
+</div>
+<div id="trialBar" style="display:none;position:fixed;top:37px;left:248px;right:0;z-index:799;height:2px;background:rgba(255,255,255,0.04);">
+  <div id="trialBarFill" style="height:100%;border-radius:2px;transition:width .6s ease;"></div>
+</div>
+
+<!-- TRIAL PANEL MODAL -->
+<div id="trialModal" style="position:fixed;inset:0;z-index:9500;background:rgba(7,8,12,0.9);backdrop-filter:blur(20px);display:none;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#13101A;border:1px solid rgba(201,116,138,0.2);border-radius:20px;padding:28px;width:100%;max-width:460px;max-height:90vh;overflow-y:auto;position:relative;">
+    <button onclick="closeTrialPanel()" style="position:absolute;top:14px;right:14px;background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:50%;width:28px;height:28px;cursor:pointer;color:var(--text-3);font-size:12px;display:flex;align-items:center;justify-content:center;">x</button>
+    <div id="trialPinGate" style="text-align:center;padding:10px 0;">
+      <div style="font-size:30px;margin-bottom:10px;">&#128272;</div>
+      <div style="font-family:Cormorant Garamond,serif;font-size:20px;margin-bottom:6px;">Panel Administradora</div>
+      <div style="font-size:12px;color:var(--text-3);margin-bottom:16px;">Ingresa tu PIN de 4 digitos</div>
+      <input id="trialPin" type="password" maxlength="4" placeholder="****" onkeydown="if(event.key==='Enter')checkTrialPin()" style="background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:12px;color:var(--text-1);font-size:20px;text-align:center;letter-spacing:8px;outline:none;width:150px;font-family:Cormorant Garamond,serif;display:block;margin:0 auto;">
+      <div style="font-size:11px;color:#F472B6;min-height:16px;margin-top:8px;" id="trialPinErr"></div>
+      <div style="margin-top:6px;font-size:10px;color:var(--text-4);">PIN demo: 1234</div>
+      <button onclick="checkTrialPin()" class="btn btn-rose" style="margin-top:14px;padding:10px 28px;">Entrar</button>
+    </div>
+    <div id="trialPanelMain" style="display:none;">
+      <div style="font-family:Cormorant Garamond,serif;font-size:20px;margin-bottom:18px;">Panel de Control</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:18px;">
+        <div style="background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center;">
+          <div style="font-family:Cormorant Garamond,serif;font-size:22px;color:var(--rose-pale);" id="tpDays">14</div>
+          <div style="font-size:9px;color:var(--text-3);text-transform:uppercase;margin-top:2px;">Dias</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center;">
+          <div style="font-family:Cormorant Garamond,serif;font-size:22px;color:var(--gold-pale);" id="tpUsers">0</div>
+          <div style="font-size:9px;color:var(--text-3);text-transform:uppercase;margin-top:2px;">Invitadas</div>
+        </div>
+        <div style="background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:10px;padding:12px;text-align:center;">
+          <div style="font-size:13px;" id="tpStatus">Activo</div>
+          <div style="font-size:9px;color:var(--text-3);text-transform:uppercase;margin-top:2px;">Estado</div>
+        </div>
+      </div>
+      <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-3);margin-bottom:10px;">Control de Prueba</div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;">
+        <span style="font-size:12px;color:var(--text-2);flex:1;">Dias de prueba</span>
+        <input id="tpDaysInput" type="number" min="1" max="365" value="14" style="background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;padding:6px 10px;color:var(--text-1);font-size:12px;outline:none;width:75px;text-align:center;font-family:DM Sans,sans-serif;">
+        <button onclick="updateTrialDays()" class="btn btn-rose btn-sm">Guardar</button>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;">
+        <span style="font-size:12px;color:var(--text-2);flex:1;">Extender dias</span>
+        <input id="tpExtend" type="number" min="1" max="90" value="7" style="background:rgba(255,255,255,0.05);border:1px solid var(--border);border-radius:8px;padding:6px 10px;color:var(--text-1);font-size:12px;outline:none;width:75px;text-align:center;font-family:DM Sans,sans-serif;">
+        <button onclick="extendTrial()" style="padding:6px 14px;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;border:1px solid rgba(52,211,153,0.3);color:#34D399;background:rgba(52,211,153,0.1);font-family:DM Sans,sans-serif;">Extender</button>
+      </div>
+      <div style="height:1px;background:var(--border);margin:12px 0;"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;">
+        <button onclick="activateLicense()" class="btn btn-rose btn-sm">Activar Licencia</button>
+        <button onclick="resetTrial()" style="padding:6px 14px;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid rgba(252,211,77,0.25);color:#FCD34D;background:rgba(252,211,77,0.08);font-family:DM Sans,sans-serif;">Reiniciar</button>
+        <button onclick="suspendTrial()" style="padding:6px 14px;border-radius:8px;font-size:11px;font-weight:600;cursor:pointer;border:1px solid rgba(244,114,182,0.25);color:#F472B6;background:rgba(244,114,182,0.08);font-family:DM Sans,sans-serif;">Suspender</button>
+      </div>
+      <div style="height:1px;background:var(--border);margin:12px 0;"></div>
+      <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-3);margin-bottom:10px;">Codigos para Invitadas</div>
+      <div style="display:flex;gap:8px;margin-bottom:10px;">
+        <input id="tpGuestName" class="form-input" placeholder="Nombre de la invitada" style="flex:1;">
+        <button onclick="generateGuestCode()" class="btn btn-rose btn-sm">+ Generar</button>
+      </div>
+      <div id="tpGuestList"></div>
+      <div style="height:1px;background:var(--border);margin:12px 0;"></div>
+      <div style="font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-3);margin-bottom:10px;">Cambiar Contrasena</div>
+      <div style="display:flex;gap:8px;">
+        <input id="tpNewPass" type="password" class="form-input" placeholder="Nueva contrasena" style="flex:1;">
+        <button onclick="changeAdminPass()" class="btn btn-rose btn-sm">Cambiar</button>
+      </div>
+      <div style="text-align:center;margin-top:16px;">
+        <button onclick="doLogout()" style="background:none;border:none;color:var(--text-3);font-size:11px;cursor:pointer;">Cerrar sesion</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EXPIRED SCREEN -->
+<div id="expiredScreen" style="position:fixed;inset:0;z-index:8000;background:rgba(7,8,12,0.97);backdrop-filter:blur(30px);display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:32px;">
+  <div style="font-size:50px;margin-bottom:16px;">&#9203;</div>
+  <div style="font-family:Cormorant Garamond,serif;font-size:28px;font-weight:300;color:#F472B6;margin-bottom:10px;">Periodo de Prueba Finalizado</div>
+  <div style="font-size:14px;color:var(--text-3);max-width:360px;line-height:1.7;margin-bottom:24px;">Tu periodo de prueba ha terminado. Contacta a la administradora para activar tu acceso.</div>
+  <button onclick="openTrialPanel()" class="btn btn-rose" style="padding:13px 32px;">Activar Licencia</button>
+</div>
+
 <div class="app">
 
 <!-- ════ SIDEBAR ════ -->
@@ -1200,7 +1334,284 @@ tick();
 setInterval(tick,30000);
 
 // ── INIT ──
-renderDashboard();
+
+/* ══════════════════════════════════
+   AUTH + TRIAL SYSTEM
+══════════════════════════════════ */
+const AUTH_KEY  = 'ob_auth';
+const TRIAL_KEY = 'ob_trial';
+const GUESTS_KEY= 'ob_guests';
+
+function getAuth(){
+  const d = localStorage.getItem(AUTH_KEY);
+  if(d) return JSON.parse(d);
+  return {user:'admin', pass:'1234', pin:'1234'};
+}
+function getTrial(){
+  const d = localStorage.getItem(TRIAL_KEY);
+  if(d) return JSON.parse(d);
+  const t = {days:14, start:new Date().toISOString().split('T')[0], status:'active'};
+  localStorage.setItem(TRIAL_KEY, JSON.stringify(t));
+  return t;
+}
+function getGuests(){ return JSON.parse(localStorage.getItem(GUESTS_KEY)||'[]'); }
+function saveAuth(a){ localStorage.setItem(AUTH_KEY,JSON.stringify(a)); }
+function saveTrial(t){ localStorage.setItem(TRIAL_KEY,JSON.stringify(t)); }
+function saveGuests(g){ localStorage.setItem(GUESTS_KEY,JSON.stringify(g)); }
+
+function getDaysLeft(){
+  const t = getTrial();
+  if(t.status==='licensed') return 9999;
+  if(t.status==='suspended') return 0;
+  const diff = Math.floor((new Date()-new Date(t.start))/(1000*60*60*24));
+  return Math.max(0, t.days - diff);
+}
+
+let currentUser = null;
+let trialPinUnlocked = false;
+
+function selectRole(role){
+  const adminCard = document.getElementById('roleAdminCard');
+  const guestCard = document.getElementById('roleGuestCard');
+  const adminForm = document.getElementById('adminLoginForm');
+  const guestForm = document.getElementById('guestLoginForm');
+  if(role==='admin'){
+    adminCard.style.background='rgba(201,116,138,0.1)';
+    adminCard.style.borderColor='rgba(201,116,138,0.3)';
+    guestCard.style.background='rgba(255,255,255,0.04)';
+    guestCard.style.borderColor='rgba(245,240,236,0.07)';
+    adminForm.style.display='block';
+    guestForm.style.display='none';
+  } else {
+    guestCard.style.background='rgba(201,116,138,0.1)';
+    guestCard.style.borderColor='rgba(201,116,138,0.3)';
+    adminCard.style.background='rgba(255,255,255,0.04)';
+    adminCard.style.borderColor='rgba(245,240,236,0.07)';
+    guestForm.style.display='block';
+    adminForm.style.display='none';
+  }
+}
+
+function doLogin(){
+  const u = document.getElementById('loginUser').value.trim();
+  const p = document.getElementById('loginPass').value;
+  const auth = getAuth();
+  if(u===auth.user && p===auth.pass){
+    currentUser = {role:'admin', name:'Ejecutiva'};
+    enterApp();
+  } else {
+    document.getElementById('loginError').textContent = 'Usuario o contrasena incorrectos';
+    document.getElementById('loginPass').value='';
+  }
+}
+
+function doGuestLogin(){
+  const code = document.getElementById('guestCode').value.trim().toUpperCase();
+  const guests = getGuests();
+  const guest = guests.find(g=>g.code===code && g.active);
+  if(guest){
+    const t = getTrial();
+    if(t.status==='suspended'||getDaysLeft()===0){
+      document.getElementById('guestError').textContent='El acceso esta suspendido o vencido';
+      return;
+    }
+    currentUser = {role:'guest', name:guest.name};
+    enterApp();
+  } else {
+    document.getElementById('guestError').textContent='Codigo invalido o revocado';
+  }
+}
+
+function enterApp(){
+  document.getElementById('loginScreen').style.display='none';
+  const t = getTrial();
+  const days = getDaysLeft();
+  if(t.status==='suspended'||days===0){
+    document.getElementById('expiredScreen').style.display='flex';
+    return;
+  }
+  updateTrialBanner();
+  // update user display
+  if(document.getElementById('userName')) document.getElementById('userName').textContent = currentUser.name;
+  if(document.getElementById('userAv')) document.getElementById('userAv').textContent = currentUser.name[0].toUpperCase();
+  // hide edit/delete for guests
+  if(currentUser.role==='guest'){
+    const style = document.createElement('style');
+    style.textContent='.row-actions{display:none!important;} .btn-rose{display:none!important;} #trialAdminBtn{display:none!important;}';
+    document.head.appendChild(style);
+  }
+  if(currentUser.role==='admin'){
+    const btn = document.getElementById('trialAdminBtn');
+    if(btn) btn.style.display='block';
+  }
+  renderDashboard();
+}
+
+function doLogout(){
+  currentUser=null;
+  trialPinUnlocked=false;
+  closeTrialPanel();
+  document.getElementById('trialBanner').style.display='none';
+  document.getElementById('trialBar').style.display='none';
+  document.getElementById('loginScreen').style.display='flex';
+  document.getElementById('loginPass').value='';
+  document.getElementById('loginError').textContent='';
+  selectRole('admin');
+}
+
+function updateTrialBanner(){
+  const t = getTrial();
+  const days = getDaysLeft();
+  const banner = document.getElementById('trialBanner');
+  const bar = document.getElementById('trialBar');
+  const fill = document.getElementById('trialBarFill');
+  const dot = document.getElementById('trialDot');
+  const text = document.getElementById('trialText');
+  const upgradeBtn = document.getElementById('trialUpgradeBtn');
+  banner.style.display='flex';
+  bar.style.display='block';
+  if(t.status==='licensed'){
+    banner.style.background='linear-gradient(90deg,rgba(52,211,153,0.08),transparent)';
+    banner.style.borderBottom='1px solid rgba(52,211,153,0.15)';
+    dot.style.background='#34D399'; dot.style.boxShadow='0 0 6px #34D399';
+    text.textContent='Licencia Activa — Acceso Completo';
+    text.style.color='#34D399';
+    fill.style.width='100%'; fill.style.background='#34D399';
+    upgradeBtn.style.display='none';
+  } else if(days<=3){
+    banner.style.background='linear-gradient(90deg,rgba(244,114,182,0.1),transparent)';
+    banner.style.borderBottom='1px solid rgba(244,114,182,0.2)';
+    dot.style.background='#F472B6'; dot.style.boxShadow='0 0 6px #F472B6';
+    text.textContent = days===0?'Prueba vencida':'Prueba: '+days+' dia'+(days!==1?'s':'')+' restante'+(days!==1?'s':'');
+    text.style.color='#F472B6';
+    const p=Math.round(days/t.days*100);
+    fill.style.width=p+'%'; fill.style.background='#F472B6';
+    upgradeBtn.style.display='block';
+  } else if(days<=7){
+    banner.style.background='linear-gradient(90deg,rgba(252,211,77,0.08),transparent)';
+    banner.style.borderBottom='1px solid rgba(252,211,77,0.15)';
+    dot.style.background='#FCD34D'; dot.style.boxShadow='0 0 6px #FCD34D';
+    text.textContent='Prueba: '+days+' dias restantes';
+    text.style.color='#FCD34D';
+    const p=Math.round(days/t.days*100);
+    fill.style.width=p+'%'; fill.style.background='#FCD34D';
+    upgradeBtn.style.display='block';
+  } else {
+    banner.style.background='linear-gradient(90deg,rgba(201,116,138,0.08),transparent)';
+    banner.style.borderBottom='1px solid rgba(201,116,138,0.12)';
+    dot.style.background='var(--rose)'; dot.style.boxShadow='0 0 6px var(--rose)';
+    text.textContent='Periodo de prueba activo — '+days+' dias restantes de '+t.days;
+    text.style.color='var(--rose-pale)';
+    const p=Math.round(days/t.days*100);
+    fill.style.width=p+'%'; fill.style.background='linear-gradient(90deg,var(--rose),var(--mauve))';
+    upgradeBtn.style.display='none';
+  }
+}
+
+function openTrialPanel(){
+  trialPinUnlocked=false;
+  document.getElementById('trialModal').style.display='flex';
+  document.getElementById('trialPinGate').style.display='block';
+  document.getElementById('trialPanelMain').style.display='none';
+  document.getElementById('trialPin').value='';
+  document.getElementById('trialPinErr').textContent='';
+  setTimeout(()=>document.getElementById('trialPin').focus(),100);
+}
+function closeTrialPanel(){ document.getElementById('trialModal').style.display='none'; }
+function checkTrialPin(){
+  const pin = document.getElementById('trialPin').value;
+  const auth = getAuth();
+  if(pin===auth.pin){
+    trialPinUnlocked=true;
+    document.getElementById('trialPinGate').style.display='none';
+    document.getElementById('trialPanelMain').style.display='block';
+    showTrialStats();
+  } else {
+    document.getElementById('trialPinErr').textContent='PIN incorrecto';
+    document.getElementById('trialPin').value='';
+  }
+}
+function showTrialStats(){
+  const t=getTrial(); const g=getGuests();
+  const days=getDaysLeft();
+  document.getElementById('tpDays').textContent = t.status==='licensed'?'inf':days;
+  document.getElementById('tpUsers').textContent = g.filter(x=>x.active).length;
+  document.getElementById('tpStatus').textContent = t.status==='licensed'?'Licenciado':t.status==='suspended'?'Suspendido':'Activo';
+  document.getElementById('tpDaysInput').value = t.days;
+  renderGuestList();
+}
+function updateTrialDays(){
+  const t=getTrial(); t.days=parseInt(document.getElementById('tpDaysInput').value)||14;
+  saveTrial(t); showTrialStats(); updateTrialBanner(); showToast('Dias actualizados');
+}
+function extendTrial(){
+  const extra=parseInt(document.getElementById('tpExtend').value)||7;
+  const t=getTrial();
+  const s=new Date(t.start); s.setDate(s.getDate()-extra);
+  t.start=s.toISOString().split('T')[0];
+  if(t.status==='suspended'||t.status==='expired') t.status='active';
+  saveTrial(t);
+  document.getElementById('expiredScreen').style.display='none';
+  showTrialStats(); updateTrialBanner(); showToast('Prueba extendida '+extra+' dias');
+}
+function activateLicense(){
+  const t=getTrial(); t.status='licensed'; saveTrial(t);
+  document.getElementById('expiredScreen').style.display='none';
+  showTrialStats(); updateTrialBanner(); showToast('Licencia activada');
+}
+function resetTrial(){
+  const t=getTrial(); t.status='active'; t.start=new Date().toISOString().split('T')[0];
+  saveTrial(t);
+  document.getElementById('expiredScreen').style.display='none';
+  showTrialStats(); updateTrialBanner(); showToast('Periodo reiniciado');
+}
+function suspendTrial(){
+  const t=getTrial(); t.status='suspended'; saveTrial(t);
+  showTrialStats(); updateTrialBanner(); showToast('App suspendida');
+}
+function generateGuestCode(){
+  const name=document.getElementById('tpGuestName').value.trim();
+  if(!name){showToast('Escribe el nombre');return;}
+  const code='ROSA-'+Math.random().toString(36).substr(2,4).toUpperCase();
+  const guests=getGuests();
+  guests.push({id:uid(),name,code,active:true,created:new Date().toISOString().split('T')[0]});
+  saveGuests(guests);
+  document.getElementById('tpGuestName').value='';
+  renderGuestList(); showTrialStats();
+  showToast('Codigo '+code+' generado para '+name);
+}
+function renderGuestList(){
+  const guests=getGuests();
+  const el=document.getElementById('tpGuestList');
+  if(!guests.length){
+    el.innerHTML='<div style="font-size:11px;color:var(--text-3);padding:10px;text-align:center;">Sin invitadas</div>';
+    return;
+  }
+  el.innerHTML=guests.map(g=>`
+    <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:8px;margin-bottom:6px;">
+      <div style="flex:1;">
+        <div style="font-size:12px;color:var(--text-1);">${g.name}</div>
+        <div style="font-size:10px;color:var(--rose-pale);letter-spacing:1px;margin-top:1px;">${g.code}</div>
+      </div>
+      <span style="font-size:10px;padding:2px 8px;border-radius:10px;${g.active?'background:rgba(52,211,153,0.1);color:#34D399;border:1px solid rgba(52,211,153,0.2);':'background:rgba(244,114,182,0.1);color:#F472B6;border:1px solid rgba(244,114,182,0.2);'}">${g.active?'Activa':'Revocada'}</span>
+      <button onclick="toggleGuest('${g.id}')" style="background:none;border:1px solid var(--border);border-radius:6px;padding:3px 8px;font-size:10px;color:var(--text-3);cursor:pointer;font-family:DM Sans,sans-serif;">${g.active?'Revocar':'Activar'}</button>
+    </div>`).join('');
+}
+function toggleGuest(id){
+  const guests=getGuests();
+  const idx=guests.findIndex(g=>g.id===id);
+  if(idx>-1){guests[idx].active=!guests[idx].active; saveGuests(guests); renderGuestList(); showTrialStats();}
+}
+function changeAdminPass(){
+  const np=document.getElementById('tpNewPass').value;
+  if(np.length<4){showToast('Minimo 4 caracteres');return;}
+  const a=getAuth(); a.pass=np; saveAuth(a);
+  document.getElementById('tpNewPass').value='';
+  showToast('Contrasena actualizada');
+}
+
+// Show login on start
+document.getElementById("loginScreen").style.display="flex";
 </script>
 </body>
 </html>
