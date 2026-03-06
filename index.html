@@ -608,6 +608,7 @@ function Colaboradores({isAdmin,isPrimaryAdmin}){
     setModal(null);
   }
   function toggleActivo(id){const cs=DB.colaboradores().map(c=>c.id===id?{...c,activo:!c.activo}:c);DB.saveColaboradores(cs);setColabs(cs);}
+  function toggleAdmin2(id){const cs=DB.colaboradores().map(c=>{if(c.id!==id)return c;const newRole=c.role==="admin2"?"vendedor":"admin2";const users=DB.users();if(c.email&&users[c.email]){users[c.email].role=newRole;DB.saveUsers(users);}return{...c,role:newRole};});DB.saveColaboradores(cs);setColabs(cs);}
   function aprobarUser(email,plan){const u=DB.users();if(!u[email])return;u[email].status="approved";u[email].plan=plan;u[email].approvedAt=new Date().toISOString();DB.saveUsers(u);setUsers({...u});toast_("✓ Usuario aprobado");}
   function rechazarUser(email){const u=DB.users();if(!u[email])return;u[email].status="rejected";DB.saveUsers(u);setUsers({...u});toast_("✗ Usuario rechazado","#ff3d6e");}
   const pendientes=Object.values(users).filter(u=>u.status==="pending"&&u.role!=="admin");
