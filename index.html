@@ -516,6 +516,7 @@ function Productos({user,isAdmin}){
      setModal(null);setForm({nombre:"",costo:"",precio:"",stock:"",categoria:"fundas",proveedor:"",codigo:""});
    }
   const totalInventario=productos.reduce((a,p)=>a+Number(p.precio)*Number(p.stock||0),0);
+   const filtrados=busca?productos.filter(p=>p.nombre.toLowerCase().includes(busca.toLowerCase())||(p.codigo&&p.codigo.toLowerCase().includes(busca.toLowerCase()))):productos;
   return <div style={{display:"flex",flexDirection:"column",height:"100%"}}>
     <div style={{padding:"14px 16px",borderBottom:`1px solid ${G.gb}`,flexShrink:0}}>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
