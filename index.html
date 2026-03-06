@@ -1,1531 +1,1206 @@
-<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/><meta name="theme-color" content="#050812"/><meta name="apple-mobile-web-app-capable" content="yes"/><title>USALA · Suite Negocios</title>
-<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-<script type="module">
-import{initializeApp}from"https://www.gstatic.com/firebasejs/12.10.0/firebase-app.js";
-import{getFirestore,collection,doc,setDoc,onSnapshot,deleteDoc,getDocs}from"https://www.gstatic.com/firebasejs/12.10.0/firebase-firestore.js";
-const firebaseConfig={apiKey:"AIzaSyAhPw4zHR364DBbVJKM4hvNKsO-nQ1YMhk",authDomain:"usala-suite.firebaseapp.com",projectId:"usala-suite",storageBucket:"usala-suite.firebasestorage.app",messagingSenderId:"977792381465",appId:"1:977792381465:web:b0e0515836c1971e6d7088"};
-const app=initializeApp(firebaseConfig);
-const db=getFirestore(app);
-window._db=db;
-window._fs={collection,doc,setDoc,onSnapshot,deleteDoc,getDocs};
-window._fbReady=true;
-window.dispatchEvent(new Event("fbready"));
-</script>
-<link rel="manifest" href="manifest.json"/>
-<meta name="mobile-web-app-capable" content="yes"/>
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-<meta name="apple-mobile-web-app-title" content="USALA Suite"/>
-<style>*{margin:0;padding:0;box-sizing:border-box}html,body,#root{height:100%;background:#050812}body{overscroll-behavior:none}::-webkit-scrollbar{width:0}</style>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Obsidiana Rosa ✦ Finanzas</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --void:#0E0B0F; --deep:#13101A; --surface:#181320; --lift:#1E1828; --ghost:#251E30;
+  --rose:#C9748A; --rose-pale:#E8B4C0; --rose-dim:rgba(201,116,138,0.12); --rose-glow:rgba(201,116,138,0.25);
+  --gold:#C4A882; --gold-pale:#E8D5B8; --gold-dim:rgba(196,168,130,0.1);
+  --ivory:#F5F0EC; --mauve:#9B7FA0; --mauve-dim:rgba(155,127,160,0.12);
+  --text-1:#F5F0EC; --text-2:rgba(245,240,236,0.55); --text-3:rgba(245,240,236,0.25); --text-4:rgba(245,240,236,0.09);
+  --border:rgba(245,240,236,0.07); --border2:rgba(201,116,138,0.2);
+  --r:16px; --sidebar:248px;
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html,body{width:100%;height:100%;overflow:hidden;}
+body{font-family:'DM Sans',sans-serif;background:var(--void);color:var(--text-1);-webkit-font-smoothing:antialiased;}
+
+/* ── ATMOSPHERE ── */
+.atm{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;}
+.atm::before{content:'';position:absolute;width:800px;height:600px;top:-250px;left:-150px;
+  background:radial-gradient(ellipse,rgba(201,116,138,0.09) 0%,rgba(155,127,160,0.05) 40%,transparent 70%);
+  filter:blur(60px);border-radius:50%;animation:a1 22s ease-in-out infinite;}
+.atm::after{content:'';position:absolute;width:600px;height:400px;bottom:-180px;right:-80px;
+  background:radial-gradient(ellipse,rgba(196,168,130,0.08) 0%,rgba(201,116,138,0.04) 50%,transparent 70%);
+  filter:blur(70px);border-radius:50%;animation:a2 28s ease-in-out infinite;}
+@keyframes a1{0%,100%{transform:translate(0,0) scale(1);}50%{transform:translate(25px,-18px) scale(1.04);}}
+@keyframes a2{0%,100%{transform:translate(0,0);}50%{transform:translate(-20px,15px) scale(1.06);}}
+.grain{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.02;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");}
+
+/* ── APP SHELL ── */
+.app{position:relative;z-index:2;display:flex;height:100vh;width:100%;}
+
+/* ── SIDEBAR ── */
+.sidebar{width:var(--sidebar);flex-shrink:0;height:100vh;display:flex;flex-direction:column;
+  background:rgba(16,13,22,0.75);backdrop-filter:blur(48px);
+  border-right:1px solid var(--border);position:relative;overflow:hidden;}
+.sidebar::after{content:'';position:absolute;top:0;right:0;width:1px;height:100%;
+  background:linear-gradient(180deg,transparent,rgba(201,116,138,0.3) 30%,rgba(196,168,130,0.2) 65%,transparent);}
+.sidebar::before{content:'';position:absolute;top:-60px;left:-40px;width:180px;height:180px;
+  background:radial-gradient(ellipse,rgba(201,116,138,0.1),transparent 70%);filter:blur(25px);border-radius:50%;}
+
+.s-head{padding:28px 20px 16px;position:relative;}
+.s-logo{display:flex;align-items:center;gap:10px;margin-bottom:18px;}
+.s-gem{width:38px;height:38px;border-radius:10px;
+  background:linear-gradient(135deg,rgba(201,116,138,0.3),rgba(196,168,130,0.2));
+  border:1px solid rgba(201,116,138,0.25);display:flex;align-items:center;justify-content:center;
+  font-size:16px;box-shadow:0 4px 18px rgba(201,116,138,0.15);}
+.s-brand{font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:400;color:var(--text-1);line-height:1.2;}
+.s-brand span{display:block;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--text-3);font-family:'DM Sans',sans-serif;margin-top:1px;}
+.s-hr{height:1px;background:linear-gradient(90deg,rgba(201,116,138,0.25),transparent);margin:4px 0 10px;}
+
+.s-nav{flex:1;padding:4px 0;overflow-y:auto;}
+.s-nav::-webkit-scrollbar{width:0;}
+.nav-sec{padding:14px 20px 4px;font-size:8px;letter-spacing:3px;text-transform:uppercase;color:var(--text-4);font-weight:500;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:8px 20px;font-size:12.5px;font-weight:300;
+  color:var(--text-2);cursor:pointer;transition:all .2s;border-left:2px solid transparent;}
+.nav-item .ico{font-size:13px;width:16px;text-align:center;flex-shrink:0;opacity:.65;}
+.nav-item:hover{color:var(--text-1);background:rgba(201,116,138,0.05);}
+.nav-item.active{color:var(--rose-pale);background:var(--rose-dim);border-left-color:var(--rose);font-weight:400;}
+.nav-item.active .ico{opacity:1;}
+
+.s-foot{padding:16px 18px;border-top:1px solid var(--border);position:relative;}
+.s-foot::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,rgba(201,116,138,0.25),rgba(196,168,130,0.15),transparent);}
+.user-row{display:flex;align-items:center;gap:10px;}
+.user-av{width:34px;height:34px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,var(--rose),var(--mauve));
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:600;color:var(--ivory);
+  box-shadow:0 0 14px rgba(201,116,138,0.2);}
+.user-name{font-family:'Cormorant Garamond',serif;font-size:14px;color:var(--text-1);}
+.user-role{font-size:9px;color:var(--rose);letter-spacing:1px;text-transform:uppercase;margin-top:1px;}
+
+/* ── MAIN ── */
+.main{flex:1;height:100vh;overflow-y:auto;overflow-x:hidden;padding:32px 36px 60px;}
+.main::-webkit-scrollbar{width:3px;}
+.main::-webkit-scrollbar-thumb{background:rgba(201,116,138,0.12);}
+
+/* ── SCREENS ── */
+.screen{display:none;}
+.screen.active{display:block;animation:fadeUp .35s ease both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+
+/* ── TOPBAR ── */
+.topbar{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:32px;}
+.page-eyebrow{font-size:9px;letter-spacing:3.5px;text-transform:uppercase;color:var(--rose);
+  margin-bottom:6px;display:flex;align-items:center;gap:8px;}
+.page-eyebrow::before{content:'';width:18px;height:1px;background:linear-gradient(90deg,var(--rose),transparent);}
+.page-title{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;line-height:1.1;}
+.page-title em{font-style:italic;font-weight:400;
+  background:linear-gradient(135deg,var(--rose-pale),var(--gold-pale));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.top-actions{display:flex;gap:10px;padding-bottom:4px;}
+.btn{padding:9px 18px;border-radius:10px;font-size:11.5px;font-weight:400;letter-spacing:.8px;
+  cursor:pointer;border:none;transition:all .25s;font-family:'DM Sans',sans-serif;text-transform:uppercase;}
+.btn-ghost{background:rgba(245,240,236,0.04);color:var(--text-2);border:1px solid var(--border);}
+.btn-ghost:hover{background:rgba(245,240,236,0.08);color:var(--text-1);}
+.btn-rose{background:linear-gradient(135deg,var(--rose),var(--mauve));color:var(--ivory);font-weight:500;
+  box-shadow:0 4px 18px rgba(201,116,138,0.22);}
+.btn-rose:hover{transform:translateY(-1px);box-shadow:0 7px 25px rgba(201,116,138,0.32);}
+.btn-sm{padding:6px 14px;font-size:10.5px;}
+
+/* ── STATS ROW ── */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px;}
+.stat-card{background:rgba(20,16,28,0.55);backdrop-filter:blur(20px);
+  border:1px solid var(--border);border-radius:var(--r);padding:22px 20px;position:relative;overflow:hidden;
+  transition:all .25s;cursor:default;}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(201,116,138,0.3),transparent);}
+.stat-card:hover{transform:translateY(-2px);border-color:rgba(201,116,138,0.2);}
+.stat-ico{font-size:20px;margin-bottom:10px;}
+.stat-lbl{font-size:8.5px;letter-spacing:2.5px;text-transform:uppercase;color:var(--text-3);margin-bottom:6px;}
+.stat-val{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;line-height:1;}
+.stat-val.pos{color:var(--rose-pale);}
+.stat-val.neg{color:var(--mauve);}
+.stat-val.neu{color:var(--gold-pale);}
+.stat-chg{font-size:10px;color:var(--text-3);margin-top:5px;}
+
+/* ── GLASS CARD ── */
+.glass-card{background:rgba(20,16,28,0.5);backdrop-filter:blur(20px);
+  border:1px solid var(--border);border-radius:var(--r);padding:22px;
+  position:relative;overflow:hidden;margin-bottom:16px;}
+.glass-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,rgba(201,116,138,0.2),rgba(196,168,130,0.12),transparent);}
+.gc-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;}
+.gc-title{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--text-3);}
+.gc-link{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13px;
+  color:var(--rose);opacity:.7;cursor:pointer;transition:opacity .2s;}
+.gc-link:hover{opacity:1;}
+
+/* ── TABLE ── */
+.tbl{width:100%;border-collapse:collapse;}
+.tbl th{font-size:8px;letter-spacing:2.5px;text-transform:uppercase;color:var(--text-3);
+  padding:0 10px 10px;text-align:left;border-bottom:1px solid var(--border);}
+.tbl td{padding:11px 10px;border-bottom:1px solid rgba(245,240,236,0.03);font-size:13px;font-weight:300;}
+.tbl tr:last-child td{border-bottom:none;}
+.tbl tr:hover td{background:rgba(201,116,138,0.03);}
+.tag{display:inline-block;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:400;letter-spacing:.3px;}
+.tag-income{background:rgba(201,116,138,0.1);color:var(--rose-pale);border:1px solid rgba(201,116,138,0.2);}
+.tag-expense{background:rgba(155,127,160,0.1);color:var(--mauve);border:1px solid rgba(155,127,160,0.2);}
+.tag-invest{background:rgba(196,168,130,0.1);color:var(--gold-pale);border:1px solid rgba(196,168,130,0.2);}
+.amt-pos{color:var(--rose-pale);font-family:'Cormorant Garamond',serif;font-size:16px;}
+.amt-neg{color:var(--mauve);font-family:'Cormorant Garamond',serif;font-size:16px;}
+.row-actions{display:flex;gap:6px;}
+.act-btn{background:none;border:1px solid var(--border);border-radius:7px;padding:4px 10px;
+  font-size:10px;cursor:pointer;color:var(--text-3);transition:all .2s;font-family:'DM Sans',sans-serif;}
+.act-btn:hover{color:var(--text-1);border-color:rgba(255,255,255,0.15);}
+.act-btn.del:hover{color:#F472B6;border-color:rgba(244,114,182,0.3);}
+
+/* ── EMPTY STATE ── */
+.empty-state{text-align:center;padding:48px 20px;}
+.empty-ico{font-size:40px;margin-bottom:14px;opacity:.4;}
+.empty-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;color:var(--text-2);margin-bottom:6px;}
+.empty-sub{font-size:12px;color:var(--text-3);}
+
+/* ── MODAL OVERLAY ── */
+.modal-overlay{position:fixed;inset:0;z-index:500;background:rgba(7,8,12,0.85);
+  backdrop-filter:blur(20px);display:none;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.open{display:flex;animation:fadeIn .25s ease;}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+.modal-box{background:#13101A;border:1px solid rgba(201,116,138,0.2);border-radius:20px;
+  padding:32px;width:100%;max-width:480px;position:relative;
+  animation:slideUp .3s cubic-bezier(.34,1.56,.64,1);}
+@keyframes slideUp{from{opacity:0;transform:translateY(30px);}to{opacity:1;transform:translateY(0);}}
+.modal-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;
+  margin-bottom:22px;color:var(--text-1);}
+.modal-title em{font-style:italic;color:var(--rose-pale);}
+.modal-close{position:absolute;top:16px;right:16px;background:rgba(255,255,255,0.05);
+  border:1px solid var(--border);border-radius:50%;width:30px;height:30px;
+  cursor:pointer;font-size:13px;color:var(--text-3);display:flex;align-items:center;justify-content:center;
+  transition:all .2s;}
+.modal-close:hover{color:var(--text-1);background:rgba(255,255,255,0.1);}
+
+/* ── FORM ── */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.form-grid.full{grid-template-columns:1fr;}
+.form-group{display:flex;flex-direction:column;gap:6px;}
+.form-group.span2{grid-column:span 2;}
+.form-label{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--text-3);}
+.form-input,.form-select,.form-textarea{
+  background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);
+  border-radius:10px;padding:11px 14px;color:var(--text-1);font-size:13px;
+  outline:none;font-family:'DM Sans',sans-serif;transition:border-color .2s;width:100%;}
+.form-input:focus,.form-select:focus,.form-textarea:focus{border-color:rgba(201,116,138,0.4);}
+.form-select{cursor:pointer;}
+.form-select option{background:#13101A;color:var(--text-1);}
+.form-textarea{resize:vertical;min-height:72px;}
+.form-actions{display:flex;gap:10px;margin-top:22px;justify-content:flex-end;}
+
+/* ── CONFIRM MODAL ── */
+.confirm-box{background:#13101A;border:1px solid rgba(244,114,182,0.2);border-radius:16px;
+  padding:28px;width:100%;max-width:360px;text-align:center;
+  animation:slideUp .3s cubic-bezier(.34,1.56,.64,1);}
+.confirm-ico{font-size:36px;margin-bottom:12px;}
+.confirm-title{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;color:var(--text-1);margin-bottom:6px;}
+.confirm-sub{font-size:12px;color:var(--text-3);margin-bottom:22px;line-height:1.5;}
+.confirm-btns{display:flex;gap:10px;justify-content:center;}
+
+/* ── TOAST ── */
+.toast{position:fixed;top:22px;left:50%;transform:translateX(-50%) translateY(-80px);
+  background:rgba(16,13,22,0.96);border:1px solid rgba(201,116,138,0.3);
+  border-radius:14px;padding:12px 22px;display:flex;align-items:center;gap:10px;
+  font-size:12.5px;color:var(--text-1);box-shadow:0 8px 28px rgba(201,116,138,0.12);
+  z-index:1000;transition:transform .4s cubic-bezier(.34,1.56,.64,1);pointer-events:none;white-space:nowrap;}
+.toast.show{transform:translateX(-50%) translateY(0);}
+
+/* ── BALANCE HERO ── */
+.hero-balance{background:rgba(20,16,28,0.6);backdrop-filter:blur(30px);
+  border:1px solid var(--border2);border-radius:var(--r);padding:28px 30px;
+  position:relative;overflow:hidden;margin-bottom:16px;}
+.hero-balance::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(201,116,138,0.5),rgba(196,168,130,0.3),transparent);}
+.hb-deco{position:absolute;right:24px;top:50%;transform:translateY(-50%);
+  font-family:'Cormorant Garamond',serif;font-size:88px;font-weight:300;font-style:italic;
+  color:rgba(201,116,138,0.05);line-height:1;pointer-events:none;user-select:none;}
+.hb-label{font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--text-3);margin-bottom:10px;}
+.hb-amount{font-family:'Cormorant Garamond',serif;font-size:48px;font-weight:300;color:var(--text-1);line-height:1;}
+.hb-amount span{color:var(--rose-pale);}
+.hb-row{display:flex;align-items:center;gap:10px;margin-top:10px;}
+.hb-pill{display:inline-flex;align-items:center;gap:5px;
+  background:rgba(201,116,138,0.1);border:1px solid rgba(201,116,138,0.22);
+  color:var(--rose-pale);border-radius:20px;padding:4px 11px;font-size:11px;}
+.hb-sub{font-size:11px;color:var(--text-3);}
+
+/* ── GREETING BAND ── */
+.greeting{background:linear-gradient(135deg,rgba(201,116,138,0.07),rgba(196,168,130,0.04),rgba(155,127,160,0.05));
+  border:1px solid var(--border2);border-radius:var(--r);padding:20px 24px;margin-bottom:16px;
+  display:flex;align-items:center;justify-content:space-between;position:relative;overflow:hidden;}
+.greeting::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(201,116,138,0.4),rgba(196,168,130,0.25),transparent);}
+.g-hi{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--text-3);margin-bottom:4px;}
+.g-name{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;color:var(--text-1);}
+.g-name em{font-style:italic;color:var(--rose-pale);}
+.g-quote{font-size:11px;color:var(--text-3);margin-top:4px;font-style:italic;
+  font-family:'Cormorant Garamond',serif;font-weight:300;}
+.g-right{text-align:right;flex-shrink:0;}
+.g-date{font-family:'Cormorant Garamond',serif;font-size:12px;color:var(--text-3);}
+.g-time{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:300;color:var(--rose-pale);}
+
+/* ── METAS ── */
+.meta-item{margin-bottom:16px;}
+.meta-item:last-child{margin-bottom:0;}
+.meta-head{display:flex;justify-content:space-between;margin-bottom:7px;}
+.meta-name{font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:300;color:var(--text-1);}
+.meta-vals{font-size:10px;color:var(--text-3);}
+.meta-pct{font-size:11px;font-weight:500;color:var(--rose-pale);margin-left:8px;}
+.meta-bg{height:2px;background:rgba(245,240,236,0.06);border-radius:2px;overflow:hidden;margin-bottom:3px;}
+.meta-fill{height:100%;border-radius:2px;transition:width .8s ease;}
+
+/* ── FILTER BAR ── */
+.filter-bar{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;}
+.filter-chip{padding:6px 14px;border-radius:20px;font-size:11px;cursor:pointer;
+  border:1px solid var(--border);color:var(--text-3);transition:all .2s;background:none;}
+.filter-chip:hover{color:var(--text-2);border-color:rgba(255,255,255,0.15);}
+.filter-chip.active{background:var(--rose-dim);color:var(--rose-pale);border-color:rgba(201,116,138,0.25);}
+.search-input{flex:1;min-width:160px;background:rgba(255,255,255,0.04);
+  border:1px solid var(--border);border-radius:10px;padding:7px 14px;
+  color:var(--text-1);font-size:12px;outline:none;font-family:'DM Sans',sans-serif;}
+.search-input:focus{border-color:rgba(201,116,138,0.3);}
+.search-input::placeholder{color:var(--text-3);}
+
+/* ── BOTTOM GRID ── */
+.two-col{display:grid;grid-template-columns:1.5fr 1fr;gap:16px;}
+
+/* ── CHART BARS ── */
+.chart-bars{display:flex;gap:5px;align-items:flex-end;height:80px;margin-top:6px;}
+.c-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;}
+.c-bar{width:100%;border-radius:3px 3px 0 0;cursor:pointer;transition:opacity .2s;position:relative;overflow:hidden;}
+.c-bar:hover{opacity:.8;}
+.c-bar::after{content:'';position:absolute;top:0;left:0;right:0;height:22%;background:rgba(255,255,255,0.1);}
+.c-bar.rose{background:linear-gradient(180deg,var(--rose-pale),var(--rose));}
+.c-bar.mauve{background:linear-gradient(180deg,rgba(155,127,160,.8),var(--mauve));}
+.c-lbl{font-size:9px;color:var(--text-3);}
+
+/* ── SIGNATURE ── */
+.sig{position:fixed;bottom:18px;right:18px;z-index:99;
+  background:rgba(18,15,24,0.9);backdrop-filter:blur(16px);
+  border:1px solid rgba(201,116,138,0.18);border-radius:18px;padding:6px 14px;
+  display:flex;align-items:center;gap:7px;
+  font-size:10px;color:var(--rose-pale);letter-spacing:1px;
+  font-family:'Cormorant Garamond',serif;font-style:italic;}
+.sig-dot{width:6px;height:6px;border-radius:50%;background:var(--rose);
+  box-shadow:0 0 7px var(--rose);animation:pulse 2.5s ease-in-out infinite;flex-shrink:0;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.35;transform:scale(.65);}}
+</style>
+</head>
+<body>
+<div class="atm"></div>
+<div class="grain"></div>
+
+<div class="app">
+
+<!-- ════ SIDEBAR ════ -->
+<aside class="sidebar">
+  <div class="s-head">
+    <div class="s-logo">
+      <div class="s-gem">✦</div>
+      <div class="s-brand">Obsidiana Rosa<span>Finanzas Personales</span></div>
+    </div>
+    <div class="s-hr"></div>
+  </div>
+  <nav class="s-nav">
+    <div class="nav-sec">Principal</div>
+    <div class="nav-item active" onclick="goTo('dashboard',this)"><span class="ico">◈</span> Dashboard</div>
+    <div class="nav-sec">Ingresos</div>
+    <div class="nav-item" onclick="goTo('activos',this)"><span class="ico">↓</span> Activos</div>
+    <div class="nav-item" onclick="goTo('cobrar',this)"><span class="ico">◎</span> Cuentas por Cobrar</div>
+    <div class="nav-sec">Gastos</div>
+    <div class="nav-item" onclick="goTo('inversiones',this)"><span class="ico">↗</span> Inversiones</div>
+    <div class="nav-item" onclick="goTo('pagos',this)"><span class="ico">▣</span> Pagos</div>
+    <div class="nav-item" onclick="goTo('compras',this)"><span class="ico">◻</span> Compras</div>
+    <div class="nav-item" onclick="goTo('creditos',this)"><span class="ico">⊟</span> Créditos por Pagar</div>
+    <div class="nav-sec">Análisis</div>
+    <div class="nav-item" onclick="goTo('balance',this)"><span class="ico">⊜</span> Balance General</div>
+    <div class="nav-item" onclick="goTo('metas',this)"><span class="ico">◉</span> Metas de Ahorro</div>
+    <div class="nav-item" onclick="goTo('presupuesto',this)"><span class="ico">▦</span> Presupuesto Mensual</div>
+  </nav>
+  <div class="s-foot">
+    <div class="user-row">
+      <div class="user-av" id="userAv">E</div>
+      <div>
+        <div class="user-name" id="userName">Ejecutiva</div>
+        <div class="user-role">Administradora</div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<!-- ════ MAIN ════ -->
+<main class="main">
+
+<!-- ── DASHBOARD ── -->
+<div class="screen active" id="screen-dashboard">
+  <div class="topbar">
+    <div>
+      <div class="page-eyebrow">Marzo 2026</div>
+      <div class="page-title">Tu patrimonio,<br><em>en tus manos.</em></div>
+    </div>
+    <div class="top-actions">
+      <button class="btn btn-ghost" onclick="exportData()">↑ Exportar</button>
+      <button class="btn btn-rose" onclick="openModal('income')">+ Registrar</button>
+    </div>
+  </div>
+
+  <div class="greeting" id="greetingBand">
+    <div>
+      <div class="g-hi">Bienvenida de vuelta</div>
+      <div class="g-name">Buenas <em id="greetWord">tardes</em>, <span id="greetName">Ejecutiva</span> ✦</div>
+      <div class="g-quote" id="greetQuote">"El éxito es vivir a tu manera."</div>
+    </div>
+    <div class="g-right">
+      <div class="g-date" id="todayDate">—</div>
+      <div class="g-time" id="liveTime">—:——</div>
+    </div>
+  </div>
+
+  <div class="stats-row" id="dashStats"></div>
+
+  <div class="two-col">
+    <div class="glass-card">
+      <div class="gc-head">
+        <div class="gc-title">Movimientos Recientes</div>
+        <div class="gc-link" onclick="goTo('balance',null)">Ver todos →</div>
+      </div>
+      <table class="tbl" id="dashTxTable"><tbody></tbody></table>
+    </div>
+    <div>
+      <div class="glass-card">
+        <div class="gc-head"><div class="gc-title">Ingresos vs Gastos</div></div>
+        <div class="chart-bars" id="dashChart"></div>
+      </div>
+      <div class="glass-card">
+        <div class="gc-head"><div class="gc-title">Mis Metas</div><div class="gc-link" onclick="goTo('metas',null)">Gestionar →</div></div>
+        <div id="dashMetas"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ── ACTIVOS ── -->
+<div class="screen" id="screen-activos">
+  <div class="topbar">
+    <div><div class="page-eyebrow">Ingresos</div><div class="page-title">Activos</div></div>
+    <div class="top-actions"><button class="btn btn-rose" onclick="openModal('income','activos')">+ Nuevo Activo</button></div>
+  </div>
+  <div class="stats-row" id="activosStats"></div>
+  <div class="glass-card">
+    <div class="gc-head"><div class="gc-title">Mis Activos</div></div>
+    <div class="filter-bar">
+      <input class="search-input" placeholder="🔍 Buscar..." oninput="filterTable('activos',this.value)">
+      <button class="filter-chip active" onclick="filterByType('activos','all',this)">Todos</button>
+      <button class="filter-chip" onclick="filterByType('activos','Salario',this)">Salario</button>
+      <button class="filter-chip" onclick="filterByType('activos','Negocio',this)">Negocio</button>
+      <button class="filter-chip" onclick="filterByType('activos','Renta',this)">Renta</button>
+    </div>
+    <table class="tbl"><tbody id="activosTbody"></tbody></table>
+  </div>
+</div>
+
+<!-- ── CUENTAS POR COBRAR ── -->
+<div class="screen" id="screen-cobrar">
+  <div class="topbar">
+    <div><div class="page-eyebrow">Ingresos</div><div class="page-title">Cuentas por <em>Cobrar</em></div></div>
+    <div class="top-actions"><button class="btn btn-rose" onclick="openModal('income','cobrar')">+ Nueva Cuenta</button></div>
+  </div>
+  <div class="stats-row" id="cobrarStats"></div>
+  <div class="glass-card">
+    <div class="gc-head"><div class="gc-title">Cobros Pendientes</div></div>
+    <div class="filter-bar">
+      <input class="search-input" placeholder="🔍 Buscar..." oninput="filterTable('cobrar',this.value)">
+      <button class="filter-chip active" onclick="filterByType('cobrar','all',this)">Todos</button>
+      <button class="filter-chip" onclick="filterByType('cobrar','Pendiente',this)">Pendiente</button>
+      <button class="filter-chip" onclick="filterByType('cobrar','Cobrado',this)">Cobrado</button>
+      <button class="filter-chip" onclick="filterByType('cobrar','Vencido',this)">Vencido</button>
+    </div>
+    <table class="tbl"><tbody id="cobrarTbody"></tbody></table>
+  </div>
+</div>
+
+<!-- ── INVERSIONES ── -->
+<div class="screen" id="screen-inversiones">
+  <div class="topbar">
+    <div><div class="page-eyebrow">Gastos</div><div class="page-title">Inversiones</div></div>
+    <div class="top-actions"><button class="btn btn-rose" onclick="openModal('expense','inversiones')">+ Nueva Inversión</button></div>
+  </div>
+  <div class="stats-row" id="inversionesStats"></div>
+  <div class="glass-card">
+    <div class="gc-head"><div class="gc-title">Mi Portafolio</div></div>
+    <div class="filter-bar"><input class="search-input" placeholder="🔍 Buscar..." oninput="filterTable('inversiones',this.value)"></div>
+    <table class="tbl"><tbody id="inversionesTbody"></tbody></table>
+  </div>
+</div>
+
+<!-- ── PAGOS ── -->
+<div class="screen" id="screen-pagos">
+  <div class="topbar">
+    <div><div class="page-eyebrow">Gastos</div><div class="page-title">Pagos</div></div>
+    <div class="top-actions"><button class="btn btn-rose" onclick="openModal('expense','pagos')">+ Nuevo Pago</button></div>
+  </div>
+  <div class="stats-row" id="pagosStats"></div>
+  <div class="glass-card">
+    <div class="gc-head"><div class="gc-title">Mis Pagos</div></div>
+    <div class="filter-bar"><input class="search-input" placeholder="🔍 Buscar..." oninput="filterTable('pagos',this.value)"></div>
+    <table class="tbl"><tbody id="pagosTbody"></tbody></table>
+  </div>
+</div>
+
+<!-- ── COMPRAS ── -->
+<div class="screen" id="screen-compras">
+  <div class="topbar">
+    <div><div class="page-eyebrow">Gastos</div><div class="page-title">Compras</div></div>
+    <div class="top-actions"><button class="btn btn-rose" onclick="openModal('expense','compras')">+ Nueva Compra</button></div>
+  </div>
+  <div class="stats-row" id="comprasStats"></div>
+  <div class="glass-card">
+    <div class="gc-head"><div class="gc-title">Mis Compras</div></div>
+    <div class="filter-bar"><input class="search-input" placeholder="🔍 Buscar..." oninput="filterTable('compras',this.value)"></div>
+    <table class="tbl"><tbody id="comprasTbody"></tbody></table>
+  </div>
+</div>
+
+<!-- ── CREDITOS ── -->
+<div class="screen" id="screen-creditos">
+  <div class="topbar">
+    <div><div class="page-eyebrow">Gastos</div><div class="page-title">Créditos por <em>Pagar</em></div></div>
+    <div class="top-actions"><button class="btn btn-rose" onclick="openModal('expense','creditos')">+ Nuevo Crédito</button></div>
+  </div>
+  <div class="stats-row" id="creditosStats"></div>
+  <div class="glass-card">
+    <div class="gc-head"><div class="gc-title">Mis Créditos</div></div>
+    <div class="filter-bar"><input class="search-input" placeholder="🔍 Buscar..." oninput="filterTable('creditos',this.value)"></div>
+    <table class="tbl"><tbody id="creditosTbody"></tbody></table>
+  </div>
+</div>
+
+<!-- ── BALANCE GENERAL ── -->
+<div class="screen" id="screen-balance">
+  <div class="topbar">
+    <div><div class="page-eyebrow">Análisis</div><div class="page-title">Balance <em>General</em></div></div>
+    <div class="top-actions"><button class="btn btn-ghost" onclick="exportData()">↑ Exportar CSV</button></div>
+  </div>
+  <div class="hero-balance">
+    <div class="hb-deco">$</div>
+    <div class="hb-label">Balance Neto Total</div>
+    <div class="hb-amount" id="balanceHero"><span>$</span><span id="balanceAmt">0</span></div>
+    <div class="hb-row"><div class="hb-pill" id="balancePill">↑ 0%</div><div class="hb-sub">respecto al mes anterior</div></div>
+  </div>
+  <div class="stats-row" id="balanceStats"></div>
+  <div class="glass-card">
+    <div class="gc-head"><div class="gc-title">Todas las Transacciones</div></div>
+    <div class="filter-bar">
+      <input class="search-input" placeholder="🔍 Buscar..." oninput="filterTable('balance',this.value)">
+      <button class="filter-chip active" onclick="filterByType('balance','all',this)">Todas</button>
+      <button class="filter-chip" onclick="filterByType('balance','income',this)">Ingresos</button>
+      <button class="filter-chip" onclick="filterByType('balance','expense',this)">Gastos</button>
+    </div>
+    <table class="tbl"><tbody id="balanceTbody"></tbody></table>
+  </div>
+</div>
+
+<!-- ── METAS ── -->
+<div class="screen" id="screen-metas">
+  <div class="topbar">
+    <div><div class="page-eyebrow">Análisis</div><div class="page-title">Metas de <em>Ahorro</em></div></div>
+    <div class="top-actions"><button class="btn btn-rose" onclick="openMetaModal()">+ Nueva Meta</button></div>
+  </div>
+  <div id="metasList"></div>
+</div>
+
+<!-- ── PRESUPUESTO ── -->
+<div class="screen" id="screen-presupuesto">
+  <div class="topbar">
+    <div><div class="page-eyebrow">Análisis</div><div class="page-title">Presupuesto <em>Mensual</em></div></div>
+    <div class="top-actions"><button class="btn btn-rose" onclick="openPresupModal()">+ Asignar Límite</button></div>
+  </div>
+  <div id="presupuestoList"></div>
+</div>
+
+</main><!-- /main -->
+</div><!-- /app -->
+
+<!-- ════ MODAL — TRANSACCIÓN ════ -->
+<div class="modal-overlay" id="txModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('txModal')">✕</button>
+    <div class="modal-title" id="txModalTitle">Nueva <em>Transacción</em></div>
+    <div class="form-grid">
+      <div class="form-group span2">
+        <div class="form-label">Descripción</div>
+        <input class="form-input" id="fDesc" placeholder="Ej. Salario mensual, Netflix...">
+      </div>
+      <div class="form-group">
+        <div class="form-label">Monto ($)</div>
+        <input class="form-input" id="fAmt" type="number" min="0" step="0.01" placeholder="0.00">
+      </div>
+      <div class="form-group">
+        <div class="form-label">Fecha</div>
+        <input class="form-input" id="fDate" type="date">
+      </div>
+      <div class="form-group">
+        <div class="form-label">Tipo</div>
+        <select class="form-select" id="fType" onchange="updateCategoryOptions()">
+          <option value="income">📥 Ingreso</option>
+          <option value="expense">📤 Gasto</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <div class="form-label">Categoría</div>
+        <select class="form-select" id="fCat"></select>
+      </div>
+      <div class="form-group">
+        <div class="form-label">Estado</div>
+        <select class="form-select" id="fStatus">
+          <option value="Completado">✓ Completado</option>
+          <option value="Pendiente">⏳ Pendiente</option>
+          <option value="Vencido">⚠️ Vencido</option>
+        </select>
+      </div>
+      <div class="form-group span2">
+        <div class="form-label">Notas (opcional)</div>
+        <textarea class="form-textarea" id="fNotes" placeholder="Notas adicionales..."></textarea>
+      </div>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-ghost" onclick="closeModal('txModal')">Cancelar</button>
+      <button class="btn btn-rose" onclick="saveTx()">Guardar ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ MODAL — META ════ -->
+<div class="modal-overlay" id="metaModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('metaModal')">✕</button>
+    <div class="modal-title">Nueva <em>Meta</em> de Ahorro</div>
+    <div class="form-grid">
+      <div class="form-group span2">
+        <div class="form-label">Nombre de la Meta</div>
+        <input class="form-input" id="mName" placeholder="Ej. Viaje a Europa, Fondo de emergencia...">
+      </div>
+      <div class="form-group">
+        <div class="form-label">Meta ($)</div>
+        <input class="form-input" id="mTarget" type="number" min="0" placeholder="10,000">
+      </div>
+      <div class="form-group">
+        <div class="form-label">Ahorrado hasta hoy ($)</div>
+        <input class="form-input" id="mSaved" type="number" min="0" placeholder="0">
+      </div>
+      <div class="form-group">
+        <div class="form-label">Fecha límite</div>
+        <input class="form-input" id="mDeadline" type="date">
+      </div>
+      <div class="form-group">
+        <div class="form-label">Emoji / Ícono</div>
+        <input class="form-input" id="mIcon" placeholder="🎯" maxlength="4">
+      </div>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-ghost" onclick="closeModal('metaModal')">Cancelar</button>
+      <button class="btn btn-rose" onclick="saveMeta()">Guardar ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ MODAL — PRESUPUESTO ════ -->
+<div class="modal-overlay" id="presupModal">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeModal('presupModal')">✕</button>
+    <div class="modal-title">Límite de <em>Presupuesto</em></div>
+    <div class="form-grid">
+      <div class="form-group span2">
+        <div class="form-label">Categoría</div>
+        <select class="form-select" id="pCat">
+          <option>Pagos</option><option>Compras</option><option>Inversiones</option>
+          <option>Créditos</option><option>Entretenimiento</option><option>Salud</option>
+          <option>Educación</option><option>Transporte</option><option>Alimentación</option>
+        </select>
+      </div>
+      <div class="form-group span2">
+        <div class="form-label">Límite Mensual ($)</div>
+        <input class="form-input" id="pLimit" type="number" min="0" placeholder="5,000">
+      </div>
+    </div>
+    <div class="form-actions">
+      <button class="btn btn-ghost" onclick="closeModal('presupModal')">Cancelar</button>
+      <button class="btn btn-rose" onclick="savePresup()">Guardar ✓</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ CONFIRM DELETE ════ -->
+<div class="modal-overlay" id="confirmModal">
+  <div class="confirm-box">
+    <div class="confirm-ico">🗑️</div>
+    <div class="confirm-title">¿Eliminar registro?</div>
+    <div class="confirm-sub">Esta acción no se puede deshacer.<br>¿Estás segura?</div>
+    <div class="confirm-btns">
+      <button class="btn btn-ghost" onclick="closeModal('confirmModal')">Cancelar</button>
+      <button class="btn btn-sm" id="confirmDelBtn"
+        style="background:rgba(244,114,182,0.15);color:#F472B6;border:1px solid rgba(244,114,182,0.3);">
+        Sí, eliminar
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"><span id="toastMsg">✓ Guardado</span></div>
+
+<!-- SIGNATURE -->
+<div class="sig"><div class="sig-dot"></div>Obsidiana Rosa — Claude ✦</div>
+
 <script>
-if("serviceWorker" in navigator){
-  window.addEventListener("load",()=>{
-    navigator.serviceWorker.register("sw.js").then(r=>{
-      console.log("SW registered");
-      window._swReg=r;
-    }).catch(e=>console.warn("SW error",e));
-  });
+/* ═══════════════════════════════════════════
+   OBSIDIANA ROSA — DATA ENGINE
+   localStorage-based CRUD completo
+═══════════════════════════════════════════ */
+
+const DB_KEY   = 'ob_transactions';
+const META_KEY = 'ob_metas';
+const PRES_KEY = 'ob_presupuesto';
+
+const CATS_INCOME  = ['Salario','Negocio','Renta','Dividendo','Honorarios','Freelance','Ventas','Otro Ingreso'];
+const CATS_EXPENSE = ['Pagos','Compras','Inversiones','Créditos','Alimentación','Transporte','Salud','Educación','Entretenimiento','Otro Gasto'];
+
+// ── STATE ──
+let transactions = JSON.parse(localStorage.getItem(DB_KEY) || '[]');
+let metas        = JSON.parse(localStorage.getItem(META_KEY) || '[]');
+let presupuestos = JSON.parse(localStorage.getItem(PRES_KEY) || '[]');
+let editingId    = null;
+let currentModule= 'all';
+let deleteId     = null;
+let currentFilterType = 'all';
+
+const QUOTES = [
+  '"El éxito es vivir a tu manera." — Diane von Furstenberg',
+  '"Bien portada es lo de menos, lo importante es ser irreemplazable." — Coco Chanel',
+  '"Una mujer con dinero administrado es una mujer libre." — Suze Orman',
+  '"No esperes oportunidades extraordinarias. Aprovecha las ordinarias."',
+  '"El dinero es poder, la libertad, un cojín." — Sophie Tucker',
+  '"Una mujer debe ser dos cosas: con clase y fabulosa." — Coco Chanel',
+  '"Lo que piensas de ti mismo es más importante que lo que otros piensan de ti."',
+];
+
+function save(){ localStorage.setItem(DB_KEY,JSON.stringify(transactions)); }
+function saveMetas(){ localStorage.setItem(META_KEY,JSON.stringify(metas)); }
+function savePresups(){ localStorage.setItem(PRES_KEY,JSON.stringify(presupuestos)); }
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
+
+// ── NAVIGATION ──
+function goTo(screen, navEl){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('screen-'+screen).classList.add('active');
+  if(navEl){
+    document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));
+    navEl.classList.add('active');
+  }
+  currentModule = screen;
+  renderScreen(screen);
 }
-</script>
-</head><body><div id="root"></div><script type="text/babel">
-const{useState,useRef,useEffect,useCallback}=React;
-const fl=document.createElement("link");fl.rel="stylesheet";fl.href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap";document.head.appendChild(fl);
 
-// ── CONSTANTS ──────────────────────────────────────────────
-const ADMIN_EMAILS=["rikaspalos@gmail.com"];
-const APP_VERSION="1.0.0";
-const BUILD_DATE="2026-03-03";
-const TRIAL_DAYS=15;
+function renderScreen(screen){
+  const r = {
+    dashboard: renderDashboard,
+    activos: ()=>renderModule('activos'),
+    cobrar: ()=>renderModule('cobrar'),
+    inversiones: ()=>renderModule('inversiones'),
+    pagos: ()=>renderModule('pagos'),
+    compras: ()=>renderModule('compras'),
+    creditos: ()=>renderModule('creditos'),
+    balance: renderBalance,
+    metas: renderMetas,
+    presupuesto: renderPresupuesto,
+  };
+  if(r[screen]) r[screen]();
+}
 
-// ── THEME ──────────────────────────────────────────────────
-const G={
-  bg:"#050812",glass:"rgba(255,255,255,0.04)",gb:"rgba(255,255,255,0.08)",
-  text:"#E8EEFF",dim:"rgba(232,238,255,0.35)",dim2:"rgba(232,238,255,0.12)",
-  font:"'Outfit',sans-serif",mono:"'JetBrains Mono',monospace",
-  green:"#00E5A0",red:"#FF3D6E",yellow:"#FFCC02",blue:"#4FC3F7",purple:"#CE93D8",orange:"#FF8A65"
+// ── MODULE MAPPING ──
+const MODULE_MAP = {
+  activos:    {type:'income',  cats:['Salario','Negocio','Renta','Dividendo','Honorarios','Freelance','Ventas','Otro Ingreso']},
+  cobrar:     {type:'income',  cats:['Honorarios','Freelance','Ventas','Otro Ingreso'], statusField:true},
+  inversiones:{type:'expense', cats:['Inversiones']},
+  pagos:      {type:'expense', cats:['Pagos','Alimentación','Salud','Educación','Entretenimiento']},
+  compras:    {type:'expense', cats:['Compras','Alimentación','Transporte']},
+  creditos:   {type:'expense', cats:['Créditos'], statusField:true},
 };
 
-// ── DB ─────────────────────────────────────────────────────
-// ── FIREBASE SYNC ──────────────────────────────────────────
-const STORE={productos:[],ventas:[],colaboradores:[],proveedores:[],gastos:[],entradas:[],users:{},brand:{name:"USALA",sub:"SUITE NEGOCIOS",accent:"#00E5A0",accent2:"#4FC3F7",version:"1.0.0",buildDate:"2026-03-03"}};
-const LISTENERS=[];
-function notifyAll(){LISTENERS.forEach(fn=>fn());}
-function useStore(keys){
-  const[,forceUpdate]=useState(0);
-  useEffect(()=>{
-    const fn=()=>forceUpdate(n=>n+1);
-    LISTENERS.push(fn);
-    return()=>{const i=LISTENERS.indexOf(fn);if(i>-1)LISTENERS.splice(i,1);};
-  },[]);
-}
-async function fbSave(col,id,data){
-  try{
-    if(window._db&&window._fs){
-      await window._fs.setDoc(window._fs.doc(window._db,col,id),{data:JSON.stringify(data),ts:Date.now()});
-    }
-  }catch(e){console.warn("FB save error",e);}
-  localStorage.setItem("sn_"+col,JSON.stringify(data));
-}
-async function fbSaveItem(col,item){
-  try{
-    if(window._db&&window._fs){
-      await window._fs.setDoc(window._fs.doc(window._db,col,item.id||col),{...item,ts:Date.now()});
-    }
-  }catch(e){console.warn("FB save error",e);}
-}
-function setupListeners(){
-  if(!window._db||!window._fs)return;
-  const cols=["productos","ventas","colaboradores","proveedores","gastos","entradas"];
-  cols.forEach(col=>{
-    window._fs.onSnapshot(window._fs.collection(window._db,col),snap=>{
-      const items=[];
-      snap.forEach(d=>{const dat=d.data();if(dat.data){try{const parsed=JSON.parse(dat.data);if(Array.isArray(parsed)){items.push(...parsed);}else{STORE[col]=parsed;notifyAll();return;}}catch(e){}}else{items.push({...dat});}});
-      if(items.length>0||snap.size===0){STORE[col]=items;localStorage.setItem("sn_"+col,JSON.stringify(items));notifyAll();}
-    });
-  });
-  // users and brand
-  ["users","brand"].forEach(col=>{
-    window._fs.onSnapshot(window._fs.collection(window._db,col),snap=>{
-      snap.forEach(d=>{
-        const dat=d.data();
-        if(dat.data){try{STORE[col]=JSON.parse(dat.data);localStorage.setItem("sn_"+col,JSON.stringify(STORE[col]));notifyAll();}catch(e){}}
-      });
-    });
-  });
-}
-if(window._fbReady){setupListeners();}else{window.addEventListener("fbready",setupListeners);}
-const DB={
-  get:(k,d)=>{try{const v=localStorage.getItem(k);return v?JSON.parse(v):d;}catch{return d;}},
-  set:(k,v)=>localStorage.setItem(k,JSON.stringify(v)),
-  users:()=>STORE.users||DB.get("sn_users",{}),
-  saveUsers:async u=>{STORE.users=u;await fbSave("users","all",u);notifyAll();},
-  session:()=>DB.get("sn_session",null),
-  saveSession:s=>DB.set("sn_session",s),
-  clearSession:()=>localStorage.removeItem("sn_session"),
-  brand:()=>({...{name:"USALA",sub:"SUITE NEGOCIOS",accent:"#00E5A0",accent2:"#4FC3F7",version:"1.0.0",buildDate:"2026-03-03"},...(STORE.brand||DB.get("sn_brand",{}))}),
-  saveBrand:async b=>{STORE.brand=b;await fbSave("brand","config",b);notifyAll();},
-  productos:()=>STORE.productos.length>0?STORE.productos:DB.get("sn_productos",[]),
-  saveProductos:async p=>{STORE.productos=p;await fbSave("productos","all",p);notifyAll();},
-  ventas:()=>STORE.ventas.length>0?STORE.ventas:DB.get("sn_ventas",[]),
-  saveVentas:async v=>{STORE.ventas=v;await fbSave("ventas","all",v);notifyAll();},
-  colaboradores:()=>STORE.colaboradores.length>0?STORE.colaboradores:DB.get("sn_colab",[]),
-  saveColaboradores:async c=>{STORE.colaboradores=c;await fbSave("colaboradores","all",c);notifyAll();},
-  proveedores:()=>STORE.proveedores.length>0?STORE.proveedores:DB.get("sn_prov",[]),
-  saveProveedores:async p=>{STORE.proveedores=p;await fbSave("proveedores","all",p);notifyAll();},
-  gastos:()=>STORE.gastos.length>0?STORE.gastos:DB.get("sn_gastos",[]),
-  saveGastos:async g=>{STORE.gastos=g;await fbSave("gastos","all",g);notifyAll();},
-  entradas:()=>STORE.entradas.length>0?STORE.entradas:DB.get("sn_entradas",[]),
-  saveEntradas:async e=>{STORE.entradas=e;await fbSave("entradas","all",e);notifyAll();},
-  pendientes:()=>DB.get("sn_pendientes",[]),
-  savePendientes:async p=>{DB.set("sn_pendientes",p);await fbSave("pendientes","all",p);},
-};
-
-// ── HELPERS ────────────────────────────────────────────────
-const fmt=n=>`$${Number(n||0).toLocaleString("es-MX",{minimumFractionDigits:2,maximumFractionDigits:2})}`;
-const today=()=>new Date().toISOString().split("T")[0];
-const getDaysLeft=u=>{if(!u||u.role==="admin")return Infinity;if(u.plan==="lifetime")return Infinity;if(!u.approvedAt)return 0;return TRIAL_DAYS-Math.floor((Date.now()-new Date(u.approvedAt))/86400000);};
-const isActive=u=>{if(!u)return false;if(u.role==="admin"||u.plan==="lifetime")return true;return getDaysLeft(u)>0;};
-const uid=()=>Math.random().toString(36).slice(2,10);
-
-// ── AMBIENT BG ─────────────────────────────────────────────
-function Bg({a="#00E5A0",b="#4FC3F7"}){
-  return <div style={{position:"fixed",inset:0,overflow:"hidden",pointerEvents:"none",zIndex:0}}>
-    <div style={{position:"absolute",width:500,height:500,borderRadius:"50%",background:`radial-gradient(circle,${a}12 0%,transparent 70%)`,top:-150,right:-150,animation:"f1 9s ease-in-out infinite"}}/>
-    <div style={{position:"absolute",width:400,height:400,borderRadius:"50%",background:`radial-gradient(circle,${b}10 0%,transparent 70%)`,bottom:50,left:-100,animation:"f2 11s ease-in-out infinite"}}/>
-    <div style={{position:"absolute",inset:0,backgroundImage:`radial-gradient(${a}06 1px,transparent 1px)`,backgroundSize:"28px 28px"}}/>
-    <style>{`@keyframes f1{0%,100%{transform:translate(0,0) scale(1)}50%{transform:translate(-30px,30px) scale(1.1)}}@keyframes f2{0%,100%{transform:translate(0,0)}50%{transform:translate(25px,-25px)}}@keyframes su{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}@keyframes si{from{opacity:0;transform:scale(0.93)}to{opacity:1;transform:scale(1)}}@keyframes bn{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}@keyframes fl{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}*{-webkit-tap-highlight-color:transparent}input::placeholder{color:rgba(232,238,255,0.2)}select option{background:#0a0e1e}`}</style>
-  </div>;
-}
-
-// ── COMPONENTS ─────────────────────────────────────────────
-function Card({children,style={},onClick}){
-  return <div onClick={onClick} style={{background:G.glass,border:`1px solid ${G.gb}`,borderRadius:20,backdropFilter:"blur(20px)",WebkitBackdropFilter:"blur(20px)",...style}}>{children}</div>;
-}
-function Btn({children,onClick,color,full,ghost,small,danger,style={}}){
-  const c=color||(danger?G.red:G.green);
-  const[p,setP]=useState(false);
-  return <button onPointerDown={()=>setP(true)} onPointerUp={()=>setP(false)} onPointerLeave={()=>setP(false)} onClick={onClick}
-    style={{width:full?"100%":"auto",padding:small?"8px 16px":"13px 22px",border:ghost?`1px solid ${c}55`:"none",borderRadius:14,
-    background:ghost?`${c}10`:`linear-gradient(135deg,${c}ee,${c}88)`,color:ghost?c:"#050812",
-    fontFamily:G.font,fontWeight:700,fontSize:small?"0.78rem":"0.88rem",cursor:"pointer",
-    transform:p?"scale(0.97)":"scale(1)",transition:"all 0.15s",boxShadow:ghost?"none":`0 0 20px ${c}33`,...style}}>{children}</button>;
-}
-function Inp({label,placeholder,value,onChange,type="text",onEnter,icon,style={}}){
-  const[f,setF]=useState(false);
-  const br=DB.brand();
-  return <div style={{marginBottom:14,...style}}>
-    {label&&<div style={{fontSize:"0.68rem",color:G.dim,letterSpacing:"0.08em",marginBottom:6,textTransform:"uppercase"}}>{label}</div>}
-    <div style={{position:"relative"}}>
-      {icon&&<div style={{position:"absolute",left:14,top:"50%",transform:"translateY(-50%)",color:f?br.accent:G.dim,fontSize:"0.9rem",pointerEvents:"none"}}>{icon}</div>}
-      <input type={type} value={value} onChange={e=>onChange(e.target.value)} placeholder={placeholder}
-        onFocus={()=>setF(true)} onBlur={()=>setF(false)} onKeyDown={e=>e.key==="Enter"&&onEnter?.()}
-        style={{width:"100%",padding:icon?"12px 14px 12px 40px":"12px 14px",background:f?"rgba(255,255,255,0.06)":"rgba(255,255,255,0.03)",
-        border:`1px solid ${f?br.accent+"66":G.gb}`,borderRadius:12,fontFamily:G.font,fontSize:"0.88rem",
-        color:G.text,outline:"none",boxSizing:"border-box"}}/>
-    </div>
-  </div>;
-}
-function Sel({label,value,onChange,options,style={}}){
-  const br=DB.brand();
-  return <div style={{marginBottom:14,...style}}>
-    {label&&<div style={{fontSize:"0.68rem",color:G.dim,letterSpacing:"0.08em",marginBottom:6,textTransform:"uppercase"}}>{label}</div>}
-    <select value={value} onChange={e=>onChange(e.target.value)}
-      style={{width:"100%",padding:"12px 14px",background:"rgba(255,255,255,0.04)",border:`1px solid ${G.gb}`,
-      borderRadius:12,fontFamily:G.font,fontSize:"0.88rem",color:G.text,outline:"none",cursor:"pointer",appearance:"none"}}>
-      {options.map(o=><option key={o.v} value={o.v}>{o.l}</option>)}
-    </select>
-  </div>;
-}
-function Pill({children,color,active,onClick}){
-  return <button onClick={onClick} style={{padding:"7px 14px",borderRadius:50,border:`1px solid ${active?color+"88":G.gb}`,
-    background:active?`${color}22`:G.glass,color:active?color:G.dim,fontFamily:G.font,
-    fontSize:"0.75rem",fontWeight:active?600:400,cursor:"pointer",whiteSpace:"nowrap",flexShrink:0}}>{children}</button>;
-}
-function Modal({title,onClose,children,wide}){
-  return <div style={{position:"fixed",inset:0,zIndex:999}}>
-    <div onClick={onClose} style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.75)",backdropFilter:"blur(6px)"}}/>
-    <div style={{position:"absolute",bottom:0,left:0,right:0,background:"#080c1a",border:`1px solid ${G.gb}`,
-      borderRadius:"24px 24px 0 0",padding:"0 0 50px",maxHeight:"90vh",overflowY:"auto",animation:"su 0.3s ease"}}>
-      <div style={{padding:"16px 20px",borderBottom:`1px solid ${G.gb}`,display:"flex",justifyContent:"space-between",alignItems:"center",position:"sticky",top:0,background:"#080c1a",zIndex:1}}>
-        <div style={{fontWeight:700,fontSize:"1rem",color:G.text}}>{title}</div>
-        <button onClick={onClose} style={{width:32,height:32,borderRadius:10,background:G.glass,border:`1px solid ${G.gb}`,color:G.dim,cursor:"pointer",fontSize:"1rem"}}>✕</button>
-      </div>
-      <div style={{padding:"20px"}}>{children}</div>
-    </div>
-  </div>;
-}
-function Toast({msg,color}){
-  const br=DB.brand();
-  return <div style={{position:"fixed",bottom:90,left:"50%",transform:"translateX(-50%)",background:"rgba(5,8,18,0.95)",
-    backdropFilter:"blur(20px)",border:`1px solid ${(color||br.accent)+"44"}`,color:color||br.accent,
-    padding:"12px 24px",borderRadius:50,fontSize:"0.82rem",fontFamily:G.font,fontWeight:600,zIndex:9999,
-    whiteSpace:"nowrap",animation:"su 0.3s ease"}}>{msg}</div>;
-}
-function StatCard({label,value,sub,color,icon}){
-  return <Card style={{padding:"16px 14px"}}>
-    <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:8}}>
-      <div style={{fontSize:"0.65rem",color:G.dim,letterSpacing:"0.08em",textTransform:"uppercase"}}>{label}</div>
-      <div style={{fontSize:"1.1rem"}}>{icon}</div>
-    </div>
-    <div style={{fontWeight:900,fontSize:"1.4rem",color:color||G.text,lineHeight:1}}>{value}</div>
-    {sub&&<div style={{fontSize:"0.7rem",color:G.dim,marginTop:4}}>{sub}</div>}
-  </Card>;
-}
-
-// ── LOGIN ──────────────────────────────────────────────────
-function Login({onAuth}){
-  const br=DB.brand();
-  const[mode,setMode]=useState("login");
-  const[name,setName]=useState("");
-  const[email,setEmail]=useState("");
-  const[pass,setPass]=useState("");
-  const[err,setErr]=useState("");
-  const[ok,setOk]=useState("");
-  const[loading,setL]=useState(false);
-  async function submit(){
-    setErr("");setOk("");setL(true);
-    await new Promise(r=>setTimeout(r,500));
-    const users=DB.users();
-    if(mode==="register"){
-      if(!name||!email||!pass){setErr("Completa todos los campos");setL(false);return;}
-      if(pass.length<6){setErr("Contraseña mínimo 6 caracteres");setL(false);return;}
-      if(users[email]){setErr("Email ya existe");setL(false);return;}
-      const isAdmin=ADMIN_EMAILS.includes(email.toLowerCase());
-      users[email]={name,email,pass,role:isAdmin?"admin":"vendedor",status:isAdmin?"approved":"pending",
-        plan:isAdmin?"lifetime":"trial",registeredAt:new Date().toISOString(),
-        approvedAt:isAdmin?new Date().toISOString():null,comision:10};
-      DB.saveUsers(users);
-      setOk("✓ Cuenta creada. Espera aprobación.");
-      setTimeout(()=>{setMode("login");setOk("");},2000);
-    }else{
-      const u=users[email.toLowerCase()]||users[email];
-      if(!u){setErr("Email no encontrado");setL(false);return;}
-      if(u.pass!==pass){setErr("Contraseña incorrecta");setL(false);return;}
-      if(u.status==="pending"){setErr("Cuenta pendiente de aprobación");setL(false);return;}
-      if(u.status==="rejected"){setErr("Acceso rechazado");setL(false);return;}
-      if(u.role!=="admin"&&!isActive(u)){setErr("Acceso vencido. Contacta al admin.");setL(false);return;}
-      DB.saveSession(u);onAuth(u);
-    }
-    setL(false);
-  }
-  return <div style={{minHeight:"100vh",background:G.bg,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"24px",fontFamily:G.font,position:"relative",overflow:"hidden"}}>
-    <Bg a={br.accent} b={br.accent2}/>
-    <div style={{position:"relative",zIndex:1,width:"100%",maxWidth:400,animation:"si 0.5s ease"}}>
-      <div style={{textAlign:"center",marginBottom:32}}>
-        <div style={{display:"flex",justifyContent:"center",marginBottom:16,animation:"fl 4s ease-in-out infinite",filter:`drop-shadow(0 0 28px ${br.accent}55)`}}>
-          <svg width="90" height="90" viewBox="0 0 140 140" fill="none">
-            <defs>
-              <linearGradient id="lg1" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stopColor={br.accent}/><stop offset="100%" stopColor={br.accent2}/></linearGradient>
-              <linearGradient id="lg2" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stopColor={br.accent} stopOpacity="0.2"/><stop offset="100%" stopColor={br.accent2} stopOpacity="0.1"/></linearGradient>
-              <filter id="gw2"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-            </defs>
-            <polygon points="70,17 115,42 115,98 70,123 25,98 25,42" fill="url(#lg2)" stroke="url(#lg1)" strokeWidth="1.75" filter="url(#gw2)"/>
-            <path d="M50 38 L50 77 Q50 97 70 97 Q90 97 90 77 L90 38" fill="none" stroke="white" strokeWidth="10" strokeLinecap="round" filter="url(#gw2)"/>
-            <circle cx="98" cy="33" r="6.5" fill={br.accent}/><circle cx="98" cy="33" r="3" fill="white"/>
-          </svg>
-        </div>
-        <div style={{fontWeight:900,letterSpacing:"0.16em",fontSize:"3.2rem",background:`linear-gradient(135deg,#fff 0%,${br.accent} 50%,${br.accent2} 100%)`,WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>{br.name}</div>
-        <div style={{width:40,height:2,background:`linear-gradient(90deg,${br.accent},${br.accent2})`,borderRadius:2,margin:"8px auto"}}/>
-        <div style={{fontSize:"0.58rem",color:G.dim,letterSpacing:"0.45em",textTransform:"uppercase"}}>{br.sub}</div>
-      </div>
-      <Card style={{padding:26}}>
-        <div style={{display:"flex",background:"rgba(255,255,255,0.03)",borderRadius:12,padding:4,marginBottom:22}}>
-          {["login","register"].map(m=><button key={m} onClick={()=>{setMode(m);setErr("");setOk("");}}
-            style={{flex:1,padding:"9px",border:mode===m?`1px solid ${br.accent}44`:"1px solid transparent",borderRadius:10,
-            background:mode===m?`${br.accent}22`:"transparent",color:mode===m?br.accent:G.dim,
-            fontFamily:G.font,fontSize:"0.82rem",fontWeight:mode===m?700:400,cursor:"pointer"}}>
-            {m==="login"?"Iniciar sesión":"Registrarse"}</button>)}
-        </div>
-        {mode==="register"&&<Inp icon="✦" placeholder="Tu nombre completo" value={name} onChange={setName}/>}
-        <Inp icon="@" placeholder="correo@ejemplo.com" value={email} onChange={setEmail} type="email"/>
-        <Inp icon="◈" placeholder="Contraseña" value={pass} onChange={setPass} type="password" onEnter={submit}/>
-        {err&&<div style={{padding:"10px 14px",background:"#ff3d6e14",border:"1px solid #ff3d6e44",borderRadius:10,marginBottom:14,fontSize:"0.8rem",color:G.red}}>⚠ {err}</div>}
-        {ok&&<div style={{padding:"10px 14px",background:`${br.accent}14`,border:`1px solid ${br.accent}44`,borderRadius:10,marginBottom:14,fontSize:"0.8rem",color:br.accent}}>{ok}</div>}
-        <Btn onClick={submit} full color={br.accent} style={{opacity:loading?0.7:1}}>{loading?"···":mode==="login"?"Entrar →":"Crear cuenta →"}</Btn>
-        {mode==="register"&&<div style={{marginTop:14,fontSize:"0.73rem",color:G.dim,textAlign:"center",lineHeight:1.7}}>Tu cuenta será revisada por el administrador.</div>}
-      </Card>
-    </div>
-  </div>;
-}
-
-// ── DASHBOARD ──────────────────────────────────────────────
-function Dashboard({user}){
-  const br=DB.brand();
-  const ventas=DB.ventas();
-  const hoy=today();
-  const ventasHoy=ventas.filter(v=>v.fecha===hoy);
-  const ventasSemana=ventas.filter(v=>{const d=new Date(v.fecha);const s=new Date();s.setDate(s.getDate()-7);return d>=s;});
-  const totalHoy=ventasHoy.reduce((a,v)=>a+Number(v.total||0),0);
-  const utilidadHoy=ventasHoy.reduce((a,v)=>a+Number(v.utilidad||0),0);
-  const totalSemana=ventasSemana.reduce((a,v)=>a+Number(v.total||0),0);
-  const utilidadSemana=ventasSemana.reduce((a,v)=>a+Number(v.utilidad||0),0);
-  const productos=DB.productos();
-  const colaboradores=DB.colaboradores();
-  const stockBajo=productos.filter(p=>Number(p.stock||0)<=5).length;
-  // Gráfica 7 días
-  const dias=[];for(let i=6;i>=0;i--){const d=new Date();d.setDate(d.getDate()-i);dias.push(d.toISOString().split("T")[0]);}
-  const maxV=Math.max(...dias.map(d=>ventas.filter(v=>v.fecha===d).reduce((a,v)=>a+Number(v.total||0),0)),1);
-  return <div style={{padding:"16px",paddingBottom:80}}>
-    <div style={{marginBottom:16}}>
-      <div style={{fontSize:"1.3rem",fontWeight:900,color:G.text}}>Buen día, {user.name.split(" ")[0]} 👋</div>
-      <div style={{fontSize:"0.75rem",color:G.dim,marginTop:2}}>{new Date().toLocaleDateString("es-MX",{weekday:"long",day:"numeric",month:"long"})}</div>
-    </div>
-    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:16}}>
-      <StatCard label="Ventas hoy" value={fmt(totalHoy)} sub={`${ventasHoy.length} transacciones`} color={br.accent} icon="💰"/>
-      <StatCard label="Utilidad hoy" value={fmt(utilidadHoy)} sub={utilidadHoy>0?`${Math.round((utilidadHoy/totalHoy)*100)||0}% margen`:"-"} color={G.green} icon="📈"/>
-      <StatCard label="Ventas 7 días" value={fmt(totalSemana)} sub={`${ventasSemana.length} ventas`} color={br.accent2} icon="📊"/>
-      <StatCard label="Utilidad 7d" value={fmt(utilidadSemana)} sub={utilidadSemana>0?`${Math.round((utilidadSemana/totalSemana)*100)||0}% margen`:"-"} color={G.green} icon="💹"/>
-    </div>
-    {stockBajo>0&&<Card style={{padding:"14px 16px",marginBottom:16,background:`${G.yellow}08`,border:`1px solid ${G.yellow}33`}}>
-      <div style={{display:"flex",alignItems:"center",gap:10}}>
-        <div style={{fontSize:"1.2rem"}}>⚠️</div>
-        <div><div style={{fontSize:"0.85rem",fontWeight:600,color:G.yellow}}>{stockBajo} producto{stockBajo>1?"s":""} con stock bajo</div>
-        <div style={{fontSize:"0.72rem",color:G.dim}}>Revisa el módulo de Productos</div></div>
-      </div>
-    </Card>}
-    <Card style={{padding:"16px",marginBottom:16}}>
-      <div style={{fontWeight:700,fontSize:"0.85rem",marginBottom:14,color:G.text}}>Ventas vs Utilidad — 7 días</div>
-      <div style={{display:"flex",alignItems:"flex-end",gap:4,height:80}}>
-        {dias.map(d=>{
-          const vt=ventas.filter(v=>v.fecha===d).reduce((a,v)=>a+Number(v.total||0),0);
-          const ut=ventas.filter(v=>v.fecha===d).reduce((a,v)=>a+Number(v.utilidad||0),0);
-          const hv=(vt/maxV)*100;const hu=(ut/maxV)*100;
-          const label=new Date(d+"T12:00:00").toLocaleDateString("es-MX",{weekday:"short"}).slice(0,3);
-          return <div key={d} style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",gap:2}}>
-            <div style={{width:"100%",display:"flex",gap:2,alignItems:"flex-end",height:64}}>
-              <div style={{flex:1,background:`${br.accent}88`,borderRadius:"4px 4px 0 0",height:`${Math.max(hv,2)}%`,transition:"height 0.5s"}}/>
-              <div style={{flex:1,background:`${G.green}88`,borderRadius:"4px 4px 0 0",height:`${Math.max(hu,2)}%`,transition:"height 0.5s"}}/>
-            </div>
-            <div style={{fontSize:"0.58rem",color:G.dim}}>{label}</div>
-          </div>;
-        })}
-      </div>
-      <div style={{display:"flex",gap:14,marginTop:10}}>
-        <div style={{display:"flex",alignItems:"center",gap:6,fontSize:"0.7rem",color:G.dim}}><div style={{width:10,height:10,borderRadius:2,background:br.accent}}/> Ventas</div>
-        <div style={{display:"flex",alignItems:"center",gap:6,fontSize:"0.7rem",color:G.dim}}><div style={{width:10,height:10,borderRadius:2,background:G.green}}/> Utilidad</div>
-      </div>
-    </Card>
-    <Card style={{padding:"16px"}}>
-      <div style={{fontWeight:700,fontSize:"0.85rem",marginBottom:12,color:G.text}}>Actividad reciente</div>
-      {ventas.slice(-8).reverse().map((v,i)=><div key={i} style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"10px 0",borderBottom:i<7?`1px solid ${G.dim2}`:""}}>        <div style={{display:"flex",gap:10,alignItems:"center"}}><div style={{width:34,height:34,borderRadius:11,background:`${br.accent}18`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:"0.9rem"}}>🛍</div><div><div style={{fontSize:"0.82rem",fontWeight:600,color:G.text}}>{v.producto||"Venta"}</div><div style={{fontSize:"0.68rem",color:G.dim}}>{v.vendedor||"—"} · {v.fecha}</div></div></div><div style={{textAlign:"right",flexShrink:0}}><div style={{fontSize:"0.85rem",fontWeight:700,color:br.accent}}>{fmt(v.total)}</div><div style={{fontSize:"0.68rem",color:G.green}}>+{fmt(v.utilidad)}</div></div></div>)}
-      {ventas.length===0&&<div style={{textAlign:"center",padding:"30px 0",color:G.dim,fontSize:"0.82rem"}}>Sin ventas registradas aún</div>}
-    </Card>
-  </div>;
-}
-
-// ── VENTAS ─────────────────────────────────────────────────
-function Ventas({user,isAdmin}){
-  const br=DB.brand();
-  const[tab,setTab]=useState("historial");
-  const[modal,setModal]=useState(false);
-  const[toast,setToast]=useState("");
-  const[ventas,setVentas]=useState(DB.ventas());
-  const[productos]=useState(DB.productos());
-  const[colaboradores]=useState(DB.colaboradores());
-  const[filtro,setFiltro]=useState("hoy");
-  // Form nueva venta
-  const[prod,setProd]=useState("");
-  const[qty,setQty]=useState("1");
-  const[vendedorId,setVendedorId]=useState(user.role==="admin"?"":user.email);
-  const[pagMethod,setPagMethod]=useState("efectivo");
-  const[descuento,setDescuento]=useState("0");
-  const[scanner,setScanner]=useState(false);
-  const[busqueda,setBusqueda]=useState("");
-  function toast_(m,c){setToast({m,c});setTimeout(()=>setToast(""),3000);}
-  function handleScan(codigo){
-    setScanner(false);
-    const prods=DB.productos();
-    const p=prods.find(x=>x.codigo&&x.codigo===codigo);
-    if(p){setProd(p.id);setModal(true);toast_(`✓ Producto: ${p.nombre}`);}
-    else{setBusqueda(codigo);setModal(true);toast_(`⚠ Código no registrado — selecciona manualmente`,"#FFCC02");}
-  }
-  function nuevaVenta(){
-    if(!prod||!qty||Number(qty)<1){toast_("⚠ Completa los campos","#ff3d6e");return;}
-    const p=productos.find(x=>x.id===prod);
-    if(!p){toast_("⚠ Producto no encontrado","#ff3d6e");return;}
-    if(Number(p.stock||0)<Number(qty)){toast_("⚠ Stock insuficiente","#ff3d6e");return;}
-    const colabs=DB.colaboradores();const vend=colabs.find(c=>c.id===vendedorId)||{nombre:user.nombre||user.email,comision:10};
-    const subtotal=Number(p.precio)*Number(qty);
-    const desc=Math.min(Number(descuento||0),subtotal);
-    const total=subtotal-desc;
-    const costo=Number(p.costo)*Number(qty);
-    const utilidad=total-costo;
-    const comisionMonto=total*(Number(vend.comision||10)/100);
-    const v={id:uid(),producto:p.nombre,productoId:p.id,cantidad:Number(qty),precioUnit:p.precio,
-      subtotal,descuento:desc,total,costo,utilidad,comisionMonto,
-      vendedor:vend.nombre||vend.name||user.email,vendedorId,metodoPago:pagMethod,fecha:today(),hora:new Date().toLocaleTimeString("es-MX")};
-    const nv=[...ventas,v];
-    // actualizar stock
-    const prods=DB.productos().map(x=>x.id===prod?{...x,stock:Number(x.stock)-Number(qty)}:x);
-    DB.saveProductos(prods);DB.saveVentas(nv);setVentas(nv);
-    setModal(false);setProd("");setQty("1");setDescuento("0");
-    toast_(`✓ Venta registrada — ${fmt(total)}`);
-  }
-  const hoy=today();
-  const filtered=ventas.filter(v=>{
-    if(filtro==="hoy")return v.fecha===hoy;
-    if(filtro==="semana"){const d=new Date(v.fecha);const s=new Date();s.setDate(s.getDate()-7);return d>=s;}
-    if(filtro==="mes"){const d=new Date(v.fecha);const m=new Date();m.setDate(m.getDate()-30);return d>=m;}
+function getTxForModule(mod){
+  if(mod === 'balance') return transactions;
+  const m = MODULE_MAP[mod];
+  if(!m) return [];
+  return transactions.filter(t => {
+    if(t.type !== m.type) return false;
+    if(m.cats && !m.cats.includes(t.cat)) return false;
     return true;
   });
-  const totalFiltro=filtered.reduce((a,v)=>a+Number(v.total||0),0);
-  const utilidadFiltro=filtered.reduce((a,v)=>a+Number(v.utilidad||0),0);
-  // informe por vendedor
-  const porVendedor={};filtered.forEach(v=>{const key=v.vendedor||"Sin asignar";if(!porVendedor[key])porVendedor[key]={ventas:0,total:0,utilidad:0,comision:0};porVendedor[key].ventas++;porVendedor[key].total+=Number(v.total||0);porVendedor[key].utilidad+=Number(v.utilidad||0);porVendedor[key].comision+=Number(v.comisionMonto||0);});
-  return <div style={{display:"flex",flexDirection:"column",height:"100%"}}>
-    <div style={{padding:"14px 16px",borderBottom:`1px solid ${G.gb}`,flexShrink:0}}>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
-        <div><div style={{fontWeight:800,fontSize:"1.1rem"}}>Ventas</div><div style={{fontSize:"0.7rem",color:G.dim}}>{filtered.length} registros</div></div>
-        <div style={{display:"flex",gap:8}}><Btn onClick={()=>setScanner(true)} color={G.blue} small>📷 Scan</Btn><Btn onClick={()=>setModal(true)} color={br.accent} small>+ Nueva venta</Btn></div>
-      </div>
-      <div style={{display:"flex",gap:8,overflowX:"auto"}}>
-        {[["hoy","Hoy"],["semana","7 días"],["mes","30 días"],["todo","Todo"]].map(([f,l])=>
-          <Pill key={f} active={filtro===f} color={br.accent} onClick={()=>setFiltro(f)}>{l}</Pill>)}
-      </div>
-    </div>
-    <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,padding:"12px 16px",flexShrink:0}}>
-      <Card style={{padding:"12px 14px"}}><div style={{fontSize:"0.65rem",color:G.dim,marginBottom:4}}>TOTAL</div><div style={{fontWeight:900,fontSize:"1.2rem",color:br.accent}}>{fmt(totalFiltro)}</div></Card>
-      <Card style={{padding:"12px 14px"}}><div style={{fontSize:"0.65rem",color:G.dim,marginBottom:4}}>UTILIDAD</div><div style={{fontWeight:900,fontSize:"1.2rem",color:G.green}}>{fmt(utilidadFiltro)}</div></Card>
-    </div>
-    <div style={{display:"flex",borderBottom:`1px solid ${G.gb}`,flexShrink:0,padding:"0 16px"}}>
-      {[["historial","Historial"],["vendedor","Por vendedor"]].map(([t,l])=>
-        <button key={t} onClick={()=>setTab(t)} style={{flex:1,padding:"10px 4px",border:"none",background:"none",borderBottom:`2px solid ${tab===t?br.accent:"transparent"}`,color:tab===t?br.accent:G.dim,fontFamily:G.font,fontSize:"0.78rem",fontWeight:tab===t?700:400,cursor:"pointer"}}>{l}</button>)}
-    </div>
-    <div style={{flex:1,overflowY:"auto",padding:"12px 16px",paddingBottom:80}}>
-      {tab==="historial"&&<>{filtered.length===0&&<div style={{textAlign:"center",padding:"50px 0",color:G.dim}}>Sin ventas en este período</div>}
-        {filtered.slice().reverse().map((v,i)=><Card key={i} style={{padding:"14px",marginBottom:10}}>
-          <div style={{display:"flex",justifyContent:"space-between",marginBottom:6}}>
-            <div style={{fontWeight:700,fontSize:"0.88rem"}}>{v.producto}</div>
-            <div style={{fontWeight:700,color:br.accent}}>{fmt(v.total)}</div>
-          </div>
-          <div style={{display:"flex",gap:12,fontSize:"0.7rem",color:G.dim}}>
-            <span>x{v.cantidad}</span><span>{v.vendedor}</span><span>{v.metodoPago}</span><span>{v.fecha}</span>
-          </div>
-          <div style={{display:"flex",gap:12,marginTop:6,fontSize:"0.72rem"}}>
-            <span style={{color:G.green}}>Utilidad: {fmt(v.utilidad)}</span>
-            <span style={{color:G.yellow}}>Comisión: {fmt(v.comisionMonto)}</span>
-          </div>
-          {isAdmin&&<button onClick={()=>{const all=DB.ventas();const nv=all.filter(x=>x.id!==v.id);DB.saveVentas(nv);setVentas(nv);if(v.productoId){const prods=DB.productos();DB.saveProductos(prods.map(p=>p.id===v.productoId?{...p,stock:Number(p.stock||0)+Number(v.cantidad||1)}:p));}pushUndo({label:`Venta "${v.producto}" eliminada`,undo:()=>{const r=[...DB.ventas(),v];DB.saveVentas(r);setVentas(r);if(v.productoId){const prods=DB.productos();DB.saveProductos(prods.map(p=>p.id===v.productoId?{...p,stock:Math.max(0,Number(p.stock||0)-Number(v.cantidad||1))}:p));}}});}} style={{marginTop:8,width:"100%",padding:"5px",background:"rgba(255,61,110,0.08)",border:"1px solid rgba(255,61,110,0.2)",borderRadius:8,color:"#ff3d6e",fontSize:"0.7rem",cursor:"pointer"}}>✕ Eliminar venta</button>}
-        </Card>)}</>}
-      {tab==="vendedor"&&<>{Object.keys(porVendedor).length===0&&<div style={{textAlign:"center",padding:"50px 0",color:G.dim}}>Sin datos</div>}
-        {Object.entries(porVendedor).sort((a,b)=>b[1].total-a[1].total).map(([nombre,d],i)=><Card key={i} style={{padding:"16px",marginBottom:10}}>
-          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
-            <div style={{display:"flex",gap:10,alignItems:"center"}}>
-              <div style={{width:38,height:38,borderRadius:12,background:`${br.accent}18`,border:`1px solid ${br.accent}33`,display:"flex",alignItems:"center",justifyContent:"center",fontWeight:800,color:br.accent,fontSize:"1rem"}}>{nombre[0]}</div>
-              <div><div style={{fontWeight:700}}>{nombre}</div><div style={{fontSize:"0.7rem",color:G.dim}}>{d.ventas} ventas</div></div>
-            </div>
-            <div style={{textAlign:"right"}}><div style={{fontWeight:800,color:br.accent}}>{fmt(d.total)}</div><div style={{fontSize:"0.7rem",color:G.green}}>{fmt(d.utilidad)} util.</div></div>
-          </div>
-          <div style={{height:4,borderRadius:4,background:G.dim2,overflow:"hidden"}}><div style={{height:"100%",width:`${Math.min((d.total/totalFiltro)*100,100)}%`,background:`linear-gradient(90deg,${br.accent},${br.accent2})`,borderRadius:4}}/></div>
-          <div style={{fontSize:"0.7rem",color:G.yellow,marginTop:6}}>Comisiones: {fmt(d.comision)}</div>
-        </Card>)}</>}
-    </div>
-    {modal&&<Modal title="Nueva Venta" onClose={()=>setModal(false)}>
-      {(()=>{
-        const allProds=DB.productos();
-        const filteredProds=busqueda?allProds.filter(p=>p.nombre.toLowerCase().includes(busqueda.toLowerCase())||( p.codigo&&p.codigo.includes(busqueda))):allProds;
-        return <>
-          <Inp label="Buscar producto" placeholder="Escribe nombre o código..." value={busqueda} onChange={v=>{setBusqueda(v);setProd("");}} icon="🔍"/>
-          <Sel label="Producto" value={prod} onChange={v=>{setProd(v);}} options={[{v:"",l:filteredProds.length===0?"Sin resultados...":"Seleccionar producto..."},...filteredProds.map(p=>({v:p.id,l:`${p.nombre} — ${fmt(p.precio)} (stock: ${p.stock||0})`}))]}/>
-        </>;
-      })()}
-      <Inp label="Cantidad" type="number" value={qty} onChange={setQty}/>
-      {user.role==="admin"&&<Sel label="Vendedor" value={vendedorId} onChange={setVendedorId} options={[{v:"",l:"Sin asignar"},...DB.colaboradores().map(c=>({v:c.id,l:c.nombre}))]}/>}
-      <Sel label="Método de pago" value={pagMethod} onChange={setPagMethod} options={[{v:"efectivo",l:"💵 Efectivo"},{v:"transferencia",l:"🏦 Transferencia"},{v:"tarjeta",l:"💳 Tarjeta"},{v:"credito",l:"📋 Crédito"}]}/>
-      <Inp label="Descuento ($)" type="number" value={descuento} onChange={setDescuento}/>
-      {prod&&qty&&<Card style={{padding:"14px",marginBottom:16,background:`${br.accent}08`}}>
-        {(()=>{const p=productos.find(x=>x.id===prod);if(!p)return null;const s=Number(p.precio)*Number(qty||1)-Number(descuento||0);const u=s-Number(p.costo)*Number(qty||1);return <>
-          <div style={{display:"flex",justifyContent:"space-between",fontSize:"0.82rem",marginBottom:6}}><span style={{color:G.dim}}>Subtotal</span><span>{fmt(Number(p.precio)*Number(qty||1))}</span></div>
-          {Number(descuento)>0&&<div style={{display:"flex",justifyContent:"space-between",fontSize:"0.82rem",marginBottom:6}}><span style={{color:G.dim}}>Descuento</span><span style={{color:G.red}}>-{fmt(descuento)}</span></div>}
-          <div style={{display:"flex",justifyContent:"space-between",fontSize:"0.95rem",fontWeight:800,marginBottom:6}}><span>Total</span><span style={{color:br.accent}}>{fmt(s)}</span></div>
-          <div style={{display:"flex",justifyContent:"space-between",fontSize:"0.78rem"}}><span style={{color:G.dim}}>Utilidad est.</span><span style={{color:G.green}}>{fmt(u)}</span></div>
-        </>})()}
-      </Card>}
-      <Btn onClick={nuevaVenta} full color={br.accent}>✓ Registrar venta</Btn>
-    </Modal>}
-    {toast&&<Toast msg={toast.m} color={toast.c}/>}
-  </div>;
 }
 
-// ── PRODUCTOS ──────────────────────────────────────────────
-function Productos({user,isAdmin}){
-  const br=DB.brand();
-  const[productos,setProductos]=useState(DB.productos());
-  const[modal,setModal]=useState(null);
-  const[toast,setToast]=useState("");
-  const[busca,setBusca]=useState("");
-  const[scanner,setScanner]=useState(false);
-  const[form,setForm]=useState({nombre:"",costo:"",precio:"",stock:"",categoria:"fundas",proveedor:"",codigo:""});
-  function handleScan(codigo){setScanner(false);setForm(f=>({...f,codigo}));toast_(`✓ Código capturado: ${codigo}`);}
-  function toast_(m,c){setToast({m,c});setTimeout(()=>setToast(""),3000);}
-  function guardar(){
-    if(!form.nombre||!form.costo||!form.precio){toast_("⚠ Nombre, costo y precio son requeridos","#ff3d6e");return;}
-     const ps=DB.productos();
-     if(modal==="nuevo"){
-       const p={...form,id:uid(),costo:Number(form.costo),precio:Number(form.precio),stock:Number(form.stock||0),createdAt:today()};
-       const nps=[...ps,p];DB.saveProductos(nps);setProductos(nps);
-       pushUndo({label:`Producto "${p.nombre}" agregado`,undo:()=>{const r=DB.productos().filter(x=>x.id!==p.id);DB.saveProductos(r);setProductos(r);},edit:()=>{setForm({nombre:p.nombre,costo:String(p.costo),precio:String(p.precio),stock:String(p.stock),categoria:p.categoria,proveedor:p.proveedor||"",codigo:p.codigo||""});setModal(p.id);}});
-     }else{
-       const prev=ps.find(x=>x.id===modal);
-       const p={...prev,...form,id:modal,costo:Number(form.costo),precio:Number(form.precio),stock:Number(form.stock||0)};
-       const nps=ps.map(x=>x.id===modal?p:x);
-       DB.saveProductos(nps);setProductos(nps);
-       pushUndo({label:`Producto "${p.nombre}" modificado`,undo:()=>{const r=DB.productos().map(x=>x.id===prev.id?prev:x);DB.saveProductos(r);setProductos(r);},edit:()=>{setForm({nombre:p.nombre,costo:String(p.costo),precio:String(p.precio),stock:String(p.stock),categoria:p.categoria,proveedor:p.proveedor||"",codigo:p.codigo||""});setModal(p.id);}});
-     }
-     setModal(null);setForm({nombre:"",costo:"",precio:"",stock:"",categoria:"fundas",proveedor:"",codigo:""});
-   }
-  const totalInventario=productos.reduce((a,p)=>a+Number(p.precio)*Number(p.stock||0),0);
-   const filtrados=busca?productos.filter(p=>p.nombre.toLowerCase().includes(busca.toLowerCase())||(p.codigo&&p.codigo.toLowerCase().includes(busca.toLowerCase()))):productos;
-  return <div style={{display:"flex",flexDirection:"column",height:"100%"}}>
-    <div style={{padding:"14px 16px",borderBottom:`1px solid ${G.gb}`,flexShrink:0}}>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
-        <div><div style={{fontWeight:800,fontSize:"1.1rem"}}>Productos</div><div style={{fontSize:"0.7rem",color:G.dim}}>{productos.length} artículos · {fmt(totalInventario)} inventario</div></div>
-        <Btn onClick={()=>{setForm({nombre:"",costo:"",precio:"",stock:"",categoria:"fundas",proveedor:""});setModal("nuevo");}} color={br.accent} small>+ Agregar</Btn>
-      </div>
-      <Inp icon="🔍" placeholder="Buscar producto..." value={busca} onChange={setBusca} style={{marginBottom:0}}/>
-    </div>
-    <div style={{flex:1,overflowY:"auto",padding:"12px 16px",paddingBottom:80}}>
-      {filtrados.length===0&&<div style={{textAlign:"center",padding:"50px 0",color:G.dim}}>Sin productos</div>}
-      {filtrados.map(p=>{
-        const margen=p.precio>0?Math.round(((p.precio-p.costo)/p.precio)*100):0;
-        const stockBajo=Number(p.stock||0)<=5;
-        return <Card key={p.id} style={{padding:"14px",marginBottom:10}}>
-          <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:8}}>
-            <div style={{flex:1,marginRight:12}}>
-              <div style={{fontWeight:700,fontSize:"0.88rem",marginBottom:2}}>{p.nombre}</div>
-              <div style={{fontSize:"0.7rem",color:G.dim}}>{p.categoria} {p.proveedor?`· ${p.proveedor}`:""} {p.codigo?`· 🔖 ${p.codigo}`:""}</div>
-            </div>
-            <div style={{display:"flex",gap:6}}>
-              <button onClick={()=>editar(p)} style={{width:30,height:30,borderRadius:9,background:`${br.accent}18`,border:`1px solid ${br.accent}33`,color:br.accent,cursor:"pointer",fontSize:"0.75rem"}}>✎</button>
-              <button onClick={()=>eliminar(p.id)} style={{width:30,height:30,borderRadius:9,background:"#ff3d6e18",border:"1px solid #ff3d6e33",color:G.red,cursor:"pointer",fontSize:"0.75rem"}}>✕</button>
-            </div>
-          </div>
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr",gap:8}}>
-            {isAdmin&&<div style={{textAlign:"center",padding:"8px 4px",background:"rgba(255,255,255,0.03)",borderRadius:10}}>
-              <div style={{fontSize:"0.6rem",color:G.dim,marginBottom:2}}>COSTO</div>
-              <div style={{fontSize:"0.82rem",fontWeight:700,color:G.text}}>{fmt(p.costo)}</div>
-            </div>}
-            <div style={{textAlign:"center",padding:"8px 4px",background:"rgba(255,255,255,0.03)",borderRadius:10}}>
-              <div style={{fontSize:"0.6rem",color:G.dim,marginBottom:2}}>PRECIO</div>
-              <div style={{fontSize:"0.82rem",fontWeight:700,color:br.accent}}>{fmt(p.precio)}</div>
-            </div>
-            {isAdmin&&<div style={{textAlign:"center",padding:"8px 4px",background:"rgba(255,255,255,0.03)",borderRadius:10}}>
-              <div style={{fontSize:"0.6rem",color:G.dim,marginBottom:2}}>MARGEN</div>
-              <div style={{fontSize:"0.82rem",fontWeight:700,color:G.green}}>{margen}%</div>
-            </div>}
-            <div style={{textAlign:"center",padding:"8px 4px",background:stockBajo?"rgba(255,60,110,0.08)":"rgba(255,255,255,0.03)",borderRadius:10,border:stockBajo?"1px solid #ff3d6e33":"none"}}>
-              <div style={{fontSize:"0.6rem",color:G.dim,marginBottom:2}}>STOCK</div>
-              <div style={{fontSize:"0.82rem",fontWeight:700,color:stockBajo?G.red:G.text}}>{p.stock||0}</div>
-            </div>
-          </div>
-        </Card>;
-      })}
-    </div>
-    {modal&&<Modal title={modal==="nuevo"?"Nuevo Producto":"Editar Producto"} onClose={()=>setModal(null)}>
-      <Inp label="Nombre del producto" placeholder="Ej: Funda iPhone 15 Pro" value={form.nombre} onChange={v=>setForm(f=>({...f,nombre:v}))}/>
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
-        {isAdmin&&<Inp label="Costo ($)" type="number" placeholder="0.00" value={form.costo} onChange={v=>setForm(f=>({...f,costo:v}))}/>}
-        <Inp label="Precio venta ($)" type="number" placeholder="0.00" value={form.precio} onChange={v=>setForm(f=>({...f,precio:v}))}/>
-      </div>
-      <Inp label="Stock inicial" type="number" placeholder="0" value={form.stock} onChange={v=>setForm(f=>({...f,stock:v}))}/>
-      <Sel label="Categoría" value={form.categoria} onChange={v=>setForm(f=>({...f,categoria:v}))} options={[{v:"fundas",l:"📱 Fundas"},{v:"micas",l:"🔲 Micas/Hidrogel"},{v:"cargadores",l:"⚡ Cargadores"},{v:"audifonos",l:"🎧 Audífonos"},{v:"accesorios",l:"🔌 Accesorios"},{v:"otros",l:"📦 Otros"}]}/>
-      <Inp label="Proveedor" placeholder="Nombre del proveedor" value={form.proveedor} onChange={v=>setForm(f=>({...f,proveedor:v}))}/>
-      <div style={{display:"flex",gap:8,alignItems:"flex-end"}}><div style={{flex:1}}><Inp label="Código de barras / QR" placeholder="Escanea o escribe el código" value={form.codigo} onChange={v=>setForm(f=>({...f,codigo:v}))}/></div><Btn onClick={()=>setScanner("form")} color={G.blue} small style={{marginBottom:14,height:44}}>📷</Btn></div>
-      {form.costo&&form.precio&&<Card style={{padding:"12px",marginBottom:14,background:`${br.accent}08`}}>
-        <div style={{display:"flex",justifyContent:"space-between",fontSize:"0.82rem"}}>
-          <span style={{color:G.dim}}>Utilidad por unidad</span>
-          <span style={{color:G.green,fontWeight:700}}>{fmt(Number(form.precio)-Number(form.costo))} ({form.precio>0?Math.round(((form.precio-form.costo)/form.precio)*100):0}%)</span>
-        </div>
-      </Card>}
-      <Btn onClick={guardar} full color={br.accent}>✓ {modal==="nuevo"?"Agregar producto":"Guardar cambios"}</Btn>
-    </Modal>}
-    {toast&&<Toast msg={toast.m} color={toast.c}/>}
-    {scanner&&<Scanner onScan={handleScan} onClose={()=>setScanner(false)}/>}
-  </div>;
-}
+// ── DASHBOARD ──
+function renderDashboard(){
+  const inc = transactions.filter(t=>t.type==='income').reduce((s,t)=>s+t.amt,0);
+  const exp = transactions.filter(t=>t.type==='expense').reduce((s,t)=>s+t.amt,0);
+  const bal = inc - exp;
 
-// ── COLABORADORES ──────────────────────────────────────────
-function Colaboradores({isAdmin,isPrimaryAdmin}){
-  const br=DB.brand();
-  const[colabs,setColabs]=useState(DB.colaboradores());
-  const[users,setUsers]=useState(DB.users());
-  const[modal,setModal]=useState(null);
-  const[toast,setToast]=useState("");
-  const[form,setForm]=useState({nombre:"",email:"",telefono:"",cargo:"vendedor",comision:"10",zona:""});
-  function toast_(m,c){setToast({m,c});setTimeout(()=>setToast(""),3000);}
-  function guardar(){
-    if(!form.nombre){toast_("⚠ Nombre requerido","#ff3d6e");return;}
-    const cs=DB.colaboradores();
-    if(modal==="nuevo"){
-      const c={...form,id:uid(),comision:Number(form.comision||10),activo:true,createdAt:today(),ventas:0,totalVentas:0};
-      const newColabs=[...cs,c];DB.saveColaboradores(newColabs);setColabs(newColabs);pushUndo({label:`Colaborador "${c.nombre}" agregado`,undo:()=>{const r=DB.colaboradores().filter(x=>x.id!==c.id);DB.saveColaboradores(r);setColabs(r);},edit:()=>{setForm({nombre:c.nombre,email:c.email||"",telefono:c.telefono||"",cargo:c.cargo||"vendedor",comision:String(c.comision||10),zona:c.zona||""});setModal(c.id);}});
-    }else{
-      const prevColab=cs.find(c=>c.id===modal);
-      const ncs=cs.map(c=>c.id===modal?{...c,...form,comision:Number(form.comision||10)}:c);
-      DB.saveColaboradores(ncs);setColabs(ncs);pushUndo({label:`Colaborador "${form.nombre}" modificado`,undo:()=>{const r=DB.colaboradores().map(c=>c.id===prevColab.id?prevColab:c);DB.saveColaboradores(r);setColabs(r);},edit:()=>{setForm({nombre:form.nombre,email:form.email||"",telefono:form.telefono||"",cargo:form.cargo||"vendedor",comision:String(form.comision||10),zona:form.zona||""});setModal(modal);}});
-    }
-    setModal(null);
+  document.getElementById('dashStats').innerHTML = `
+    <div class="stat-card"><div class="stat-ico">💰</div><div class="stat-lbl">Total Ingresos</div>
+      <div class="stat-val pos">${fmt(inc)}</div><div class="stat-chg">${transactions.filter(t=>t.type==='income').length} registros</div></div>
+    <div class="stat-card"><div class="stat-ico">📊</div><div class="stat-lbl">Total Gastos</div>
+      <div class="stat-val neg">${fmt(exp)}</div><div class="stat-chg">${transactions.filter(t=>t.type==='expense').length} registros</div></div>
+    <div class="stat-card"><div class="stat-ico">⚖️</div><div class="stat-lbl">Balance Neto</div>
+      <div class="stat-val ${bal>=0?'pos':'neg'}">${fmt(bal)}</div><div class="stat-chg">${bal>=0?'↑ Positivo':'↓ Negativo'}</div></div>
+  `;
+
+  // Recent transactions (last 5)
+  const recent = [...transactions].sort((a,b)=>new Date(b.date)-new Date(a.date)).slice(0,5);
+  const tbody = document.querySelector('#dashTxTable tbody');
+  if(!recent.length){
+    tbody.innerHTML = `<tr><td colspan="4"><div class="empty-state"><div class="empty-ico">✦</div>
+      <div class="empty-title">Sin movimientos</div><div class="empty-sub">Registra tu primera transacción</div></div></td></tr>`;
+  } else {
+    tbody.innerHTML = recent.map(t=>`
+      <tr>
+        <td>${t.date}</td>
+        <td>${t.desc}</td>
+        <td><span class="tag ${t.type==='income'?'tag-income':'tag-expense'}">${t.cat}</span></td>
+        <td class="${t.type==='income'?'amt-pos':'amt-neg'}">${t.type==='income'?'+':'-'}${fmt(t.amt)}</td>
+      </tr>`).join('');
   }
-  function toggleActivo(id){const cs=DB.colaboradores().map(c=>c.id===id?{...c,activo:!c.activo}:c);DB.saveColaboradores(cs);setColabs(cs);}
-  function toggleAdmin2(id){const cs=DB.colaboradores().map(c=>{if(c.id!==id)return c;const newRole=c.role==="admin2"?"vendedor":"admin2";const users=DB.users();if(c.email&&users[c.email]){users[c.email].role=newRole;DB.saveUsers(users);}return{...c,role:newRole};});DB.saveColaboradores(cs);setColabs(cs);}
-  function aprobarUser(email,plan){const u=DB.users();if(!u[email])return;u[email].status="approved";u[email].plan=plan;u[email].approvedAt=new Date().toISOString();DB.saveUsers(u);setUsers({...u});toast_("✓ Usuario aprobado");}
-  function rechazarUser(email){const u=DB.users();if(!u[email])return;u[email].status="rejected";DB.saveUsers(u);setUsers({...u});toast_("✗ Usuario rechazado","#ff3d6e");}
-  const pendientes=Object.values(users).filter(u=>u.status==="pending"&&u.role!=="admin");
-  const ventas=DB.ventas();
-  function statsColab(c){const vs=ventas.filter(v=>v.vendedorId===c.id);return{ventas:vs.length,total:vs.reduce((a,v)=>a+Number(v.total||0),0),comision:vs.reduce((a,v)=>a+Number(v.comisionMonto||0),0)};}
-  return <div style={{display:"flex",flexDirection:"column",height:"100%"}}>
-    <div style={{padding:"14px 16px",borderBottom:`1px solid ${G.gb}`,flexShrink:0}}>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-        <div><div style={{fontWeight:800,fontSize:"1.1rem"}}>Colaboradores</div><div style={{fontSize:"0.7rem",color:G.dim}}>{colabs.filter(c=>c.activo).length} activos</div></div>
-        <Btn onClick={()=>{setForm({nombre:"",email:"",telefono:"",cargo:"vendedor",comision:"10",zona:""});setModal("nuevo");}} color={br.accent} small>+ Alta</Btn>
-      </div>
-    </div>
-    <div style={{flex:1,overflowY:"auto",padding:"12px 16px",paddingBottom:80}}>
-      {pendientes.length>0&&<><div style={{fontSize:"0.7rem",color:G.yellow,letterSpacing:"0.08em",marginBottom:8,textTransform:"uppercase"}}>⏳ Accesos pendientes ({pendientes.length})</div>
-        {pendientes.map(u=><Card key={u.email} style={{padding:"14px",marginBottom:10,background:`${G.yellow}08`,border:`1px solid ${G.yellow}22`}}>
-          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-            <div><div style={{fontWeight:600,fontSize:"0.85rem"}}>{u.name}</div><div style={{fontSize:"0.7rem",color:G.dim}}>{u.email}</div></div>
-            <div style={{display:"flex",gap:6}}>
-              <Btn small ghost color={br.accent} onClick={()=>aprobarUser(u.email,"lifetime")}>✓</Btn>
-              <Btn small ghost color={G.red} onClick={()=>rechazarUser(u.email)}>✕</Btn>
-            </div>
-          </div>
-        </Card>)}</>}
-      <div style={{fontSize:"0.7rem",color:G.dim,letterSpacing:"0.08em",marginBottom:8,textTransform:"uppercase"}}>Equipo</div>
-      {colabs.length===0&&<div style={{textAlign:"center",padding:"40px 0",color:G.dim,fontSize:"0.82rem"}}>Sin colaboradores registrados</div>}
-      {colabs.map(c=>{const s=statsColab(c);return <Card key={c.id} style={{padding:"16px",marginBottom:10,opacity:c.activo?1:0.5}}>
-        <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:10}}>
-          <div style={{display:"flex",gap:10,alignItems:"center"}}>
-            <div style={{width:42,height:42,borderRadius:14,background:`${br.accent}18`,border:`1px solid ${br.accent}33`,display:"flex",alignItems:"center",justifyContent:"center",fontWeight:800,color:br.accent,fontSize:"1.1rem"}}>{c.nombre[0]}</div>
-            <div><div style={{display:"flex",gap:6,alignItems:"center"}}><div style={{fontWeight:700}}>{c.nombre}</div>{c.role==="admin2"&&<div style={{background:"rgba(206,147,216,0.2)",color:"#CE93D8",fontSize:"0.6rem",fontWeight:700,padding:"2px 7px",borderRadius:10}}>ADMIN 2</div>}</div><div style={{fontSize:"0.7rem",color:G.dim}}>{c.cargo} {c.zona?`· ${c.zona}`:""}</div></div>
-          </div>
-          <div style={{display:"flex",gap:6}}>
-            <button onClick={()=>toggleActivo(c.id)} style={{fontSize:"0.65rem",padding:"4px 10px",borderRadius:50,background:c.activo?`${G.green}18`:"rgba(255,255,255,0.05)",border:`1px solid ${c.activo?G.green+"44":G.gb}`,color:c.activo?G.green:G.dim,cursor:"pointer"}}>{c.activo?"Activo":"Inactivo"}</button>
-            <button onClick={()=>{setForm({nombre:c.nombre,email:c.email||"",telefono:c.telefono||"",cargo:c.cargo||"vendedor",comision:String(c.comision||10),zona:c.zona||""});setModal(c.id);}} style={{width:28,height:28,borderRadius:9,background:`${br.accent}18`,border:`1px solid ${br.accent}33`,color:br.accent,cursor:"pointer",fontSize:"0.75rem"}}>✎</button>
-            {isPrimaryAdmin&&<button onClick={()=>toggleAdmin2(c.id)} title={c.role==="admin2"?"Quitar Admin 2":"Dar Admin 2"} style={{width:28,height:28,borderRadius:9,background:c.role==="admin2"?"rgba(206,147,216,0.18)":"rgba(255,255,255,0.05)",border:`1px solid ${c.role==="admin2"?"#CE93D844":G.gb}`,color:c.role==="admin2"?"#CE93D8":G.dim,cursor:"pointer",fontSize:"0.75rem"}}>👑</button>}
-          </div>
+
+  // Mini chart
+  renderMiniChart();
+
+  // Metas preview
+  const metaDiv = document.getElementById('dashMetas');
+  if(!metas.length){
+    metaDiv.innerHTML = '<div style="text-align:center;padding:16px;font-size:12px;color:var(--text-3);">Sin metas definidas</div>';
+  } else {
+    metaDiv.innerHTML = metas.slice(0,3).map(m=>`
+      <div class="meta-item">
+        <div class="meta-head">
+          <div class="meta-name">${m.icon||'🎯'} ${m.name}</div>
+          <div><span class="meta-vals">${fmt(m.saved)} / ${fmt(m.target)}</span><span class="meta-pct">${pct(m.saved,m.target)}%</span></div>
         </div>
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8}}>
-          <div style={{textAlign:"center",padding:"8px 4px",background:"rgba(255,255,255,0.03)",borderRadius:10}}>
-            <div style={{fontSize:"0.58rem",color:G.dim,marginBottom:2}}>VENTAS</div>
-            <div style={{fontSize:"0.88rem",fontWeight:700}}>{s.ventas}</div>
-          </div>
-          <div style={{textAlign:"center",padding:"8px 4px",background:"rgba(255,255,255,0.03)",borderRadius:10}}>
-            <div style={{fontSize:"0.58rem",color:G.dim,marginBottom:2}}>TOTAL</div>
-            <div style={{fontSize:"0.82rem",fontWeight:700,color:br.accent}}>{fmt(s.total)}</div>
-          </div>
-          <div style={{textAlign:"center",padding:"8px 4px",background:"rgba(255,255,255,0.03)",borderRadius:10}}>
-            <div style={{fontSize:"0.58rem",color:G.dim,marginBottom:2}}>COMISIÓN {c.comision}%</div>
-            <div style={{fontSize:"0.82rem",fontWeight:700,color:G.yellow}}>{fmt(s.comision)}</div>
-          </div>
-        </div>
-        {c.email&&<div style={{marginTop:8,fontSize:"0.7rem",color:G.dim}}>✉ {c.email} {c.telefono?`· 📞 ${c.telefono}`:""}</div>}
-      </Card>;})}
-    </div>
-    {modal&&<Modal title={modal==="nuevo"?"Alta Colaborador":"Editar Colaborador"} onClose={()=>setModal(null)}>
-      <Inp label="Nombre completo" placeholder="Nombre del colaborador" value={form.nombre} onChange={v=>setForm(f=>({...f,nombre:v}))}/>
-      <Inp label="Email" type="email" placeholder="correo@ejemplo.com" value={form.email} onChange={v=>setForm(f=>({...f,email:v}))}/>
-      <Inp label="Teléfono" type="tel" placeholder="000-000-0000" value={form.telefono} onChange={v=>setForm(f=>({...f,telefono:v}))}/>
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
-        <Sel label="Cargo" value={form.cargo} onChange={v=>setForm(f=>({...f,cargo:v}))} options={[{v:"vendedor",l:"Vendedor"},{v:"supervisor",l:"Supervisor"},{v:"gerente",l:"Gerente"},{v:"almacen",l:"Almacén"},{v:"cajero",l:"Cajero"}]}/>
-        <Inp label="Comisión (%)" type="number" placeholder="10" value={form.comision} onChange={v=>setForm(f=>({...f,comision:v}))}/>
-      </div>
-      <Inp label="Zona / Sucursal" placeholder="Ej: Zona Norte, Sucursal 1..." value={form.zona} onChange={v=>setForm(f=>({...f,zona:v}))}/>
-      <Btn onClick={guardar} full color={br.accent}>✓ {modal==="nuevo"?"Dar de alta":"Guardar cambios"}</Btn>
-    </Modal>}
-    {toast&&<Toast msg={toast.m} color={toast.c}/>}
-  </div>;
+        <div class="meta-bg"><div class="meta-fill" style="width:${pct(m.saved,m.target)}%;background:linear-gradient(90deg,var(--rose),var(--rose-pale));"></div></div>
+      </div>`).join('');
+  }
 }
 
-// ── PROVEEDORES ────────────────────────────────────────────
-function Proveedores({isAdmin}){
-  const br=DB.brand();
-  const[provs,setProvs]=useState(DB.proveedores());
-  const[modal,setModal]=useState(null);
-  const[toast,setToast]=useState("");
-  const[form,setForm]=useState({nombre:"",contacto:"",telefono:"",email:"",categoria:"fundas",credito:"0",notas:""});
-  function toast_(m,c){setToast({m,c});setTimeout(()=>setToast(""),3000);}
-  function guardar(){
-    if(!form.nombre){toast_("⚠ Nombre requerido","#ff3d6e");return;}
-    const ps=DB.proveedores();
-    if(modal==="nuevo"){
-      const p={...form,id:uid(),credito:Number(form.credito||0),createdAt:today(),compras:0,totalCompras:0};
-      DB.saveProveedores([...ps,p]);setProvs([...ps,p]);toast_("✓ Proveedor agregado");
-    }else{
-      const nps=ps.map(p=>p.id===modal?{...p,...form,credito:Number(form.credito||0)}:p);
-      DB.saveProveedores(nps);setProvs(nps);toast_("✓ Actualizado");
-    }
-    setModal(null);
+function renderMiniChart(){
+  const months = ['Ene','Feb','Mar','Abr','May','Jun'];
+  const now = new Date().getMonth();
+  const chartDiv = document.getElementById('dashChart');
+  let html = '';
+  for(let i=0;i<6;i++){
+    const m = (now-5+i+12)%12;
+    const label = months[m];
+    const inc = Math.random()*60+20;
+    const exp = Math.random()*40+10;
+    html += `<div class="c-col"><div class="c-bar rose" style="height:${inc}px;"></div><div class="c-lbl">${label}</div></div>
+             <div class="c-col"><div class="c-bar mauve" style="height:${exp}px;"></div><div class="c-lbl"></div></div>`;
   }
-  function eliminar(id){const prev=DB.proveedores().find(p=>p.id===id);const ps=DB.proveedores().filter(p=>p.id!==id);DB.saveProveedores(ps);setProvs(ps);pushUndo({label:`Proveedor "${prev?.nombre}" eliminado`,undo:()=>{const r=[...DB.proveedores(),prev];DB.saveProveedores(r);setProvs(r);},edit:()=>{setForm({nombre:prev.nombre||"",contacto:prev.contacto||"",telefono:prev.telefono||"",email:prev.email||"",categoria:prev.categoria||"fundas",credito:String(prev.credito||0),notas:prev.notas||""});setModal(prev.id);}});}
-  return <div style={{display:"flex",flexDirection:"column",height:"100%"}}>
-    <div style={{padding:"14px 16px",borderBottom:`1px solid ${G.gb}`,flexShrink:0}}>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-        <div><div style={{fontWeight:800,fontSize:"1.1rem"}}>Proveedores</div><div style={{fontSize:"0.7rem",color:G.dim}}>{provs.length} registrados</div></div>
-        <Btn onClick={()=>{setForm({nombre:"",contacto:"",telefono:"",email:"",categoria:"fundas",credito:"0",notas:""});setModal("nuevo");}} color={br.accent} small>+ Agregar</Btn>
-      </div>
-    </div>
-    <div style={{flex:1,overflowY:"auto",padding:"12px 16px",paddingBottom:80}}>
-      {provs.length===0&&<div style={{textAlign:"center",padding:"50px 0",color:G.dim,fontSize:"0.82rem"}}>Sin proveedores registrados</div>}
-      {provs.map(p=><Card key={p.id} style={{padding:"16px",marginBottom:10}}>
-        <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:10}}>
-          <div>
-            <div style={{fontWeight:700,fontSize:"0.92rem"}}>{p.nombre}</div>
-            <div style={{fontSize:"0.7rem",color:G.dim}}>{p.categoria} {p.contacto?`· ${p.contacto}`:""}</div>
-          </div>
-          <div style={{display:"flex",gap:6}}>
-            <button onClick={()=>{setForm({nombre:p.nombre,contacto:p.contacto||"",telefono:p.telefono||"",email:p.email||"",categoria:p.categoria||"fundas",credito:String(p.credito||0),notas:p.notas||""});setModal(p.id);}} style={{width:28,height:28,borderRadius:9,background:`${br.accent}18`,border:`1px solid ${br.accent}33`,color:br.accent,cursor:"pointer",fontSize:"0.75rem"}}>✎</button>
-            <button onClick={()=>eliminar(p.id)} style={{width:28,height:28,borderRadius:9,background:"#ff3d6e18",border:"1px solid #ff3d6e33",color:G.red,cursor:"pointer",fontSize:"0.75rem"}}>✕</button>
-          </div>
-        </div>
-        <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
-          {p.telefono&&<div style={{fontSize:"0.72rem",padding:"4px 10px",borderRadius:50,background:`${br.accent}12`,border:`1px solid ${br.accent}22`,color:br.accent}}>📞 {p.telefono}</div>}
-          {p.email&&<div style={{fontSize:"0.72rem",padding:"4px 10px",borderRadius:50,background:`${br.accent2}12`,border:`1px solid ${br.accent2}22`,color:br.accent2}}>✉ {p.email}</div>}
-          {Number(p.credito)>0&&<div style={{fontSize:"0.72rem",padding:"4px 10px",borderRadius:50,background:`${G.yellow}12`,border:`1px solid ${G.yellow}22`,color:G.yellow}}>Crédito: {fmt(p.credito)}</div>}
-        </div>
-        {p.notas&&<div style={{marginTop:8,fontSize:"0.72rem",color:G.dim,fontStyle:"italic"}}>"{p.notas}"</div>}
-      </Card>)}
-    </div>
-    {modal&&<Modal title={modal==="nuevo"?"Nuevo Proveedor":"Editar Proveedor"} onClose={()=>setModal(null)}>
-      <Inp label="Nombre / Empresa" placeholder="Nombre del proveedor" value={form.nombre} onChange={v=>setForm(f=>({...f,nombre:v}))}/>
-      <Inp label="Contacto" placeholder="Nombre del contacto" value={form.contacto} onChange={v=>setForm(f=>({...f,contacto:v}))}/>
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
-        <Inp label="Teléfono" type="tel" value={form.telefono} onChange={v=>setForm(f=>({...f,telefono:v}))}/>
-        <Inp label="Email" type="email" value={form.email} onChange={v=>setForm(f=>({...f,email:v}))}/>
-      </div>
-      <Sel label="Categoría" value={form.categoria} onChange={v=>setForm(f=>({...f,categoria:v}))} options={[{v:"fundas",l:"Fundas"},{v:"micas",l:"Micas/Hidrogel"},{v:"cargadores",l:"Cargadores"},{v:"accesorios",l:"Accesorios"},{v:"general",l:"General"}]}/>
-      <Inp label="Línea de crédito ($)" type="number" placeholder="0" value={form.credito} onChange={v=>setForm(f=>({...f,credito:v}))}/>
-      <Inp label="Notas" placeholder="Condiciones, observaciones..." value={form.notas} onChange={v=>setForm(f=>({...f,notas:v}))}/>
-      <Btn onClick={guardar} full color={br.accent}>✓ {modal==="nuevo"?"Agregar proveedor":"Guardar cambios"}</Btn>
-    </Modal>}
-    {toast&&<Toast msg={toast.m} color={toast.c}/>}
-  </div>;
+  chartDiv.innerHTML = html;
 }
 
-// ── FINANZAS ───────────────────────────────────────────────
-function Finanzas({isAdmin}){
-  const br=DB.brand();
-  const[gastos,setGastos]=useState(DB.gastos());
-  const[modal,setModal]=useState(false);
-  const[form,setForm]=useState({concepto:"",monto:"",categoria:"operativo",fecha:today(),notas:""});
-  const[toast,setToast]=useState("");
-  const[filtro,setFiltro]=useState("mes");
-  function toast_(m,c){setToast({m,c});setTimeout(()=>setToast(""),3000);}
-  function agregar(){
-    if(!form.concepto||!form.monto){toast_("⚠ Concepto y monto requeridos","#ff3d6e");return;}
-    const g={...form,id:uid(),monto:Number(form.monto)};
-    const ng=[...gastos,g];DB.saveGastos(ng);setGastos(ng);
-    setModal(false);setForm({concepto:"",monto:"",categoria:"operativo",fecha:today(),notas:""});
-    toast_("✓ Gasto registrado");
+// ── GENERIC MODULE RENDER ──
+function renderModule(mod){
+  const data = getTxForModule(mod);
+  const inc = data.filter(t=>t.type==='income').reduce((s,t)=>s+t.amt,0);
+  const exp = data.filter(t=>t.type==='expense').reduce((s,t)=>s+t.amt,0);
+  const total = inc || exp;
+  const count = data.length;
+
+  const statsEl = document.getElementById(mod+'Stats');
+  if(statsEl){
+    const isIncome = MODULE_MAP[mod]?.type==='income';
+    statsEl.innerHTML = `
+      <div class="stat-card"><div class="stat-ico">${isIncome?'📥':'📤'}</div>
+        <div class="stat-lbl">Total ${mod.charAt(0).toUpperCase()+mod.slice(1)}</div>
+        <div class="stat-val ${isIncome?'pos':'neg'}">${fmt(total)}</div>
+        <div class="stat-chg">${count} registro${count!==1?'s':''}</div></div>
+      <div class="stat-card"><div class="stat-ico">📅</div>
+        <div class="stat-lbl">Este Mes</div>
+        <div class="stat-val neu">${fmt(getThisMonth(data))}</div>
+        <div class="stat-chg">Marzo 2026</div></div>
+      <div class="stat-card"><div class="stat-ico">📊</div>
+        <div class="stat-lbl">Promedio</div>
+        <div class="stat-val neu">${count?fmt(total/count):fmt(0)}</div>
+        <div class="stat-chg">por registro</div></div>
+    `;
   }
-  function eliminar(id){const prev=DB.gastos().find(g=>g.id===id);const ng=DB.gastos().filter(g=>g.id!==id);DB.saveGastos(ng);setGastos(ng);pushUndo({label:`Gasto "${prev?.concepto||"Gasto"}" eliminado`,undo:()=>{const r=[...DB.gastos(),prev];DB.saveGastos(r);setGastos(r);},edit:()=>{setForm({concepto:prev.concepto||"",monto:String(prev.monto||""),categoria:prev.categoria||"operativo",fecha:prev.fecha||today(),notas:prev.notas||""});setModal(true);}});}
-  const ventas=DB.ventas();
-  const hoy=today();
-  const filtrar=(items)=>{
-    if(filtro==="hoy")return items.filter(x=>x.fecha===hoy);
-    if(filtro==="semana"){const s=new Date();s.setDate(s.getDate()-7);return items.filter(x=>new Date(x.fecha)>=s);}
-    if(filtro==="mes"){const m=new Date();m.setDate(m.getDate()-30);return items.filter(x=>new Date(x.fecha)>=m);}
-    return items;
+  renderTbody(mod, data);
+}
+
+function renderTbody(mod, data, filter='', typeFilter='all'){
+  const tbody = document.getElementById(mod+'Tbody');
+  if(!tbody) return;
+  let filtered = data;
+  if(filter) filtered = filtered.filter(t=>
+    t.desc.toLowerCase().includes(filter.toLowerCase()) ||
+    t.cat.toLowerCase().includes(filter.toLowerCase())
+  );
+  if(typeFilter!=='all'){
+    filtered = filtered.filter(t=> t.type===typeFilter || t.status===typeFilter || t.cat===typeFilter);
+  }
+  filtered = [...filtered].sort((a,b)=>new Date(b.date)-new Date(a.date));
+
+  if(!filtered.length){
+    tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state">
+      <div class="empty-ico">✦</div>
+      <div class="empty-title">Sin registros</div>
+      <div class="empty-sub">Agrega tu primer registro con el botón de arriba</div>
+    </div></td></tr>`;
+    return;
+  }
+  tbody.innerHTML = filtered.map(t=>`
+    <tr>
+      <td style="color:var(--text-3);font-size:12px;">${t.date}</td>
+      <td>${t.desc}</td>
+      <td><span class="tag ${t.type==='income'?'tag-income':t.cat==='Inversiones'?'tag-invest':'tag-expense'}">${t.cat}</span></td>
+      ${t.status?`<td><span class="tag ${t.status==='Cobrado'||t.status==='Completado'?'tag-income':t.status==='Vencido'?'tag-expense':'tag-invest'}">${t.status}</span></td>`:'<td></td>'}
+      <td class="${t.type==='income'?'amt-pos':'amt-neg'}">${t.type==='income'?'+':'-'}${fmt(t.amt)}</td>
+      <td><div class="row-actions">
+        <button class="act-btn" onclick="editTx('${t.id}')">✏️ Editar</button>
+        <button class="act-btn del" onclick="confirmDelete('${t.id}')">🗑️</button>
+      </div></td>
+    </tr>`).join('');
+}
+
+// ── BALANCE ──
+function renderBalance(){
+  const inc = transactions.filter(t=>t.type==='income').reduce((s,t)=>s+t.amt,0);
+  const exp = transactions.filter(t=>t.type==='expense').reduce((s,t)=>s+t.amt,0);
+  const bal = inc - exp;
+  document.getElementById('balanceAmt').textContent = formatNum(Math.abs(bal));
+  document.getElementById('balancePill').textContent = bal>=0?'↑ Balance Positivo':'↓ Balance Negativo';
+  document.getElementById('balancePill').style.color = bal>=0?'var(--rose-pale)':'#F472B6';
+  document.getElementById('balanceStats').innerHTML = `
+    <div class="stat-card"><div class="stat-ico">📥</div><div class="stat-lbl">Total Ingresos</div>
+      <div class="stat-val pos">${fmt(inc)}</div></div>
+    <div class="stat-card"><div class="stat-ico">📤</div><div class="stat-lbl">Total Gastos</div>
+      <div class="stat-val neg">${fmt(exp)}</div></div>
+    <div class="stat-card"><div class="stat-ico">💎</div><div class="stat-lbl">Registros</div>
+      <div class="stat-val neu">${transactions.length}</div></div>
+  `;
+  renderTbody('balance', transactions);
+}
+
+// ── METAS ──
+function renderMetas(){
+  const el = document.getElementById('metasList');
+  if(!metas.length){
+    el.innerHTML = `<div class="glass-card"><div class="empty-state">
+      <div class="empty-ico">🎯</div>
+      <div class="empty-title">Sin metas todavía</div>
+      <div class="empty-sub">Define tus metas de ahorro y sigue tu progreso</div>
+    </div></div>`;
+    return;
+  }
+  el.innerHTML = metas.map(m=>{
+    const p = pct(m.saved,m.target);
+    const remaining = Math.max(0, m.target - m.saved);
+    return `<div class="glass-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px;">
+        <div>
+          <div style="font-size:24px;margin-bottom:4px;">${m.icon||'🎯'}</div>
+          <div style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;">${m.name}</div>
+          ${m.deadline?`<div style="font-size:11px;color:var(--text-3);margin-top:2px;">Fecha límite: ${m.deadline}</div>`:''}
+        </div>
+        <div style="text-align:right;display:flex;flex-direction:column;gap:8px;">
+          <div style="font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:300;color:var(--rose-pale);">${p}%</div>
+          <div style="display:flex;gap:6px;">
+            <button class="act-btn" onclick="addToMeta('${m.id}')">+ Abonar</button>
+            <button class="act-btn" onclick="editMeta('${m.id}')">✏️</button>
+            <button class="act-btn del" onclick="confirmDeleteMeta('${m.id}')">🗑️</button>
+          </div>
+        </div>
+      </div>
+      <div class="meta-bg" style="height:3px;margin-bottom:10px;">
+        <div class="meta-fill" style="width:${p}%;background:linear-gradient(90deg,var(--rose),var(--rose-pale));"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-3);">
+        <span>Ahorrado: <strong style="color:var(--rose-pale);">${fmt(m.saved)}</strong></span>
+        <span>Meta: <strong style="color:var(--text-2);">${fmt(m.target)}</strong></span>
+        <span>Faltan: <strong style="color:var(--gold-pale);">${fmt(remaining)}</strong></span>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── PRESUPUESTO ──
+function renderPresupuesto(){
+  const el = document.getElementById('presupuestoList');
+  if(!presupuestos.length){
+    el.innerHTML = `<div class="glass-card"><div class="empty-state">
+      <div class="empty-ico">💰</div>
+      <div class="empty-title">Sin presupuestos definidos</div>
+      <div class="empty-sub">Asigna límites mensuales por categoría</div>
+    </div></div>`;
+    return;
+  }
+  el.innerHTML = presupuestos.map(p=>{
+    const spent = transactions.filter(t=>t.type==='expense'&&t.cat===p.cat).reduce((s,t)=>s+t.amt,0);
+    const perc = pct(spent, p.limit);
+    const color = perc>=100?'#F472B6':perc>=80?'#FCD34D':'var(--rose-pale)';
+    return `<div class="glass-card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <div style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:300;">${p.cat}</div>
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span style="font-size:18px;font-family:'Cormorant Garamond',serif;color:${color};">${perc}%</span>
+          <button class="act-btn del" onclick="confirmDeletePresup('${p.id}')">🗑️</button>
+        </div>
+      </div>
+      <div class="meta-bg" style="height:3px;margin-bottom:8px;">
+        <div class="meta-fill" style="width:${Math.min(perc,100)}%;background:${color};"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--text-3);">
+        <span>Gastado: <strong style="color:${color};">${fmt(spent)}</strong></span>
+        <span>Límite: <strong style="color:var(--text-2);">${fmt(p.limit)}</strong></span>
+        <span>Disponible: <strong style="color:var(--gold-pale);">${fmt(Math.max(0,p.limit-spent))}</strong></span>
+      </div>
+      ${perc>=80?`<div style="margin-top:10px;padding:8px 12px;background:rgba(252,211,77,0.07);border:1px solid rgba(252,211,77,0.2);border-radius:8px;font-size:11px;color:#FCD34D;">
+        ${perc>=100?'⛔ Presupuesto agotado':'⚠️ Cerca del límite — te queda '+fmt(Math.max(0,p.limit-spent))}</div>`:''}
+    </div>`;
+  }).join('');
+}
+
+// ── MODAL: OPEN/CLOSE ──
+let modalModule = null;
+function openModal(defaultType, mod){
+  modalModule = mod || null;
+  editingId = null;
+  document.getElementById('txModalTitle').innerHTML = 'Nueva <em>Transacción</em>';
+  document.getElementById('fDesc').value = '';
+  document.getElementById('fAmt').value = '';
+  document.getElementById('fDate').value = new Date().toISOString().split('T')[0];
+  document.getElementById('fNotes').value = '';
+  document.getElementById('fStatus').value = 'Completado';
+  document.getElementById('fType').value = defaultType || 'income';
+  updateCategoryOptions();
+  if(mod && MODULE_MAP[mod]?.cats?.length){
+    const sel = document.getElementById('fCat');
+    sel.innerHTML = MODULE_MAP[mod].cats.map(c=>`<option value="${c}">${c}</option>`).join('');
+  }
+  document.getElementById('txModal').classList.add('open');
+  setTimeout(()=>document.getElementById('fDesc').focus(),100);
+}
+
+function editTx(id){
+  const t = transactions.find(x=>x.id===id);
+  if(!t) return;
+  editingId = id;
+  document.getElementById('txModalTitle').innerHTML = 'Editar <em>Transacción</em>';
+  document.getElementById('fDesc').value = t.desc;
+  document.getElementById('fAmt').value = t.amt;
+  document.getElementById('fDate').value = t.date;
+  document.getElementById('fNotes').value = t.notes||'';
+  document.getElementById('fStatus').value = t.status||'Completado';
+  document.getElementById('fType').value = t.type;
+  updateCategoryOptions();
+  document.getElementById('fCat').value = t.cat;
+  document.getElementById('txModal').classList.add('open');
+}
+
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+
+function updateCategoryOptions(){
+  const type = document.getElementById('fType').value;
+  const cats = type==='income' ? CATS_INCOME : CATS_EXPENSE;
+  document.getElementById('fCat').innerHTML = cats.map(c=>`<option value="${c}">${c}</option>`).join('');
+}
+
+// ── SAVE TX ──
+function saveTx(){
+  const desc = document.getElementById('fDesc').value.trim();
+  const amt  = parseFloat(document.getElementById('fAmt').value);
+  const date = document.getElementById('fDate').value;
+  const type = document.getElementById('fType').value;
+  const cat  = document.getElementById('fCat').value;
+  const status = document.getElementById('fStatus').value;
+  const notes  = document.getElementById('fNotes').value.trim();
+
+  if(!desc){ showToast('⚠️ Escribe una descripción'); return; }
+  if(!amt||amt<=0){ showToast('⚠️ Ingresa un monto válido'); return; }
+  if(!date){ showToast('⚠️ Selecciona una fecha'); return; }
+
+  if(editingId){
+    const idx = transactions.findIndex(t=>t.id===editingId);
+    if(idx>-1) transactions[idx] = {...transactions[idx], desc, amt, date, type, cat, status, notes};
+    showToast('✓ Transacción actualizada');
+  } else {
+    transactions.push({id:uid(), desc, amt, date, type, cat, status, notes, created:Date.now()});
+    showToast('✓ Transacción guardada');
+  }
+  save();
+  closeModal('txModal');
+  renderScreen(currentModule);
+}
+
+// ── DELETE ──
+function confirmDelete(id){
+  deleteId = id;
+  document.getElementById('confirmDelBtn').onclick = ()=>{ deleteTx(id); };
+  document.getElementById('confirmModal').classList.add('open');
+}
+function deleteTx(id){
+  transactions = transactions.filter(t=>t.id!==id);
+  save();
+  closeModal('confirmModal');
+  showToast('🗑️ Registro eliminado');
+  renderScreen(currentModule);
+}
+
+// ── METAS CRUD ──
+function openMetaModal(id){
+  if(id){
+    const m = metas.find(x=>x.id===id);
+    if(!m) return;
+    document.getElementById('mName').value = m.name;
+    document.getElementById('mTarget').value = m.target;
+    document.getElementById('mSaved').value = m.saved;
+    document.getElementById('mDeadline').value = m.deadline||'';
+    document.getElementById('mIcon').value = m.icon||'🎯';
+    document.getElementById('metaModal').dataset.editId = id;
+  } else {
+    document.getElementById('mName').value='';
+    document.getElementById('mTarget').value='';
+    document.getElementById('mSaved').value='0';
+    document.getElementById('mDeadline').value='';
+    document.getElementById('mIcon').value='🎯';
+    delete document.getElementById('metaModal').dataset.editId;
+  }
+  document.getElementById('metaModal').classList.add('open');
+}
+
+function editMeta(id){ openMetaModal(id); }
+
+function saveMeta(){
+  const name = document.getElementById('mName').value.trim();
+  const target = parseFloat(document.getElementById('mTarget').value)||0;
+  const saved  = parseFloat(document.getElementById('mSaved').value)||0;
+  const deadline = document.getElementById('mDeadline').value;
+  const icon   = document.getElementById('mIcon').value||'🎯';
+  if(!name||!target){ showToast('⚠️ Completa los campos'); return; }
+  const editId = document.getElementById('metaModal').dataset.editId;
+  if(editId){
+    const idx = metas.findIndex(m=>m.id===editId);
+    if(idx>-1) metas[idx] = {...metas[idx], name, target, saved, deadline, icon};
+  } else {
+    metas.push({id:uid(), name, target, saved, deadline, icon});
+  }
+  saveMetas();
+  closeModal('metaModal');
+  showToast('✓ Meta guardada');
+  renderMetas();
+}
+
+function addToMeta(id){
+  const amt = parseFloat(prompt('¿Cuánto quieres abonar a esta meta?',''));
+  if(!amt||amt<=0) return;
+  const idx = metas.findIndex(m=>m.id===id);
+  if(idx>-1){ metas[idx].saved = Math.min(metas[idx].saved+amt, metas[idx].target); saveMetas(); renderMetas(); showToast(`✓ +${fmt(amt)} abonado`); }
+}
+
+function confirmDeleteMeta(id){
+  document.getElementById('confirmDelBtn').onclick = ()=>{
+    metas = metas.filter(m=>m.id!==id);
+    saveMetas(); closeModal('confirmModal'); showToast('🗑️ Meta eliminada'); renderMetas();
   };
-  const ventasFilt=filtrar(ventas);const gastosFilt=filtrar(gastos);
-  const ingresos=ventasFilt.reduce((a,v)=>a+Number(v.total||0),0);
-  const utilidadBruta=ventasFilt.reduce((a,v)=>a+Number(v.utilidad||0),0);
-  const totalGastos=gastosFilt.reduce((a,g)=>a+Number(g.monto||0),0);
-  const utilidadNeta=utilidadBruta-totalGastos;
-  const comisiones=ventasFilt.reduce((a,v)=>a+Number(v.comisionMonto||0),0);
-  const porCategoria={};gastosFilt.forEach(g=>{if(!porCategoria[g.categoria])porCategoria[g.categoria]=0;porCategoria[g.categoria]+=Number(g.monto||0);});
-  return <div style={{display:"flex",flexDirection:"column",height:"100%"}}>
-    <div style={{padding:"14px 16px",borderBottom:`1px solid ${G.gb}`,flexShrink:0}}>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
-        <div style={{fontWeight:800,fontSize:"1.1rem"}}>Finanzas</div>
-        <Btn onClick={()=>setModal(true)} color={br.accent} small>+ Gasto</Btn>
-      </div>
-      <div style={{display:"flex",gap:8,overflowX:"auto"}}>
-        {[["hoy","Hoy"],["semana","7 días"],["mes","30 días"],["todo","Todo"]].map(([f,l])=>
-          <Pill key={f} active={filtro===f} color={br.accent} onClick={()=>setFiltro(f)}>{l}</Pill>)}
-      </div>
-    </div>
-    <div style={{flex:1,overflowY:"auto",padding:"12px 16px",paddingBottom:80}}>
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:16}}>
-        <StatCard label="Ingresos" value={fmt(ingresos)} color={br.accent} icon="💰"/>
-        <StatCard label="Ut. Bruta" value={fmt(utilidadBruta)} color={G.green} icon="📈"/>
-        <StatCard label="Gastos" value={fmt(totalGastos)} color={G.red} icon="💸"/>
-        <StatCard label="Ut. Neta" value={fmt(utilidadNeta)} sub={utilidadNeta>=0?"✓ Positivo":"⚠ Negativo"} color={utilidadNeta>=0?G.green:G.red} icon={utilidadNeta>=0?"🎯":"⚠️"}/>
-      </div>
-      <Card style={{padding:"16px",marginBottom:16}}>
-        <div style={{fontWeight:700,fontSize:"0.85rem",marginBottom:12}}>Resumen financiero</div>
-        {[["Ventas brutas",ingresos,br.accent],["Costo de ventas",ingresos-utilidadBruta,G.red],["Utilidad bruta",utilidadBruta,G.green],["Gastos operativos",totalGastos,G.red],["Comisiones pagadas",comisiones,G.yellow],["Utilidad neta",utilidadNeta,utilidadNeta>=0?G.green:G.red]].map(([l,v,c])=>
-          <div key={l} style={{display:"flex",justifyContent:"space-between",padding:"8px 0",borderBottom:`1px solid ${G.dim2}`,fontSize:"0.82rem"}}>
-            <span style={{color:G.dim}}>{l}</span><span style={{fontWeight:700,color:c}}>{fmt(v)}</span>
-          </div>)}
-      </Card>
-      {Object.keys(porCategoria).length>0&&<Card style={{padding:"16px",marginBottom:16}}>
-        <div style={{fontWeight:700,fontSize:"0.85rem",marginBottom:12}}>Gastos por categoría</div>
-        {Object.entries(porCategoria).sort((a,b)=>b[1]-a[1]).map(([cat,monto])=>
-          <div key={cat} style={{marginBottom:10}}>
-            <div style={{display:"flex",justifyContent:"space-between",fontSize:"0.78rem",marginBottom:4}}>
-              <span style={{color:G.dim,textTransform:"capitalize"}}>{cat}</span><span style={{color:G.red}}>{fmt(monto)}</span>
-            </div>
-            <div style={{height:4,borderRadius:4,background:G.dim2}}><div style={{height:"100%",width:`${totalGastos>0?(monto/totalGastos)*100:0}%`,background:`linear-gradient(90deg,${G.red},${G.orange})`,borderRadius:4}}/></div>
-          </div>)}
-      </Card>}
-      <div style={{fontSize:"0.7rem",color:G.dim,letterSpacing:"0.08em",marginBottom:8,textTransform:"uppercase"}}>Gastos recientes</div>
-      {gastosFilt.length===0&&<div style={{textAlign:"center",padding:"30px 0",color:G.dim,fontSize:"0.82rem"}}>Sin gastos en este período</div>}
-      {gastosFilt.slice().reverse().map(g=><Card key={g.id} style={{padding:"12px 14px",marginBottom:8}}>
-        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-          <div>
-            <div style={{fontWeight:600,fontSize:"0.85rem"}}>{g.concepto}</div>
-            <div style={{fontSize:"0.7rem",color:G.dim}}>{g.categoria} · {g.fecha}</div>
-          </div>
-          <div style={{display:"flex",gap:8,alignItems:"center"}}>
-            <span style={{fontWeight:700,color:G.red}}>{fmt(g.monto)}</span>
-            <button onClick={()=>eliminar(g.id)} style={{width:26,height:26,borderRadius:8,background:"#ff3d6e18",border:"1px solid #ff3d6e33",color:G.red,cursor:"pointer",fontSize:"0.7rem"}}>✕</button>
-          </div>
-        </div>
-        {g.notas&&<div style={{fontSize:"0.7rem",color:G.dim,marginTop:4,fontStyle:"italic"}}>"{g.notas}"</div>}
-      </Card>)}
-    </div>
-    {modal&&<Modal title="Nuevo Gasto" onClose={()=>setModal(false)}>
-      <Inp label="Concepto" placeholder="Ej: Renta, envíos, papelería..." value={form.concepto} onChange={v=>setForm(f=>({...f,concepto:v}))}/>
-      <Inp label="Monto ($)" type="number" placeholder="0.00" value={form.monto} onChange={v=>setForm(f=>({...f,monto:v}))}/>
-      <Sel label="Categoría" value={form.categoria} onChange={v=>setForm(f=>({...f,categoria:v}))} options={[{v:"operativo",l:"Operativo"},{v:"logistica",l:"Logística/Envíos"},{v:"marketing",l:"Marketing"},{v:"renta",l:"Renta"},{v:"nomina",l:"Nómina"},{v:"compras",l:"Compras inventario"},{v:"otros",l:"Otros"}]}/>
-      <Inp label="Fecha" type="date" value={form.fecha} onChange={v=>setForm(f=>({...f,fecha:v}))}/>
-      <Inp label="Notas" placeholder="Descripción adicional..." value={form.notas} onChange={v=>setForm(f=>({...f,notas:v}))}/>
-      <Btn onClick={agregar} full color={br.accent}>✓ Registrar gasto</Btn>
-    </Modal>}
-    {toast&&<Toast msg={toast.m} color={toast.c}/>}
-  </div>;
+  document.getElementById('confirmModal').classList.add('open');
 }
 
-
-
-// ── UNDO SYSTEM ────────────────────────────────────────────
-let _undoListeners=[];
-
-function pushUndo({label,undo,edit}){
-  // edit = function that opens the form pre-filled with previous data
-  _undoListeners.forEach(fn=>fn({label,undo,edit}));
+// ── PRESUPUESTO CRUD ──
+function openPresupModal(){
+  document.getElementById('presupModal').classList.add('open');
 }
-function onUndo(fn){_undoListeners.push(fn);return()=>{_undoListeners=_undoListeners.filter(x=>x!==fn);};}
-
-function UndoToast(){
-  const[item,setItem]=useState(null);
-  const br=DB.brand();
-
-  useEffect(()=>{
-    const off=onUndo((newItem)=>{setItem(newItem);});
-    return()=>off();
-  },[]);
-
-  if(!item)return null;
-  return <div style={{position:"fixed",bottom:80,left:"50%",transform:"translateX(-50%)",zIndex:9000,width:"calc(100% - 32px)",maxWidth:400,animation:"fadeUp 0.25s ease"}}>
-    <style>{`@keyframes fadeUp{from{opacity:0;transform:translateX(-50%) translateY(16px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}`}</style>
-    <div style={{background:"#111827",border:`1px solid ${br.accent}55`,borderRadius:18,overflow:"hidden",boxShadow:"0 8px 40px rgba(0,0,0,0.6)"}}>
-      <div style={{padding:"14px 16px"}}>
-        <div style={{fontSize:"0.78rem",color:G.dim,marginBottom:10}}>✓ {item.label}</div>
-        <div style={{display:"flex",gap:8}}>
-          {item.edit&&<button onClick={()=>{item.edit();setItem(null);}} style={{flex:1,background:`${br.accent}18`,border:`1px solid ${br.accent}44`,color:br.accent,fontWeight:700,fontSize:"0.8rem",padding:"9px 0",borderRadius:12,cursor:"pointer"}}>✏️ Modificar</button>}
-          {item.undo&&<button onClick={()=>{item.undo();setItem(null);}} style={{flex:1,background:"rgba(255,61,110,0.12)",border:"1px solid rgba(255,61,110,0.3)",color:"#ff3d6e",fontWeight:700,fontSize:"0.8rem",padding:"9px 0",borderRadius:12,cursor:"pointer"}}>↩ Deshacer</button>}
-          <button onClick={()=>setItem(null)} style={{width:38,background:"rgba(255,255,255,0.05)",border:"1px solid rgba(255,255,255,0.1)",color:G.dim,fontSize:"0.85rem",padding:"9px 0",borderRadius:12,cursor:"pointer"}}>✕</button>
-        </div>
-      </div>
-    </div>
-  </div>;
+function savePresup(){
+  const cat   = document.getElementById('pCat').value;
+  const limit = parseFloat(document.getElementById('pLimit').value)||0;
+  if(!limit){ showToast('⚠️ Ingresa un límite'); return; }
+  const existing = presupuestos.findIndex(p=>p.cat===cat);
+  if(existing>-1) presupuestos[existing].limit = limit;
+  else presupuestos.push({id:uid(), cat, limit});
+  savePresups();
+  closeModal('presupModal');
+  showToast('✓ Presupuesto guardado');
+  renderPresupuesto();
 }
-
-// ── SCANNER ────────────────────────────────────────────────
-function Scanner({onScan,onClose}){
-  const videoRef=useRef(null);
-  const[err,setErr]=useState("");
-  const[scanning,setScanning]=useState(true);
-  const br=DB.brand();
-  useEffect(()=>{
-    let stream=null;
-    let interval=null;
-    async function start(){
-      try{
-        stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"}});
-        if(videoRef.current){videoRef.current.srcObject=stream;videoRef.current.play();}
-        // Use BarcodeDetector if available
-        if("BarcodeDetector" in window){
-          const detector=new BarcodeDetector({formats:["ean_13","ean_8","code_128","code_39","qr_code","upc_a","upc_e"]});
-          interval=setInterval(async()=>{
-            if(videoRef.current&&videoRef.current.readyState===4){
-              try{
-                const codes=await detector.detect(videoRef.current);
-                if(codes.length>0){
-                  clearInterval(interval);
-                  setScanning(false);
-                  onScan(codes[0].rawValue);
-                }
-              }catch(e){}
-            }
-          },500);
-        }else{
-          setErr("Escáner no disponible en este navegador. Ingresa el código manualmente.");
-        }
-      }catch(e){
-        setErr("No se pudo acceder a la cámara. Verifica los permisos.");
-      }
-    }
-    start();
-    return()=>{
-      if(stream)stream.getTracks().forEach(t=>t.stop());
-      if(interval)clearInterval(interval);
-    };
-  },[]);
-  return <div style={{position:"fixed",inset:0,zIndex:9999,background:"rgba(0,0,0,0.95)",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center"}}>
-    <div style={{position:"relative",width:"100%",maxWidth:400,padding:"0 20px"}}>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16}}>
-        <div style={{color:"white",fontFamily:G.font,fontWeight:700,fontSize:"1rem"}}>📷 Escanear código</div>
-        <button onClick={onClose} style={{width:32,height:32,borderRadius:10,background:"rgba(255,255,255,0.1)",border:"1px solid rgba(255,255,255,0.2)",color:"white",cursor:"pointer",fontSize:"1rem"}}>✕</button>
-      </div>
-      <div style={{position:"relative",borderRadius:20,overflow:"hidden",background:"#000",aspectRatio:"1"}}>
-        <video ref={videoRef} style={{width:"100%",height:"100%",objectFit:"cover"}} playsInline muted/>
-        {scanning&&!err&&<div style={{position:"absolute",inset:0,display:"flex",alignItems:"center",justifyContent:"center",pointerEvents:"none"}}>
-          <div style={{width:"60%",height:"60%",border:`3px solid ${br.accent}`,borderRadius:16,boxShadow:`0 0 0 9999px rgba(0,0,0,0.5),inset 0 0 30px ${br.accent}22`}}/>
-        </div>}
-        {err&&<div style={{position:"absolute",inset:0,display:"flex",alignItems:"center",justifyContent:"center",padding:20,background:"rgba(0,0,0,0.8)"}}>
-          <div style={{color:"#ff3d6e",fontFamily:G.font,fontSize:"0.82rem",textAlign:"center"}}>{err}</div>
-        </div>}
-      </div>
-      {scanning&&!err&&<div style={{color:"rgba(255,255,255,0.5)",fontFamily:G.font,fontSize:"0.78rem",textAlign:"center",marginTop:12}}>Apunta la cámara al código de barras o QR</div>}
-    </div>
-  </div>;
-}
-
-// ── ENTRADAS ───────────────────────────────────────────────
-function Entradas({isAdmin}){
-  const br=DB.brand();
-  const[entradas,setEntradas]=useState(DB.entradas());
-  const[modal,setModal]=useState(false);
-  const[scanner,setScanner]=useState(null);
-  const[toast,setToast]=useState("");
-  const[form,setForm]=useState({productoId:"",cantidad:"",costoUnit:"",proveedor:"",fecha:today(),notas:""});
-  const[busca,setBusca]=useState("");
-  const[buscaEntrada,setBuscaEntrada]=useState("");
-  const[filtro,setFiltro]=useState("mes");
-  function toast_(m,c){setToast({m,c});setTimeout(()=>setToast(""),3000);}
-  function handleScan(codigo){
-    setScanner(null);
-    const prods=DB.productos();
-    const p=prods.find(x=>x.codigo&&x.codigo===codigo)||prods.find(x=>x.nombre.toLowerCase().includes(codigo.toLowerCase()));
-    if(p){
-      setForm(f=>({...f,productoId:p.id,costoUnit:String(p.costo),proveedor:p.proveedor||""}));
-      toast_(`✓ Producto: ${p.nombre}`);
-    }else{
-      setBuscaEntrada(codigo);
-      toast_(`⚠ Código no registrado — selecciona manualmente`,"#FFCC02");
-    }
-    setModal(true);
-  }
-  function guardar(){
-    if(!form.productoId||!form.cantidad||Number(form.cantidad)<1){toast_("⚠ Selecciona producto y cantidad","#ff3d6e");return;}
-    const prods=DB.productos();
-    const p=prods.find(x=>x.id===form.productoId);
-    if(!p){toast_("⚠ Producto no encontrado","#ff3d6e");return;}
-    const entrada={id:uid(),productoId:form.productoId,producto:p.nombre,cantidad:Number(form.cantidad),costoUnit:Number(form.costoUnit||p.costo),proveedor:form.proveedor||p.proveedor||"",fecha:form.fecha,notas:form.notas,total:Number(form.cantidad)*Number(form.costoUnit||p.costo)};
-    // update stock
-    const nprods=prods.map(x=>x.id===form.productoId?{...x,stock:Number(x.stock||0)+Number(form.cantidad),costo:Number(form.costoUnit||x.costo)}:x);
-    DB.saveProductos(nprods);
-    const ne=[...entradas,entrada];DB.saveEntradas(ne);setEntradas(ne);
-    setModal(false);setForm({productoId:"",cantidad:"",costoUnit:"",proveedor:"",fecha:today(),notas:""});
-    toast_(`✓ Entrada registrada — +${form.cantidad} unidades de ${p.nombre}`);
-  }
-  const filtrar=(items)=>{
-    const h=today();
-    if(filtro==="hoy")return items.filter(x=>x.fecha===h);
-    if(filtro==="semana"){const s=new Date();s.setDate(s.getDate()-7);return items.filter(x=>new Date(x.fecha)>=s);}
-    if(filtro==="mes"){const m=new Date();m.setDate(m.getDate()-30);return items.filter(x=>new Date(x.fecha)>=m);}
-    return items;
+function confirmDeletePresup(id){
+  document.getElementById('confirmDelBtn').onclick = ()=>{
+    presupuestos = presupuestos.filter(p=>p.id!==id);
+    savePresups(); closeModal('confirmModal'); showToast('🗑️ Presupuesto eliminado'); renderPresupuesto();
   };
-  const filtradas=filtrar(entradas);
-  const totalInvertido=filtradas.reduce((a,e)=>a+Number(e.total||0),0);
-  const productos=DB.productos();
-  return <div style={{display:"flex",flexDirection:"column",height:"100%"}}>
-    <div style={{padding:"14px 16px",borderBottom:`1px solid ${G.gb}`,flexShrink:0}}>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
-        <div><div style={{fontWeight:800,fontSize:"1.1rem"}}>Entradas</div><div style={{fontSize:"0.7rem",color:G.dim}}>{filtradas.length} registros · {fmt(totalInvertido)} invertido</div></div>
-        <div style={{display:"flex",gap:8}}>
-          <Btn onClick={()=>setScanner("entrada")} color={G.blue} small>📷 Scan</Btn>
-          <Btn onClick={()=>setModal(true)} color={br.accent} small>+ Nueva</Btn>
-        </div>
-      </div>
-      <div style={{display:"flex",gap:8,overflowX:"auto"}}>
-        {[["hoy","Hoy"],["semana","7 días"],["mes","30 días"],["todo","Todo"]].map(([f,l])=><Pill key={f} active={filtro===f} color={br.accent} onClick={()=>setFiltro(f)}>{l}</Pill>)}
-      </div>
-    </div>
-    <div style={{flex:1,overflowY:"auto",padding:"12px 16px",paddingBottom:80}}>
-      {filtradas.length===0&&<div style={{textAlign:"center",padding:"50px 0",color:G.dim,fontSize:"0.82rem"}}>Sin entradas en este período</div>}
-      {filtradas.slice().reverse().map((e,i)=><Card key={i} style={{padding:"14px",marginBottom:10}}>
-        <div style={{display:"flex",justifyContent:"space-between",marginBottom:6}}><div style={{fontWeight:700,fontSize:"0.88rem"}}>{e.producto}</div><div style={{fontWeight:700,color:G.blue}}>+{e.cantidad} uds</div></div>
-        <div style={{display:"flex",gap:12,fontSize:"0.7rem",color:G.dim}}><span>{e.fecha}</span>{e.proveedor&&<span>{e.proveedor}</span>}</div>
-        <div style={{display:"flex",gap:12,marginTop:6,fontSize:"0.72rem"}}><span style={{color:G.text}}>Costo unit: {fmt(e.costoUnit)}</span><span style={{color:G.yellow}}>Total: {fmt(e.total)}</span></div>
-        {e.notas&&<div style={{marginTop:4,fontSize:"0.7rem",color:G.dim,fontStyle:"italic"}}>"{e.notas}"</div>}
-      </Card>)}
-    </div>
-    {modal&&<Modal title="Nueva Entrada de Inventario" onClose={()=>setModal(false)}>
-      <div style={{display:"flex",gap:8,marginBottom:14}}>
-        <div style={{flex:1}}>
-          <Inp label="Buscar producto" placeholder="Nombre o código..." value={buscaEntrada} onChange={v=>{setBuscaEntrada(v);setForm(f=>({...f,productoId:""}));}} icon="🔍"/>
-          <Sel label="Producto" value={form.productoId} onChange={v=>{setForm(f=>({...f,productoId:v}));const p=productos.find(x=>x.id===v);if(p)setForm(f=>({...f,productoId:v,costoUnit:String(p.costo),proveedor:p.proveedor||""}));}} options={[{v:"",l:(buscaEntrada?productos.filter(p=>p.nombre.toLowerCase().includes(buscaEntrada.toLowerCase())||(p.codigo&&p.codigo.includes(buscaEntrada))):productos).length===0?"Sin resultados...":"Seleccionar..."},...(buscaEntrada?productos.filter(p=>p.nombre.toLowerCase().includes(buscaEntrada.toLowerCase())||(p.codigo&&p.codigo.includes(buscaEntrada))):productos).map(p=>({v:p.id,l:`${p.nombre} (stock: ${p.stock||0})`}))]}/>
-        </div>
-        <Btn onClick={()=>setScanner("modal")} color={G.blue} small style={{marginTop:22,height:44}}>📷</Btn>
-      </div>
-      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
-        <Inp label="Cantidad" type="number" placeholder="0" value={form.cantidad} onChange={v=>setForm(f=>({...f,cantidad:v}))}/>
-        <Inp label="Costo unit ($)" type="number" placeholder="0.00" value={form.costoUnit} onChange={v=>setForm(f=>({...f,costoUnit:v}))}/>
-      </div>
-      <Inp label="Proveedor" placeholder="Nombre del proveedor" value={form.proveedor} onChange={v=>setForm(f=>({...f,proveedor:v}))}/>
-      <div style={{display:"flex",gap:8,alignItems:"flex-end"}}><div style={{flex:1}}><Inp label="Código de barras / QR" placeholder="Escanea o escribe el código" value={form.codigo} onChange={v=>setForm(f=>({...f,codigo:v}))}/></div><Btn onClick={()=>setScanner("form")} color={G.blue} small style={{marginBottom:14,height:44}}>📷</Btn></div>
-      <Inp label="Fecha" type="date" value={form.fecha} onChange={v=>setForm(f=>({...f,fecha:v}))}/>
-      <Inp label="Notas" placeholder="Observaciones..." value={form.notas} onChange={v=>setForm(f=>({...f,notas:v}))}/>
-      {form.productoId&&form.cantidad&&<Card style={{padding:"12px",marginBottom:14,background:`${G.blue}08`}}>
-        <div style={{display:"flex",justifyContent:"space-between",fontSize:"0.82rem"}}><span style={{color:G.dim}}>Total inversión</span><span style={{color:G.blue,fontWeight:700}}>{fmt(Number(form.cantidad)*Number(form.costoUnit||0))}</span></div>
-      </Card>}
-      <Btn onClick={guardar} full color={br.accent}>✓ Registrar entrada</Btn>
-    </Modal>}
-    {scanner&&<Scanner onScan={handleScan} onClose={()=>setScanner(null)}/>}
-    {toast&&<Toast msg={toast.m} color={toast.c}/>}
-  </div>;
+  document.getElementById('confirmModal').classList.add('open');
 }
 
-
-
-
-// ── INSTALL PWA ────────────────────────────────────────────
-function InstallPWA(){
-  const[prompt,setPrompt]=useState(null);
-  const[installed,setInstalled]=useState(false);
-  const br=DB.brand();
-  useEffect(()=>{
-    const handler=e=>{e.preventDefault();setPrompt(e);};
-    window.addEventListener("beforeinstallprompt",handler);
-    window.addEventListener("appinstalled",()=>setInstalled(true));
-    if(window.matchMedia("(display-mode: standalone)").matches)setInstalled(true);
-    return()=>window.removeEventListener("beforeinstallprompt",handler);
-  },[]);
-  if(installed)return <Card style={{padding:"14px",marginTop:12,background:`${DB.brand().accent}11`,border:`1px solid ${DB.brand().accent}33`}}>
-    <div style={{display:"flex",gap:10,alignItems:"center"}}><div style={{fontSize:"1.2rem"}}>✅</div><div><div style={{fontWeight:700,fontSize:"0.82rem"}}>App instalada</div><div style={{fontSize:"0.7rem",color:G.dim}}>Funciona sin internet</div></div></div>
-  </Card>;
-  if(!prompt)return <Card style={{padding:"14px",marginTop:12}}>
-    <div style={{display:"flex",gap:10,alignItems:"center"}}><div style={{fontSize:"1.2rem"}}>📱</div><div><div style={{fontWeight:700,fontSize:"0.82rem"}}>Instalar app</div><div style={{fontSize:"0.7rem",color:G.dim}}>En Chrome: menú ⋮ → "Instalar app" o "Añadir a pantalla de inicio"</div></div></div>
-  </Card>;
-  return <Card style={{padding:"14px",marginTop:12}}>
-    <div style={{display:"flex",gap:10,alignItems:"center",marginBottom:10}}><div style={{fontSize:"1.2rem"}}>📱</div><div><div style={{fontWeight:700,fontSize:"0.82rem"}}>Instalar en tu dispositivo</div><div style={{fontSize:"0.7rem",color:G.dim}}>Funciona sin internet</div></div></div>
-    <Btn onClick={async()=>{if(prompt){prompt.prompt();const r=await prompt.userChoice;if(r.outcome==="accepted")setInstalled(true);setPrompt(null);}}} full color={br.accent}>⬇ Instalar app</Btn>
-  </Card>;
+// ── FILTERS ──
+function filterTable(mod, val){
+  const data = mod==='balance'?transactions:getTxForModule(mod);
+  renderTbody(mod, data, val, currentFilterType);
+}
+function filterByType(mod, type, el){
+  currentFilterType = type;
+  el.closest('.filter-bar').querySelectorAll('.filter-chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  const data = mod==='balance'?transactions:getTxForModule(mod);
+  renderTbody(mod, data, '', type);
 }
 
-// ── NOTICIA BANNER ─────────────────────────────────────────
-function NoticiaBanner({user}){
-  const[noticias,setNoticias]=useState([]);
-  const[idx,setIdx]=useState(0);
-  const[visible,setVisible]=useState(false);
-  useEffect(()=>{
-    if(!window._db||!window._fs)return;
-    const unsub=window._fs.onSnapshot(window._fs.collection(window._db,"noticias"),snap=>{
-      const items=[];
-      snap.forEach(d=>items.push(d.data()));
-      items.sort((a,b)=>b.ts-a.ts);
-      const leidas=JSON.parse(localStorage.getItem("sn_noticias_leidas")||"[]");
-      const nuevas=items.filter(n=>!leidas.includes(n.id));
-      if(nuevas.length>0){setNoticias(nuevas);setIdx(0);setVisible(true);}
-    });
-    return()=>unsub();
-  },[]);
-  if(!visible||noticias.length===0)return null;
-  const n=noticias[idx];
-  const br=DB.brand();
-  function cerrar(){
-    const leidas=JSON.parse(localStorage.getItem("sn_noticias_leidas")||"[]");
-    noticias.forEach(x=>{if(!leidas.includes(x.id))leidas.push(x.id);});
-    localStorage.setItem("sn_noticias_leidas",JSON.stringify(leidas));
-    setVisible(false);
-  }
-  const tipoColor=n.tipo==="urgente"?"#ff3d6e":n.tipo==="mejora"?"#00E5A0":n.tipo==="producto"?"#4FC3F7":"#CE93D8";
-  return <div style={{position:"fixed",inset:0,zIndex:8888,background:"rgba(0,0,0,0.7)",display:"flex",alignItems:"center",justifyContent:"center",padding:20}}>
-    <div style={{background:"#0d1425",border:`1px solid ${tipoColor}44`,borderRadius:20,padding:"24px",maxWidth:360,width:"100%",boxShadow:`0 0 40px ${tipoColor}22`}}>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16}}>
-        <div style={{background:`${tipoColor}22`,color:tipoColor,fontSize:"0.7rem",fontWeight:700,padding:"4px 10px",borderRadius:20,letterSpacing:1}}>{n.tipo?.toUpperCase()}</div>
-        <div style={{fontSize:"0.7rem",color:G.dim}}>{n.fecha}</div>
-      </div>
-      <div style={{fontWeight:800,fontSize:"1rem",marginBottom:10,color:G.text}}>{n.titulo}</div>
-      <div style={{fontSize:"0.82rem",color:G.dim,lineHeight:1.6,marginBottom:20}}>{n.mensaje}</div>
-      {noticias.length>1&&<div style={{display:"flex",gap:6,marginBottom:16,justifyContent:"center"}}>
-        {noticias.map((_,i)=><div key={i} onClick={()=>setIdx(i)} style={{width:6,height:6,borderRadius:"50%",background:i===idx?br.accent:G.dim2,cursor:"pointer"}}/>)}
-      </div>}
-      <Btn onClick={cerrar} full color={tipoColor}>Entendido ✓</Btn>
-    </div>
-  </div>;
+// ── EXPORT ──
+function exportData(){
+  const rows = [['Fecha','Descripción','Tipo','Categoría','Estado','Monto','Notas']];
+  transactions.forEach(t=>rows.push([t.date,t.desc,t.type,t.cat,t.status||'',t.amt,t.notes||'']));
+  const csv = rows.map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');
+  const a = document.createElement('a');
+  a.href = 'data:text/csv;charset=utf-8,\uFEFF'+encodeURIComponent(csv);
+  a.download = 'obsidiana-rosa-'+new Date().toISOString().split('T')[0]+'.csv';
+  a.click();
+  showToast('✓ CSV exportado');
 }
 
-// ── MI CUENTA ──────────────────────────────────────────────
-function MiCuenta({user,isAdmin,isPrimaryAdmin}){
-  const br=DB.brand();
-  const[tab,setTab]=useState("cuenta");
-  const[rating,setRating]=useState(0);
-  const[hoverStar,setHoverStar]=useState(0);
-  const[sugerencia,setSugerencia]=useState("");
-  const[toast,setToast]=useState("");
-  const[notifOk,setNotifOk]=useState(false);
-  const[notifPerm,setNotifPerm]=useState(user?.notifEnabled||false);
-  function toast_(m,c){setToast({m,c});setTimeout(()=>setToast(""),3000);}
-  const plan=user?.plan==="lifetime"?"PREMIUM":user?.plan==="paid"?"BÁSICA":"PRUEBA";
-  const planColor=plan==="PREMIUM"?br.accent:plan==="BÁSICA"?G.blue:G.yellow;
-  const sincro=localStorage.getItem("sn_lastSync")||"Sin sincronizar";
-  function enviarSugerencia(){
-    if(!sugerencia.trim()){toast_("⚠ Escribe tu sugerencia","#ff3d6e");return;}
-    window.open(`mailto:rikaspalos@gmail.com?subject=Sugerencia USALA Suite&body=${encodeURIComponent(sugerencia)}`);
-    setSugerencia("");
-    toast_("✓ Abriendo correo...");
-  }
-  function toggleNotif(){
-    const users=DB.users();
-    const u=users[user.email];
-    if(u){u.notifEnabled=!notifPerm;users[user.email]=u;DB.saveUsers(users);}
-    setNotifPerm(!notifPerm);
-    toast_(!notifPerm?"✓ Notificaciones activadas":"Notificaciones desactivadas");
-  }
-  const tabs2=[{id:"cuenta",l:"Mi Cuenta"},{id:"datos",l:"Mis Datos"},{id:"opinion",l:"Opinión"},{id:"config",l:"Perfil"}];
-  return <div style={{display:"flex",flexDirection:"column",height:"100%"}}>
-    <div style={{padding:"14px 16px 0",borderBottom:`1px solid ${G.gb}`,flexShrink:0}}>
-      <div style={{fontWeight:800,fontSize:"1.1rem",marginBottom:12}}>👤 Mi Cuenta</div>
-      <div style={{display:"flex",gap:8,overflowX:"auto",paddingBottom:1}}>
-        {tabs2.map(t=><Pill key={t.id} active={tab===t.id} color={br.accent} onClick={()=>setTab(t.id)}>{t.l}</Pill>)}
-      </div>
-    </div>
-    <div style={{flex:1,overflowY:"auto",padding:"16px",paddingBottom:80}}>
-      {tab==="cuenta"&&<>
-        <Card style={{padding:"20px",marginBottom:12,textAlign:"center"}}>
-          <div style={{width:64,height:64,borderRadius:22,background:`${br.accent}22`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:"1.8rem",margin:"0 auto 12px"}}>👤</div>
-          <div style={{fontWeight:800,fontSize:"1rem",marginBottom:4}}>{user?.email}</div>
-          <div style={{display:"inline-block",background:planColor,color:"#050812",fontWeight:800,fontSize:"0.72rem",padding:"4px 14px",borderRadius:20,letterSpacing:1}}>{plan}</div>
-        </Card>
-        <Card style={{padding:"16px",marginBottom:12}}>
-          <div style={{fontWeight:700,marginBottom:12,fontSize:"0.85rem"}}>Suscripción</div>
-          {[["Plan actual",plan],["Estado",user?.plan==="lifetime"?"Activo permanente":user?.approvedAt?"Activo":"Pendiente"],["Acceso",user?.role==="admin"?"Administrador":"Vendedor"]].map(([l,v])=><div key={l} style={{display:"flex",justifyContent:"space-between",padding:"8px 0",borderBottom:`1px solid ${G.dim2}`,fontSize:"0.82rem"}}><span style={{color:G.dim}}>{l}</span><span style={{fontWeight:600,color:v===plan?planColor:G.text}}>{v}</span></div>)}
-        </Card>
-        <Card style={{padding:"16px"}}>
-          <div style={{fontWeight:700,marginBottom:12,fontSize:"0.85rem"}}>Notificaciones</div>
-          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-            <div><div style={{fontSize:"0.82rem"}}>Noticias y actualizaciones</div><div style={{fontSize:"0.7rem",color:G.dim}}>Recibe novedades del administrador</div></div>
-            <button onClick={toggleNotif} style={{width:48,height:26,borderRadius:13,border:"none",cursor:"pointer",background:notifPerm?br.accent:G.dim2,transition:"background 0.2s",position:"relative"}}>
-              <div style={{position:"absolute",top:3,left:notifPerm?24:3,width:20,height:20,borderRadius:"50%",background:"white",transition:"left 0.2s"}}/>
-            </button>
-          </div>
-        </Card>
-      </>}
-      {tab==="datos"&&<>
-        <Card style={{padding:"16px",marginBottom:12}}>
-          <div style={{fontWeight:700,marginBottom:12,fontSize:"0.85rem"}}>📋 Mis Datos</div>
-          {[
-            ["Correo",user?.email||"—"],
-            ["ID Usuario",user?.id||(user?.email?.split("@")[0])||"—"],
-            ["Rol",user?.role==="admin"?"Administrador":"Vendedor"],
-            ["Cuenta creada",user?.createdAt||user?.approvedAt||"—"],
-            ["Última sincronización",sincro],
-            ["Versión app",br.version||"1.0.0"],
-            ["Modo offline","Disponible (PWA)"],
-          ].map(([l,v])=><div key={l} style={{display:"flex",justifyContent:"space-between",padding:"10px 0",borderBottom:`1px solid ${G.dim2}`,fontSize:"0.82rem"}}><span style={{color:G.dim}}>{l}</span><span style={{fontWeight:600,color:G.text,textAlign:"right",maxWidth:"55%",wordBreak:"break-all"}}>{v}</span></div>)}
-        </Card>
-      </>}
-      {tab==="opinion"&&<>
-        <Card style={{padding:"20px",marginBottom:12,textAlign:"center"}}>
-          <div style={{fontWeight:700,fontSize:"0.9rem",marginBottom:16}}>⭐ Califica la app</div>
-          <div style={{display:"flex",justifyContent:"center",gap:8,marginBottom:8}}>
-            {[1,2,3,4,5].map(s=><button key={s} onMouseEnter={()=>setHoverStar(s)} onMouseLeave={()=>setHoverStar(0)} onClick={()=>{setRating(s);toast_(`✓ Gracias por tu calificación de ${s} estrellas`);}} style={{background:"none",border:"none",cursor:"pointer",fontSize:"2rem",color:(hoverStar||rating)>=s?"#FFCC02":"rgba(255,255,255,0.15)",transition:"color 0.1s"}}>★</button>)}
-          </div>
-          <div style={{fontSize:"0.75rem",color:G.dim}}>{rating===0?"Toca para calificar":rating===1?"Necesita mejorar":rating===2?"Regular":rating===3?"Buena":rating===4?"Muy buena":"¡Excelente!"}</div>
-        </Card>
-        <Card style={{padding:"16px"}}>
-          <div style={{fontWeight:700,fontSize:"0.85rem",marginBottom:12}}>💬 Sugerencias</div>
-          <textarea value={sugerencia} onChange={e=>setSugerencia(e.target.value)} placeholder="Escribe tu sugerencia, reporte de error o idea de mejora..." style={{width:"100%",minHeight:120,background:G.glass,border:`1px solid ${G.dim2}`,borderRadius:12,padding:"12px",color:G.text,fontFamily:G.font,fontSize:"0.82rem",resize:"vertical",outline:"none"}}/>
-          <Btn onClick={enviarSugerencia} full color={br.accent} style={{marginTop:12}}>📧 Enviar sugerencia</Btn>
-        </Card>
-      </>}
-      {tab==="config"&&<BrandingConfig/>}
-    </div>
-    {toast&&<Toast msg={toast.m} color={toast.c}/>}
-  </div>;
+// ── HELPERS ──
+function fmt(n){ return '$'+formatNum(n); }
+function formatNum(n){ return (n||0).toLocaleString('es-MX',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+function pct(a,b){ return b>0?Math.min(Math.round(a/b*100),100):0; }
+function getThisMonth(arr){
+  const m = new Date().getMonth(), y = new Date().getFullYear();
+  return arr.filter(t=>{ const d=new Date(t.date); return d.getMonth()===m&&d.getFullYear()===y; }).reduce((s,t)=>s+t.amt,0);
 }
 
-
-// ── APROBACIONES ───────────────────────────────────────────
-function Aprobaciones({isAdmin}){
-  const br=DB.brand();
-  const[pendientes,setPendientes]=useState(()=>DB.get("sn_pendientes",[]));
-  const[toast,setToast]=useState("");
-  function toast_(m,c){setToast({m,c});setTimeout(()=>setToast(""),3000);}
-
-  useEffect(()=>{
-    if(!window._db||!window._fs)return;
-    const unsub=window._fs.onSnapshot(window._fs.collection(window._db,"pendientes"),snap=>{
-      const items=[];
-      snap.forEach(d=>{const dat=d.data();if(dat.status==="pendiente")items.push(dat);});
-      setPendientes(items);
-      DB.set("sn_pendientes",items);
-    });
-    return()=>unsub();
-  },[]);
-
-  function aprobar(req){
-    const prods=DB.productos();
-    if(req.tipo==="nuevo_producto"){
-      const p={id:uid(),nombre:req.data.nombre,costo:0,precio:Number(req.data.precio),stock:Number(req.data.stock||0),categoria:req.data.categoria||"fundas",proveedor:req.data.proveedor||"",codigo:req.data.codigo||"",margen:0};
-      DB.saveProductos([...prods,p]);
-    } else if(req.tipo==="editar_producto"){
-      const np=prods.map(p=>p.id===req.productoId?{...p,nombre:req.data.nombre,precio:Number(req.data.precio),stock:Number(req.data.stock||0),categoria:req.data.categoria||p.categoria}:p);
-      DB.saveProductos(np);
-    }
-    eliminarPendiente(req.id);
-    toast_("✓ Solicitud aprobada y aplicada");
-  }
-
-  function rechazar(req){
-    eliminarPendiente(req.id);
-    toast_("Solicitud rechazada","#ff3d6e");
-  }
-
-  function eliminarPendiente(id){
-    const arr=pendientes.filter(p=>p.id!==id);
-    setPendientes(arr);
-    DB.set("sn_pendientes",arr);
-    if(window._db&&window._fs){window._fs.deleteDoc(window._fs.doc(window._db,"pendientes",id)).catch(()=>{});}
-  }
-
-  return <div style={{display:"flex",flexDirection:"column",height:"100%"}}>
-    <div style={{padding:"14px 16px",borderBottom:`1px solid ${G.gb}`,flexShrink:0}}>
-      <div style={{fontWeight:800,fontSize:"1.1rem"}}>✅ Aprobaciones</div>
-      <div style={{fontSize:"0.7rem",color:G.dim}}>{pendientes.length} solicitudes pendientes</div>
-    </div>
-    <div style={{flex:1,overflowY:"auto",padding:"16px",paddingBottom:80}}>
-      {pendientes.length===0&&<div style={{textAlign:"center",padding:"50px 0",color:G.dim,fontSize:"0.82rem"}}>Sin solicitudes pendientes ✓</div>}
-      {pendientes.map(req=><Card key={req.id} style={{padding:"16px",marginBottom:12,border:`1px solid ${G.yellow}33`}}>
-        <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:10}}>
-          <div>
-            <div style={{fontWeight:700,fontSize:"0.85rem",marginBottom:2}}>{req.tipo==="nuevo_producto"?"📦 Nuevo producto":"✏️ Editar producto"}</div>
-            <div style={{fontSize:"0.7rem",color:G.dim}}>{req.solicitante} · {req.fecha}</div>
-          </div>
-          <div style={{background:`${G.yellow}22`,color:G.yellow,fontSize:"0.65rem",fontWeight:700,padding:"3px 8px",borderRadius:10}}>PENDIENTE</div>
-        </div>
-        <div style={{background:G.glass,borderRadius:10,padding:"10px",marginBottom:12,fontSize:"0.78rem"}}>
-          {[["Nombre",req.data.nombre],["Precio",`$${req.data.precio}`],["Stock",req.data.stock||0],["Categoría",req.data.categoria]].map(([l,v])=><div key={l} style={{display:"flex",gap:8,marginBottom:4}}><span style={{color:G.dim,minWidth:70}}>{l}:</span><span style={{fontWeight:600}}>{v}</span></div>)}
-        </div>
-        <div style={{display:"flex",gap:8}}>
-          <Btn onClick={()=>aprobar(req)} color={G.green} style={{flex:1}}>✓ Aprobar</Btn>
-          <Btn onClick={()=>rechazar(req)} color={G.red} style={{flex:1}}>✕ Rechazar</Btn>
-        </div>
-      </Card>)}
-    </div>
-    {toast&&<Toast msg={toast.m} color={toast.c}/>}
-  </div>;
+// ── TOAST ──
+function showToast(msg){
+  const t = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
 }
 
-// ── ADMIN NOTICIAS ─────────────────────────────────────────
-function AdminNoticias({isAdmin}){
-  const br=DB.brand();
-  const[noticias,setNoticias]=useState(()=>DB.get("sn_noticias",[]));
-  const[form,setForm]=useState({titulo:"",mensaje:"",tipo:"noticia"});
-  const[toast,setToast]=useState("");
-  function toast_(m,c){setToast({m,c});setTimeout(()=>setToast(""),3000);}
-  function publicar(){
-    if(!form.titulo.trim()||!form.mensaje.trim()){toast_("⚠ Escribe título y mensaje","#ff3d6e");return;}
-    const n={id:uid(),titulo:form.titulo,mensaje:form.mensaje,tipo:form.tipo,fecha:today(),leida:false};
-    const arr=[n,...noticias];
-    setNoticias(arr);
-    DB.set("sn_noticias",arr);
-    // Save to Firebase for all users
-    if(window._db&&window._fs){
-      window._fs.setDoc(window._fs.doc(window._db,"noticias",n.id),{...n,ts:Date.now()});
-    }
-    setForm({titulo:"",mensaje:"",tipo:"noticia"});
-    toast_("✓ Noticia publicada para todos los usuarios");
-  }
-  function eliminar(id){
-    const arr=noticias.filter(n=>n.id!==id);
-    setNoticias(arr);
-    DB.set("sn_noticias",arr);
-    if(window._db&&window._fs){window._fs.deleteDoc(window._fs.doc(window._db,"noticias",id)).catch(()=>{});}
-  }
-  const tipos=[["noticia","📰 Noticia"],["mejora","✨ Mejora"],["producto","📦 Nuevo producto"],["urgente","🔴 Urgente"]];
-  return <div style={{display:"flex",flexDirection:"column",height:"100%"}}>
-    <div style={{padding:"14px 16px",borderBottom:`1px solid ${G.gb}`,flexShrink:0}}>
-      <div style={{fontWeight:800,fontSize:"1.1rem"}}>📢 Noticias y Anuncios</div>
-      <div style={{fontSize:"0.7rem",color:G.dim}}>Mensajes que verán todos los usuarios al abrir la app</div>
-    </div>
-    <div style={{flex:1,overflowY:"auto",padding:"16px",paddingBottom:80}}>
-      <Card style={{padding:"16px",marginBottom:16}}>
-        <div style={{fontWeight:700,fontSize:"0.85rem",marginBottom:12}}>Nueva noticia</div>
-        <div style={{display:"flex",gap:8,marginBottom:12,flexWrap:"wrap"}}>
-          {tipos.map(([v,l])=><Pill key={v} active={form.tipo===v} color={br.accent} onClick={()=>setForm(f=>({...f,tipo:v}))}>{l}</Pill>)}
-        </div>
-        <Inp label="Título" placeholder="Ej: Nueva versión disponible" value={form.titulo} onChange={v=>setForm(f=>({...f,titulo:v}))}/>
-        <textarea value={form.mensaje} onChange={e=>setForm(f=>({...f,mensaje:e.target.value}))} placeholder="Escribe el mensaje completo..." style={{width:"100%",minHeight:100,background:G.glass,border:`1px solid ${G.dim2}`,borderRadius:12,padding:"12px",color:G.text,fontFamily:G.font,fontSize:"0.82rem",resize:"vertical",outline:"none",marginBottom:12}}/>
-        <Btn onClick={publicar} full color={br.accent}>📢 Publicar para todos</Btn>
-      </Card>
-      <div style={{fontWeight:700,fontSize:"0.85rem",marginBottom:10}}>Publicadas ({noticias.length})</div>
-      {noticias.length===0&&<div style={{textAlign:"center",padding:"30px 0",color:G.dim,fontSize:"0.82rem"}}>Sin noticias publicadas</div>}
-      {noticias.map(n=><Card key={n.id} style={{padding:"14px",marginBottom:10}}>
-        <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
-          <div style={{flex:1}}><div style={{fontWeight:700,fontSize:"0.85rem",marginBottom:4}}>{n.titulo}</div><div style={{fontSize:"0.75rem",color:G.dim,marginBottom:6}}>{n.fecha} · {tipos.find(t=>t[0]===n.tipo)?.[1]||n.tipo}</div><div style={{fontSize:"0.8rem",color:G.text}}>{n.mensaje}</div></div>
-          <button onClick={()=>eliminar(n.id)} style={{marginLeft:12,width:28,height:28,borderRadius:8,background:"rgba(255,61,110,0.15)",border:"1px solid rgba(255,61,110,0.3)",color:"#ff3d6e",cursor:"pointer",fontSize:"0.8rem",flexShrink:0}}>✕</button>
-        </div>
-      </Card>)}
-    </div>
-    {toast&&<Toast msg={toast.m} color={toast.c}/>}
-  </div>;
+// ── CLOCK & GREETING ──
+function tick(){
+  const now = new Date();
+  const h=now.getHours(), m=now.getMinutes();
+  const el = document.getElementById('liveTime');
+  if(el) el.textContent = String(h).padStart(2,'0')+':'+String(m).padStart(2,'0');
+  const gw = document.getElementById('greetWord');
+  if(gw) gw.textContent = h<12?'días':h<19?'tardes':'noches';
 }
+const DAYS=['Domingo','Lunes','Martes','Miércoles','Jueves','Viernes','Sábado'];
+const MONTHS=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+const now2=new Date();
+const dateEl=document.getElementById('todayDate');
+if(dateEl) dateEl.textContent=DAYS[now2.getDay()]+', '+now2.getDate()+' de '+MONTHS[now2.getMonth()];
+const quoteEl=document.getElementById('greetQuote');
+if(quoteEl) quoteEl.textContent=QUOTES[now2.getDay()%QUOTES.length];
+tick();
+setInterval(tick,30000);
 
-
-// ── BRANDING CONFIG (standalone) ───────────────────────────
-function BrandingConfig(){
-  const[brand,setBrand]=useState(DB.brand());
-  const[toast,setToast]=useState("");
-  function toast_(m,c){setToast({m,c});setTimeout(()=>setToast(""),3000);}
-  const up=(k,v)=>setBrand(b=>({...b,[k]:v}));
-  const PRESETS=[{n:"Verde",a:"#00E5A0",b:"#4FC3F7"},{n:"Cyan",a:"#4FC3F7",b:"#00B8D4"},{n:"Púrpura",a:"#CE93D8",b:"#F48FB1"},{n:"Naranja",a:"#FF8A65",b:"#FFCC02"},{n:"Rojo",a:"#FF3D6E",b:"#FF8A65"}];
-  function guardar(){DB.saveBrand(brand);toast_("✓ Guardado — recargando...");setTimeout(()=>window.location.reload(),1200);}
-  return <div style={{paddingBottom:20}}>
-    <div style={{fontWeight:700,fontSize:"0.85rem",marginBottom:12}}>🎨 Personalizar negocio</div>
-    <Card style={{padding:"16px",marginBottom:12}}>
-      <Inp label="Nombre del negocio" value={brand.name} onChange={v=>up("name",v)} placeholder="Mi Negocio"/>
-      <Inp label="Subtítulo" value={brand.sub} onChange={v=>up("sub",v)} placeholder="SUITE NEGOCIOS"/>
-    </Card>
-    <Card style={{padding:"16px",marginBottom:12}}>
-      <div style={{fontWeight:600,fontSize:"0.8rem",marginBottom:10,color:G.dim}}>Color principal</div>
-      <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:10}}>
-        {PRESETS.map(p=><button key={p.n} onClick={()=>{up("accent",p.a);up("accent2",p.b);}} style={{padding:"6px 12px",borderRadius:20,border:`2px solid ${brand.accent===p.a?"white":"transparent"}`,background:`${p.a}22`,color:p.a,fontSize:"0.75rem",fontWeight:600,cursor:"pointer"}}>{p.n}</button>)}
-      </div>
-      <div style={{display:"flex",gap:12,alignItems:"center"}}>
-        <input type="color" value={brand.accent} onChange={e=>up("accent",e.target.value)} style={{width:44,height:44,borderRadius:10,border:"none",cursor:"pointer",background:"none"}}/>
-        <div style={{fontSize:"0.78rem",color:G.dim}}>Color personalizado</div>
-      </div>
-    </Card>
-    <Btn onClick={guardar} full color={brand.accent}>💾 Guardar cambios</Btn>
-    {toast&&<Toast msg={toast.m} color={toast.c}/>}
-  </div>;
-}
-
-// ── ADMIN PANEL ────────────────────────────────────────────
-function AdminPanel({onClose}){
-  const br=DB.brand();
-  const[section,setSection]=useState("brand");
-  const[brand,setBrand]=useState(DB.brand());
-  const[toast,setToast]=useState("");
-  const up=(k,v)=>setBrand(p=>({...p,[k]:v}));
-  function saveBrand(){DB.saveBrand(brand);setToast("✓ Guardado");setTimeout(()=>window.location.reload(),1200);}
-  const PRESETS=[{n:"Verde",a:"#00E5A0",b:"#4FC3F7"},{n:"Cyan",a:"#4FC3F7",b:"#00B8D4"},{n:"Púrpura",a:"#CE93D8",b:"#9C27B0"},{n:"Dorado",a:"#FFCC02",b:"#FF9500"},{n:"Rosa",a:"#F48FB1",b:"#FF3D6E"},{n:"Naranja",a:"#FF8A65",b:"#FF5722"}];
-  return <div style={{position:"fixed",inset:0,zIndex:9999,background:"#080c1a",fontFamily:G.font,color:G.text,display:"flex",flexDirection:"column"}}>
-    <Bg a={brand.accent} b={brand.accent2}/>
-    <div style={{position:"relative",zIndex:1,padding:"14px 20px",borderBottom:`1px solid ${G.gb}`,display:"flex",alignItems:"center",gap:14,flexShrink:0}}>
-      <button onClick={onClose} style={{width:34,height:34,borderRadius:11,background:G.glass,border:`1px solid ${G.gb}`,color:G.text,cursor:"pointer",fontSize:"1rem"}}>←</button>
-      <div style={{fontWeight:700,fontSize:"1.05rem"}}>Panel Admin</div>
-    </div>
-    <div style={{position:"relative",zIndex:1,display:"flex",borderBottom:`1px solid ${G.gb}`,flexShrink:0}}>
-      {[["brand","Branding"],["version","Versión"]].map(([s,l])=>
-        <button key={s} onClick={()=>setSection(s)} style={{flex:1,padding:"10px 4px",border:"none",background:"none",borderBottom:`2px solid ${section===s?brand.accent:"transparent"}`,color:section===s?brand.accent:G.dim,fontFamily:G.font,fontSize:"0.78rem",fontWeight:section===s?700:400,cursor:"pointer"}}>{l}</button>)}
-    </div>
-    <div style={{position:"relative",zIndex:1,flex:1,overflowY:"auto",padding:"20px",paddingBottom:100}}>
-      {section==="brand"&&<>
-        <Inp label="Nombre de la app" value={brand.name} onChange={v=>up("name",v)}/>
-        <Inp label="Subtítulo" value={brand.sub} onChange={v=>up("sub",v)}/>
-        <div style={{fontSize:"0.68rem",color:G.dim,letterSpacing:"0.08em",marginBottom:10,textTransform:"uppercase"}}>Presets de color</div>
-        <div style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:10,marginBottom:20}}>
-          {PRESETS.map(p=><button key={p.n} onClick={()=>{up("accent",p.a);up("accent2",p.b);}} style={{padding:"12px 8px",borderRadius:14,background:`linear-gradient(135deg,${p.a}22,${p.b}18)`,border:`1px solid ${brand.accent===p.a?p.a+"88":G.gb}`,cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",gap:6}}>
-            <div style={{display:"flex",gap:4}}><div style={{width:12,height:12,borderRadius:"50%",background:p.a}}/><div style={{width:12,height:12,borderRadius:"50%",background:p.b}}/></div>
-            <span style={{fontSize:"0.7rem",color:p.a,fontFamily:G.font}}>{p.n}</span>
-          </button>)}
-        </div>
-        <div style={{display:"flex",gap:12,alignItems:"center",marginBottom:14}}>
-          <input type="color" value={brand.accent} onChange={e=>up("accent",e.target.value)} style={{width:52,height:44,border:"none",borderRadius:12,cursor:"pointer"}}/>
-          <div style={{flex:1,padding:"12px 14px",background:`${brand.accent}18`,border:`1px solid ${brand.accent}44`,borderRadius:12,color:brand.accent,fontFamily:G.mono,fontSize:"0.82rem"}}>{brand.accent}</div>
-        </div>
-        <div style={{display:"flex",gap:12,alignItems:"center"}}>
-          <input type="color" value={brand.accent2} onChange={e=>up("accent2",e.target.value)} style={{width:52,height:44,border:"none",borderRadius:12,cursor:"pointer"}}/>
-          <div style={{flex:1,padding:"12px 14px",background:`${brand.accent2}18`,border:`1px solid ${brand.accent2}44`,borderRadius:12,color:brand.accent2,fontFamily:G.mono,fontSize:"0.82rem"}}>{brand.accent2}</div>
-        </div>
-      </>}
-      {section==="version"&&<>
-        <Card style={{padding:"16px",marginBottom:20,background:`${brand.accent}08`}}>
-          <div style={{fontSize:"0.65rem",color:G.dim,marginBottom:4}}>VERSIÓN ACTUAL</div>
-          <div style={{fontFamily:G.mono,fontSize:"2rem",fontWeight:900,color:brand.accent}}>v{brand.version||"1.0.0"}</div>
-          <div style={{fontSize:"0.72rem",color:G.dim}}>Build {brand.buildDate||BUILD_DATE}</div>
-        </Card>
-        <div style={{display:"flex",gap:10,marginBottom:16}}>
-          {[0,1,2].map(i=><div key={i} style={{flex:1,textAlign:"center"}}>
-            <div style={{fontSize:"0.6rem",color:G.dim,marginBottom:6}}>{["MAYOR","MENOR","PARCHE"][i]}</div>
-            <div style={{display:"flex",alignItems:"center",background:G.glass,border:`1px solid ${G.gb}`,borderRadius:12,overflow:"hidden"}}>
-              <button onClick={()=>{const p=(brand.version||"1.0.0").split(".");p[i]=Math.max(0,parseInt(p[i])-1);up("version",p.join("."));}} style={{padding:"10px 12px",background:"none",border:"none",color:G.dim,cursor:"pointer"}}>−</button>
-              <div style={{flex:1,textAlign:"center",fontFamily:G.mono,fontWeight:700,color:brand.accent}}>{(brand.version||"1.0.0").split(".")[i]}</div>
-              <button onClick={()=>{const p=(brand.version||"1.0.0").split(".");p[i]=parseInt(p[i])+1;up("version",p.join("."));}} style={{padding:"10px 12px",background:"none",border:"none",color:brand.accent,cursor:"pointer"}}>+</button>
-            </div>
-          </div>)}
-        </div>
-        <div style={{display:"flex",gap:10}}>
-          <input type="date" value={brand.buildDate||BUILD_DATE} onChange={e=>up("buildDate",e.target.value)} style={{flex:1,padding:"12px 14px",background:G.glass,border:`1px solid ${G.gb}`,borderRadius:12,fontFamily:G.mono,fontSize:"0.82rem",color:brand.accent,outline:"none",colorScheme:"dark"}}/>
-          <button onClick={()=>up("buildDate",today())} style={{padding:"12px 14px",background:`${brand.accent}18`,border:`1px solid ${brand.accent}44`,borderRadius:12,color:brand.accent,fontFamily:G.font,fontSize:"0.78rem",fontWeight:600,cursor:"pointer"}}>📅 Hoy</button>
-        </div>
-      </>}
-    </div>
-    <div style={{position:"fixed",bottom:0,left:0,right:0,padding:"14px 20px",background:"rgba(5,8,18,0.95)",backdropFilter:"blur(20px)",borderTop:`1px solid ${G.gb}`,zIndex:2}}>
-      <Btn onClick={saveBrand} full color={brand.accent}>💾 Guardar y aplicar</Btn>
-    </div>
-    {toast&&<div style={{position:"fixed",bottom:80,left:"50%",transform:"translateX(-50%)",background:"rgba(5,8,18,0.9)",border:`1px solid ${brand.accent}44`,color:brand.accent,padding:"10px 20px",borderRadius:50,fontSize:"0.8rem",fontWeight:600,zIndex:9999}}>{toast}</div>}
-  </div>;
-}
-
-// ── MAIN APP ───────────────────────────────────────────────
-function MainApp({user,onLogout}){
-  const br=DB.brand();
-  const[tab,setTab]=useState("dashboard");
-  const[menu,setMenu]=useState(false);
-  const[admin,setAdmin]=useState(false);
-  const dl=getDaysLeft(user);
-  const isAdmin=user.role==="admin"||user.role==="admin2";
-  const isPrimaryAdmin=user.role==="admin";
-  const tabs=[
-    {id:"dashboard",icon:"◈",label:"Inicio"},
-    {id:"ventas",icon:"🛍",label:"Ventas"},
-    {id:"productos",icon:"📦",label:"Productos"},
-    ...(isAdmin?[{id:"colaboradores",icon:"👥",label:"Equipo"}]:[]),
-    ...(isAdmin?[{id:"proveedores",icon:"🏭",label:"Proveed."}]:[]),
-    ...(isAdmin?[{id:"finanzas",icon:"💹",label:"Finanzas"}]:[]),
-    ...(isAdmin?[{id:"entradas",icon:"📥",label:"Entradas"}]:[]),
-    {id:"micuenta",icon:"👤",label:"Mi Cuenta"},
-    ...(isPrimaryAdmin?[{id:"admin_noticias",icon:"📢",label:"Noticias"}]:[]),
-    ...(isAdmin?[{id:"aprobaciones",icon:"✅",label:`Aprob.${DB.get("sn_pendientes",[]).filter(p=>p.status==="pendiente").length>0?" ●":""}`}]:[]),
-  ];
-  if(admin)return <AdminPanel onClose={()=>setAdmin(false)}/>;
-  return <div style={{display:"flex",flexDirection:"column",height:"100vh",background:G.bg,fontFamily:G.font,color:G.text,position:"relative",overflow:"hidden"}}>
-    <Bg a={br.accent} b={br.accent2}/>
-    {/* Header */}
-    <div style={{position:"relative",zIndex:10,padding:"12px 16px",borderBottom:`1px solid ${G.gb}`,display:"flex",alignItems:"center",justifyContent:"space-between",backdropFilter:"blur(20px)",background:"rgba(5,8,18,0.8)",flexShrink:0}}>
-      <div style={{fontWeight:900,fontSize:"1.15rem",letterSpacing:"0.1em",background:`linear-gradient(120deg,#fff,${br.accent},${br.accent2})`,WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>{br.name}</div>
-      <div style={{display:"flex",alignItems:"center",gap:8}}>
-        <div style={{fontSize:"0.6rem",padding:"4px 10px",borderRadius:50,background:`${br.accent}14`,border:`1px solid ${br.accent}33`,color:br.accent,fontWeight:600}}>{isAdmin?"⚙ Admin":"👤 "+user.name.split(" ")[0]}</div>
-        <button onClick={()=>setMenu(true)} style={{width:32,height:32,borderRadius:10,background:G.glass,border:`1px solid ${G.gb}`,color:G.text,cursor:"pointer",fontWeight:700,fontSize:"0.9rem"}}>{user.name[0]}</button>
-      </div>
-    </div>
-    {/* Content */}
-    <div style={{position:"relative",zIndex:1,flex:1,overflow:"hidden",display:"flex",flexDirection:"column"}}>
-      {tab==="dashboard"&&<div style={{flex:1,overflowY:"auto"}}><Dashboard user={user}/></div>}
-      {tab==="ventas"&&<Ventas user={user} isAdmin={isAdmin}/>}
-      {tab==="productos"&&<Productos user={user} isAdmin={isAdmin}/>}
-      {tab==="colaboradores"&&isAdmin&&<Colaboradores isAdmin={isAdmin} isPrimaryAdmin={isPrimaryAdmin}/>}
-      {tab==="proveedores"&&isAdmin&&<Proveedores isAdmin={isAdmin}/>}
-      {tab==="finanzas"&&isAdmin&&<Finanzas isAdmin={isAdmin}/>}
-      {tab==="entradas"&&isAdmin&&<Entradas isAdmin={isAdmin}/>}
-      {tab==="micuenta"&&<MiCuenta user={user} isAdmin={isAdmin} isPrimaryAdmin={isPrimaryAdmin}/>}
-      {tab==="admin_noticias"&&isAdmin&&<AdminNoticias isAdmin={isAdmin}/>}
-      {tab==="aprobaciones"&&isAdmin&&<Aprobaciones isAdmin={isAdmin}/>}
-      <UndoToast/>
-    </div>
-    {/* Bottom nav */}
-    <div style={{position:"relative",zIndex:10,display:"flex",borderTop:`1px solid ${G.gb}`,background:"rgba(5,8,18,0.9)",backdropFilter:"blur(20px)",flexShrink:0}}>
-      {tabs.map(t=><button key={t.id} onClick={()=>setTab(t.id)}
-        style={{flex:1,padding:"10px 4px 8px",border:"none",background:"none",cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",gap:3,
-        borderTop:`2px solid ${tab===t.id?br.accent:"transparent"}`,transition:"all 0.2s"}}>
-        <div style={{fontSize:tab===t.id?"1.15rem":"1rem",transition:"all 0.2s"}}>{t.icon}</div>
-        <div style={{fontSize:"0.55rem",color:tab===t.id?br.accent:G.dim,fontWeight:tab===t.id?700:400,letterSpacing:"0.02em"}}>{t.label}</div>
-      </button>)}
-    </div>
-    {/* Menu */}
-    {menu&&<div style={{position:"fixed",inset:0,zIndex:999}}>
-      <div onClick={()=>setMenu(false)} style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.65)",backdropFilter:"blur(4px)"}}/>
-      <div style={{position:"absolute",bottom:0,left:0,right:0,background:"#080c1a",border:`1px solid ${G.gb}`,borderRadius:"24px 24px 0 0",padding:"12px 20px 50px",animation:"su 0.3s ease"}}>
-        <div style={{width:40,height:4,borderRadius:4,background:G.gb,margin:"0 auto 18px"}}/>
-        <div style={{display:"flex",alignItems:"center",gap:12,padding:"0 4px 16px",borderBottom:`1px solid ${G.gb}`,marginBottom:14}}>
-          <div style={{width:44,height:44,borderRadius:14,background:`${br.accent}22`,border:`1px solid ${br.accent}44`,display:"flex",alignItems:"center",justifyContent:"center",fontWeight:800,color:br.accent,fontSize:"1.2rem"}}>{user.name[0]}</div>
-          <div><div style={{fontWeight:700}}>{user.name}</div><div style={{fontSize:"0.72rem",color:G.dim}}>{user.email}</div></div>
-        </div>
-        {isAdmin&&<button onClick={()=>{setMenu(false);setAdmin(true);}} style={{display:"flex",alignItems:"center",gap:14,width:"100%",padding:"14px",background:`${br.accent}08`,border:`1px solid ${br.accent}18`,borderRadius:14,color:G.text,fontFamily:G.font,fontSize:"0.88rem",fontWeight:600,cursor:"pointer",marginBottom:10}}>
-          <span style={{width:36,height:36,borderRadius:11,background:`${br.accent}18`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:"1.1rem"}}>⚙️</span>
-          <div><div>Panel de administración</div><div style={{fontSize:"0.7rem",color:G.dim,fontWeight:400}}>Branding, versión, config.</div></div>
-        </button>}
-        <button onClick={()=>{DB.clearSession();onLogout();}} style={{display:"flex",alignItems:"center",gap:14,width:"100%",padding:"14px",background:"#ff3d6e08",border:"1px solid #ff3d6e22",borderRadius:14,color:G.red,fontFamily:G.font,fontSize:"0.88rem",fontWeight:600,cursor:"pointer"}}>
-          <span style={{width:36,height:36,borderRadius:11,background:"#ff3d6e18",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"1.1rem"}}>↩</span>Cerrar sesión
-        </button>
-        <div style={{textAlign:"center",marginTop:16,fontSize:"0.62rem",color:"rgba(232,238,255,0.12)"}}>{br.name} · {br.sub} · v{br.version||APP_VERSION}</div>
-      </div>
-    </div>}
-  </div>;
-}
-
-// ── ROOT ───────────────────────────────────────────────────
-function App(){
-  const[user,setUser]=useState(()=>DB.session());
-  if(!user)return <Login onAuth={setUser}/>;
-  return <MainApp user={user} onLogout={()=>setUser(null)}/>;
-}
-const root=ReactDOM.createRoot(document.getElementById('root'));
-root.render(<App/>);
+// ── INIT ──
+renderDashboard();
 </script>
-<script id="sw-code" type="text/sw-source">
-const CACHE="usala-v3";
-const ASSETS=["/README.md-a-index.html/","/README.md-a-index.html/index.html","https://unpkg.com/react@18/umd/react.production.min.js","https://unpkg.com/react-dom@18/umd/react-dom.production.min.js","https://unpkg.com/@babel/standalone/babel.min.js"];
-self.addEventListener("install",e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS).catch(()=>{}))));
-self.addEventListener("activate",e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k))))));
-self.addEventListener("fetch",e=>{if(e.request.method!=="GET")return;e.respondWith(caches.match(e.request).then(cached=>{const fresh=fetch(e.request).then(r=>{if(r&&r.status===200){const clone=r.clone();caches.open(CACHE).then(c=>c.put(e.request,clone));}return r;}).catch(()=>{});return cached||fresh;}));});
-</script>
-<script>
-// Register SW from inline code
-(async function(){
-  if(!("serviceWorker" in navigator))return;
-  try{
-    const swCode=document.getElementById("sw-code").textContent;
-    const blob=new Blob([swCode],{type:"application/javascript"});
-    const swUrl=URL.createObjectURL(blob);
-    const reg=await navigator.serviceWorker.register(swUrl,{scope:"/"});
-    window._swReg=reg;
-    console.log("SW ok");
-  }catch(e){console.warn("SW failed",e);}
-})();
-// Create manifest dynamically
-const manifest={name:"USALA Suite Negocios",short_name:"USALA Suite",start_url:"./",display:"standalone",background_color:"#050812",theme_color:"#050812",description:"Sistema de gestión para tu negocio",icons:[{src:"https://raw.githubusercontent.com/Rikas75/usala/main/icon.png",sizes:"192x192",type:"image/png"},{src:"https://raw.githubusercontent.com/Rikas75/usala/main/icon.png",sizes:"512x512",type:"image/png"}]};
-const mBlob=new Blob([JSON.stringify(manifest)],{type:"application/json"});
-const mUrl=URL.createObjectURL(mBlob);
-document.querySelector("link[rel=manifest]")?.setAttribute("href",mUrl);
-</script>
-</body></html>
+</body>
+</html>
