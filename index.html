@@ -385,7 +385,7 @@ function Ventas({user,isAdmin}){
     const p=productos.find(x=>x.id===prod);
     if(!p){toast_("⚠ Producto no encontrado","#ff3d6e");return;}
     if(Number(p.stock||0)<Number(qty)){toast_("⚠ Stock insuficiente","#ff3d6e");return;}
-    const colabs=DB.colaboradores();const vend=colabs.find(c=>c.id===vendedorId)||{name:user.name,comision:10};
+    const colabs=DB.colaboradores();const vend=colabs.find(c=>c.id===vendedorId)||{nombre:user.nombre||user.email,comision:10};
     const subtotal=Number(p.precio)*Number(qty);
     const desc=Math.min(Number(descuento||0),subtotal);
     const total=subtotal-desc;
@@ -394,7 +394,7 @@ function Ventas({user,isAdmin}){
     const comisionMonto=total*(Number(vend.comision||10)/100);
     const v={id:uid(),producto:p.nombre,productoId:p.id,cantidad:Number(qty),precioUnit:p.precio,
       subtotal,descuento:desc,total,costo,utilidad,comisionMonto,
-      vendedor:vend.name,vendedorId,metodoPago:pagMethod,fecha:today(),hora:new Date().toLocaleTimeString("es-MX")};
+      vendedor:vend.nombre||vend.name||user.email,vendedorId,metodoPago:pagMethod,fecha:today(),hora:new Date().toLocaleTimeString("es-MX")};
     const nv=[...ventas,v];
     // actualizar stock
     const prods=DB.productos().map(x=>x.id===prod?{...x,stock:Number(x.stock)-Number(qty)}:x);
