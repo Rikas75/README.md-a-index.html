@@ -13,7 +13,21 @@ window._fs={collection,doc,setDoc,onSnapshot,deleteDoc,getDocs};
 window._fbReady=true;
 window.dispatchEvent(new Event("fbready"));
 </script>
+<link rel="manifest" href="manifest.json"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+<meta name="apple-mobile-web-app-title" content="USALA Suite"/>
 <style>*{margin:0;padding:0;box-sizing:border-box}html,body,#root{height:100%;background:#050812}body{overscroll-behavior:none}::-webkit-scrollbar{width:0}</style>
+<script>
+if("serviceWorker" in navigator){
+  window.addEventListener("load",()=>{
+    navigator.serviceWorker.register("sw.js").then(r=>{
+      console.log("SW registered");
+      window._swReg=r;
+    }).catch(e=>console.warn("SW error",e));
+  });
+}
+</script>
 </head><body><div id="root"></div><script type="text/babel">
 const{useState,useRef,useEffect,useCallback}=React;
 const fl=document.createElement("link");fl.rel="stylesheet";fl.href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap";document.head.appendChild(fl);
@@ -103,6 +117,8 @@ const DB={
   saveGastos:async g=>{STORE.gastos=g;await fbSave("gastos","all",g);notifyAll();},
   entradas:()=>STORE.entradas.length>0?STORE.entradas:DB.get("sn_entradas",[]),
   saveEntradas:async e=>{STORE.entradas=e;await fbSave("entradas","all",e);notifyAll();},
+  pendientes:()=>DB.get("sn_pendientes",[]),
+  savePendientes:async p=>{DB.set("sn_pendientes",p);await fbSave("pendientes","all",p);},
 };
 
 // ── HELPERS ────────────────────────────────────────────────
@@ -430,6 +446,7 @@ function Ventas({user}){
             <span style={{color:G.green}}>Utilidad: {fmt(v.utilidad)}</span>
             <span style={{color:G.yellow}}>Comisión: {fmt(v.comisionMonto)}</span>
           </div>
+          {isAdmin&&<button onClick={()=>{const all=DB.ventas();const nv=all.filter(x=>x.id!==v.id);DB.saveVentas(nv);setVentas(nv);if(v.productoId){const prods=DB.productos();DB.saveProductos(prods.map(p=>p.id===v.productoId?{...p,stock:Number(p.stock||0)+Number(v.cantidad||1)}:p));}pushUndo({label:`Venta "${v.producto}" eliminada`,undo:()=>{const r=[...DB.ventas(),v];DB.saveVentas(r);setVentas(r);if(v.productoId){const prods=DB.productos();DB.saveProductos(prods.map(p=>p.id===v.productoId?{...p,stock:Math.max(0,Number(p.stock||0)-Number(v.cantidad||1))}:p));}}});}} style={{marginTop:8,width:"100%",padding:"5px",background:"rgba(255,61,110,0.08)",border:"1px solid rgba(255,61,110,0.2)",borderRadius:8,color:"#ff3d6e",fontSize:"0.7rem",cursor:"pointer"}}>✕ Eliminar venta</button>}
         </Card>)}</>}
       {tab==="vendedor"&&<>{Object.keys(porVendedor).length===0&&<div style={{textAlign:"center",padding:"50px 0",color:G.dim}}>Sin datos</div>}
         {Object.entries(porVendedor).sort((a,b)=>b[1].total-a[1].total).map(([nombre,d],i)=><Card key={i} style={{padding:"16px",marginBottom:10}}>
@@ -472,7 +489,7 @@ function Ventas({user}){
 }
 
 // ── PRODUCTOS ──────────────────────────────────────────────
-function Productos(){
+function Productos({user,isAdmin}){
   const br=DB.brand();
   const[productos,setProductos]=useState(DB.productos());
   const[modal,setModal]=useState(null);
@@ -484,19 +501,20 @@ function Productos(){
   function toast_(m,c){setToast({m,c});setTimeout(()=>setToast(""),3000);}
   function guardar(){
     if(!form.nombre||!form.costo||!form.precio){toast_("⚠ Nombre, costo y precio son requeridos","#ff3d6e");return;}
-    const ps=DB.productos();
-    if(modal==="nuevo"){
-      const p={...form,id:uid(),costo:Number(form.costo),precio:Number(form.precio),stock:Number(form.stock||0),createdAt:today()};
-      const nps=[...ps,p];DB.saveProductos(nps);setProductos(nps);toast_("✓ Producto agregado");
-    }else{
-      const nps=ps.map(p=>p.id===modal?{...p,...form,costo:Number(form.costo),precio:Number(form.precio),stock:Number(form.stock||0)}:p);
-      DB.saveProductos(nps);setProductos(nps);toast_("✓ Producto actualizado");
-    }
-    setModal(null);setForm({nombre:"",costo:"",precio:"",stock:"",categoria:"fundas",proveedor:"",codigo:""});
-  }
-  function eliminar(id){const nps=DB.productos().filter(p=>p.id!==id);DB.saveProductos(nps);setProductos(nps);toast_("⊘ Producto eliminado","#ff3d6e");}
-  function editar(p){setForm({nombre:p.nombre,costo:String(p.costo),precio:String(p.precio),stock:String(p.stock||0),categoria:p.categoria||"fundas",proveedor:p.proveedor||""});setModal(p.id);}
-  const filtrados=productos.filter(p=>p.nombre?.toLowerCase().includes(busca.toLowerCase()));
+     const ps=DB.productos();
+     if(modal==="nuevo"){
+       const p={...form,id:uid(),costo:Number(form.costo),precio:Number(form.precio),stock:Number(form.stock||0),createdAt:today()};
+       const nps=[...ps,p];DB.saveProductos(nps);setProductos(nps);
+       pushUndo({label:`Producto "${p.nombre}" agregado`,undo:()=>{const r=DB.productos().filter(x=>x.id!==p.id);DB.saveProductos(r);setProductos(r);},edit:()=>{setForm({nombre:p.nombre,costo:String(p.costo),precio:String(p.precio),stock:String(p.stock),categoria:p.categoria,proveedor:p.proveedor||"",codigo:p.codigo||""});setModal(p.id);}});
+     }else{
+       const prev=ps.find(x=>x.id===modal);
+       const p={...prev,...form,id:modal,costo:Number(form.costo),precio:Number(form.precio),stock:Number(form.stock||0)};
+       const nps=ps.map(x=>x.id===modal?p:x);
+       DB.saveProductos(nps);setProductos(nps);
+       pushUndo({label:`Producto "${p.nombre}" modificado`,undo:()=>{const r=DB.productos().map(x=>x.id===prev.id?prev:x);DB.saveProductos(r);setProductos(r);},edit:()=>{setForm({nombre:p.nombre,costo:String(p.costo),precio:String(p.precio),stock:String(p.stock),categoria:p.categoria,proveedor:p.proveedor||"",codigo:p.codigo||""});setModal(p.id);}});
+     }
+     setModal(null);setForm({nombre:"",costo:"",precio:"",stock:"",categoria:"fundas",proveedor:"",codigo:""});
+   }
   const totalInventario=productos.reduce((a,p)=>a+Number(p.precio)*Number(p.stock||0),0);
   return <div style={{display:"flex",flexDirection:"column",height:"100%"}}>
     <div style={{padding:"14px 16px",borderBottom:`1px solid ${G.gb}`,flexShrink:0}}>
@@ -523,18 +541,18 @@ function Productos(){
             </div>
           </div>
           <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr",gap:8}}>
-            <div style={{textAlign:"center",padding:"8px 4px",background:"rgba(255,255,255,0.03)",borderRadius:10}}>
+            {isAdmin&&<div style={{textAlign:"center",padding:"8px 4px",background:"rgba(255,255,255,0.03)",borderRadius:10}}>
               <div style={{fontSize:"0.6rem",color:G.dim,marginBottom:2}}>COSTO</div>
               <div style={{fontSize:"0.82rem",fontWeight:700,color:G.text}}>{fmt(p.costo)}</div>
-            </div>
+            </div>}
             <div style={{textAlign:"center",padding:"8px 4px",background:"rgba(255,255,255,0.03)",borderRadius:10}}>
               <div style={{fontSize:"0.6rem",color:G.dim,marginBottom:2}}>PRECIO</div>
               <div style={{fontSize:"0.82rem",fontWeight:700,color:br.accent}}>{fmt(p.precio)}</div>
             </div>
-            <div style={{textAlign:"center",padding:"8px 4px",background:"rgba(255,255,255,0.03)",borderRadius:10}}>
+            {isAdmin&&<div style={{textAlign:"center",padding:"8px 4px",background:"rgba(255,255,255,0.03)",borderRadius:10}}>
               <div style={{fontSize:"0.6rem",color:G.dim,marginBottom:2}}>MARGEN</div>
               <div style={{fontSize:"0.82rem",fontWeight:700,color:G.green}}>{margen}%</div>
-            </div>
+            </div>}
             <div style={{textAlign:"center",padding:"8px 4px",background:stockBajo?"rgba(255,60,110,0.08)":"rgba(255,255,255,0.03)",borderRadius:10,border:stockBajo?"1px solid #ff3d6e33":"none"}}>
               <div style={{fontSize:"0.6rem",color:G.dim,marginBottom:2}}>STOCK</div>
               <div style={{fontSize:"0.82rem",fontWeight:700,color:stockBajo?G.red:G.text}}>{p.stock||0}</div>
@@ -546,7 +564,7 @@ function Productos(){
     {modal&&<Modal title={modal==="nuevo"?"Nuevo Producto":"Editar Producto"} onClose={()=>setModal(null)}>
       <Inp label="Nombre del producto" placeholder="Ej: Funda iPhone 15 Pro" value={form.nombre} onChange={v=>setForm(f=>({...f,nombre:v}))}/>
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:12}}>
-        <Inp label="Costo ($)" type="number" placeholder="0.00" value={form.costo} onChange={v=>setForm(f=>({...f,costo:v}))}/>
+        {isAdmin&&<Inp label="Costo ($)" type="number" placeholder="0.00" value={form.costo} onChange={v=>setForm(f=>({...f,costo:v}))}/>}
         <Inp label="Precio venta ($)" type="number" placeholder="0.00" value={form.precio} onChange={v=>setForm(f=>({...f,precio:v}))}/>
       </div>
       <Inp label="Stock inicial" type="number" placeholder="0" value={form.stock} onChange={v=>setForm(f=>({...f,stock:v}))}/>
@@ -580,10 +598,11 @@ function Colaboradores(){
     const cs=DB.colaboradores();
     if(modal==="nuevo"){
       const c={...form,id:uid(),comision:Number(form.comision||10),activo:true,createdAt:today(),ventas:0,totalVentas:0};
-      DB.saveColaboradores([...cs,c]);setColabs([...cs,c]);toast_("✓ Colaborador agregado");
+      const newColabs=[...cs,c];DB.saveColaboradores(newColabs);setColabs(newColabs);pushUndo({label:`Colaborador "${c.nombre}" agregado`,undo:()=>{const r=DB.colaboradores().filter(x=>x.id!==c.id);DB.saveColaboradores(r);setColabs(r);},edit:()=>{setForm({nombre:c.nombre,email:c.email||"",telefono:c.telefono||"",cargo:c.cargo||"vendedor",comision:String(c.comision||10),zona:c.zona||""});setModal(c.id);}});
     }else{
+      const prevColab=cs.find(c=>c.id===modal);
       const ncs=cs.map(c=>c.id===modal?{...c,...form,comision:Number(form.comision||10)}:c);
-      DB.saveColaboradores(ncs);setColabs(ncs);toast_("✓ Actualizado");
+      DB.saveColaboradores(ncs);setColabs(ncs);pushUndo({label:`Colaborador "${form.nombre}" modificado`,undo:()=>{const r=DB.colaboradores().map(c=>c.id===prevColab.id?prevColab:c);DB.saveColaboradores(r);setColabs(r);},edit:()=>{setForm({nombre:form.nombre,email:form.email||"",telefono:form.telefono||"",cargo:form.cargo||"vendedor",comision:String(form.comision||10),zona:form.zona||""});setModal(modal);}});
     }
     setModal(null);
   }
@@ -617,11 +636,12 @@ function Colaboradores(){
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:10}}>
           <div style={{display:"flex",gap:10,alignItems:"center"}}>
             <div style={{width:42,height:42,borderRadius:14,background:`${br.accent}18`,border:`1px solid ${br.accent}33`,display:"flex",alignItems:"center",justifyContent:"center",fontWeight:800,color:br.accent,fontSize:"1.1rem"}}>{c.nombre[0]}</div>
-            <div><div style={{fontWeight:700}}>{c.nombre}</div><div style={{fontSize:"0.7rem",color:G.dim}}>{c.cargo} {c.zona?`· ${c.zona}`:""}</div></div>
+            <div><div style={{display:"flex",gap:6,alignItems:"center"}}><div style={{fontWeight:700}}>{c.nombre}</div>{c.role==="admin2"&&<div style={{background:"rgba(206,147,216,0.2)",color:"#CE93D8",fontSize:"0.6rem",fontWeight:700,padding:"2px 7px",borderRadius:10}}>ADMIN 2</div>}</div><div style={{fontSize:"0.7rem",color:G.dim}}>{c.cargo} {c.zona?`· ${c.zona}`:""}</div></div>
           </div>
           <div style={{display:"flex",gap:6}}>
             <button onClick={()=>toggleActivo(c.id)} style={{fontSize:"0.65rem",padding:"4px 10px",borderRadius:50,background:c.activo?`${G.green}18`:"rgba(255,255,255,0.05)",border:`1px solid ${c.activo?G.green+"44":G.gb}`,color:c.activo?G.green:G.dim,cursor:"pointer"}}>{c.activo?"Activo":"Inactivo"}</button>
             <button onClick={()=>{setForm({nombre:c.nombre,email:c.email||"",telefono:c.telefono||"",cargo:c.cargo||"vendedor",comision:String(c.comision||10),zona:c.zona||""});setModal(c.id);}} style={{width:28,height:28,borderRadius:9,background:`${br.accent}18`,border:`1px solid ${br.accent}33`,color:br.accent,cursor:"pointer",fontSize:"0.75rem"}}>✎</button>
+            {isPrimaryAdmin&&<button onClick={()=>toggleAdmin2(c.id)} title={c.role==="admin2"?"Quitar Admin 2":"Dar Admin 2"} style={{width:28,height:28,borderRadius:9,background:c.role==="admin2"?"rgba(206,147,216,0.18)":"rgba(255,255,255,0.05)",border:`1px solid ${c.role==="admin2"?"#CE93D844":G.gb}`,color:c.role==="admin2"?"#CE93D8":G.dim,cursor:"pointer",fontSize:"0.75rem"}}>👑</button>}
           </div>
         </div>
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8}}>
@@ -676,7 +696,7 @@ function Proveedores(){
     }
     setModal(null);
   }
-  function eliminar(id){const ps=DB.proveedores().filter(p=>p.id!==id);DB.saveProveedores(ps);setProvs(ps);toast_("⊘ Eliminado","#ff3d6e");}
+  function eliminar(id){const prev=DB.proveedores().find(p=>p.id===id);const ps=DB.proveedores().filter(p=>p.id!==id);DB.saveProveedores(ps);setProvs(ps);pushUndo({label:`Proveedor "${prev?.nombre}" eliminado`,undo:()=>{const r=[...DB.proveedores(),prev];DB.saveProveedores(r);setProvs(r);},edit:()=>{setForm({nombre:prev.nombre||"",contacto:prev.contacto||"",telefono:prev.telefono||"",email:prev.email||"",categoria:prev.categoria||"fundas",credito:String(prev.credito||0),notas:prev.notas||""});setModal(prev.id);}});}
   return <div style={{display:"flex",flexDirection:"column",height:"100%"}}>
     <div style={{padding:"14px 16px",borderBottom:`1px solid ${G.gb}`,flexShrink:0}}>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
@@ -737,7 +757,7 @@ function Finanzas(){
     setModal(false);setForm({concepto:"",monto:"",categoria:"operativo",fecha:today(),notas:""});
     toast_("✓ Gasto registrado");
   }
-  function eliminar(id){const ng=DB.gastos().filter(g=>g.id!==id);DB.saveGastos(ng);setGastos(ng);}
+  function eliminar(id){const prev=DB.gastos().find(g=>g.id===id);const ng=DB.gastos().filter(g=>g.id!==id);DB.saveGastos(ng);setGastos(ng);pushUndo({label:`Gasto "${prev?.concepto||"Gasto"}" eliminado`,undo:()=>{const r=[...DB.gastos(),prev];DB.saveGastos(r);setGastos(r);},edit:()=>{setForm({concepto:prev.concepto||"",monto:String(prev.monto||""),categoria:prev.categoria||"operativo",fecha:prev.fecha||today(),notas:prev.notas||""});setModal(true);}});}
   const ventas=DB.ventas();
   const hoy=today();
   const filtrar=(items)=>{
@@ -816,6 +836,41 @@ function Finanzas(){
   </div>;
 }
 
+
+
+// ── UNDO SYSTEM ────────────────────────────────────────────
+let _undoListeners=[];
+
+function pushUndo({label,undo,edit}){
+  // edit = function that opens the form pre-filled with previous data
+  _undoListeners.forEach(fn=>fn({label,undo,edit}));
+}
+function onUndo(fn){_undoListeners.push(fn);return()=>{_undoListeners=_undoListeners.filter(x=>x!==fn);};}
+
+function UndoToast(){
+  const[item,setItem]=useState(null);
+  const br=DB.brand();
+
+  useEffect(()=>{
+    const off=onUndo((newItem)=>{setItem(newItem);});
+    return()=>off();
+  },[]);
+
+  if(!item)return null;
+  return <div style={{position:"fixed",bottom:80,left:"50%",transform:"translateX(-50%)",zIndex:9000,width:"calc(100% - 32px)",maxWidth:400,animation:"fadeUp 0.25s ease"}}>
+    <style>{`@keyframes fadeUp{from{opacity:0;transform:translateX(-50%) translateY(16px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}`}</style>
+    <div style={{background:"#111827",border:`1px solid ${br.accent}55`,borderRadius:18,overflow:"hidden",boxShadow:"0 8px 40px rgba(0,0,0,0.6)"}}>
+      <div style={{padding:"14px 16px"}}>
+        <div style={{fontSize:"0.78rem",color:G.dim,marginBottom:10}}>✓ {item.label}</div>
+        <div style={{display:"flex",gap:8}}>
+          {item.edit&&<button onClick={()=>{item.edit();setItem(null);}} style={{flex:1,background:`${br.accent}18`,border:`1px solid ${br.accent}44`,color:br.accent,fontWeight:700,fontSize:"0.8rem",padding:"9px 0",borderRadius:12,cursor:"pointer"}}>✏️ Modificar</button>}
+          {item.undo&&<button onClick={()=>{item.undo();setItem(null);}} style={{flex:1,background:"rgba(255,61,110,0.12)",border:"1px solid rgba(255,61,110,0.3)",color:"#ff3d6e",fontWeight:700,fontSize:"0.8rem",padding:"9px 0",borderRadius:12,cursor:"pointer"}}>↩ Deshacer</button>}
+          <button onClick={()=>setItem(null)} style={{width:38,background:"rgba(255,255,255,0.05)",border:"1px solid rgba(255,255,255,0.1)",color:G.dim,fontSize:"0.85rem",padding:"9px 0",borderRadius:12,cursor:"pointer"}}>✕</button>
+        </div>
+      </div>
+    </div>
+  </div>;
+}
 
 // ── SCANNER ────────────────────────────────────────────────
 function Scanner({onScan,onClose}){
@@ -974,6 +1029,293 @@ function Entradas(){
   </div>;
 }
 
+
+
+
+// ── INSTALL PWA ────────────────────────────────────────────
+function InstallPWA(){
+  const[prompt,setPrompt]=useState(null);
+  const[installed,setInstalled]=useState(false);
+  const br=DB.brand();
+  useEffect(()=>{
+    const handler=e=>{e.preventDefault();setPrompt(e);};
+    window.addEventListener("beforeinstallprompt",handler);
+    window.addEventListener("appinstalled",()=>setInstalled(true));
+    if(window.matchMedia("(display-mode: standalone)").matches)setInstalled(true);
+    return()=>window.removeEventListener("beforeinstallprompt",handler);
+  },[]);
+  if(installed)return <Card style={{padding:"14px",marginTop:12,background:`${DB.brand().accent}11`,border:`1px solid ${DB.brand().accent}33`}}>
+    <div style={{display:"flex",gap:10,alignItems:"center"}}><div style={{fontSize:"1.2rem"}}>✅</div><div><div style={{fontWeight:700,fontSize:"0.82rem"}}>App instalada</div><div style={{fontSize:"0.7rem",color:G.dim}}>Funciona sin internet</div></div></div>
+  </Card>;
+  if(!prompt)return <Card style={{padding:"14px",marginTop:12}}>
+    <div style={{display:"flex",gap:10,alignItems:"center"}}><div style={{fontSize:"1.2rem"}}>📱</div><div><div style={{fontWeight:700,fontSize:"0.82rem"}}>Instalar app</div><div style={{fontSize:"0.7rem",color:G.dim}}>En Chrome: menú ⋮ → "Instalar app" o "Añadir a pantalla de inicio"</div></div></div>
+  </Card>;
+  return <Card style={{padding:"14px",marginTop:12}}>
+    <div style={{display:"flex",gap:10,alignItems:"center",marginBottom:10}}><div style={{fontSize:"1.2rem"}}>📱</div><div><div style={{fontWeight:700,fontSize:"0.82rem"}}>Instalar en tu dispositivo</div><div style={{fontSize:"0.7rem",color:G.dim}}>Funciona sin internet</div></div></div>
+    <Btn onClick={async()=>{if(prompt){prompt.prompt();const r=await prompt.userChoice;if(r.outcome==="accepted")setInstalled(true);setPrompt(null);}}} full color={br.accent}>⬇ Instalar app</Btn>
+  </Card>;
+}
+
+// ── NOTICIA BANNER ─────────────────────────────────────────
+function NoticiaBanner({user}){
+  const[noticias,setNoticias]=useState([]);
+  const[idx,setIdx]=useState(0);
+  const[visible,setVisible]=useState(false);
+  useEffect(()=>{
+    if(!window._db||!window._fs)return;
+    const unsub=window._fs.onSnapshot(window._fs.collection(window._db,"noticias"),snap=>{
+      const items=[];
+      snap.forEach(d=>items.push(d.data()));
+      items.sort((a,b)=>b.ts-a.ts);
+      const leidas=JSON.parse(localStorage.getItem("sn_noticias_leidas")||"[]");
+      const nuevas=items.filter(n=>!leidas.includes(n.id));
+      if(nuevas.length>0){setNoticias(nuevas);setIdx(0);setVisible(true);}
+    });
+    return()=>unsub();
+  },[]);
+  if(!visible||noticias.length===0)return null;
+  const n=noticias[idx];
+  const br=DB.brand();
+  function cerrar(){
+    const leidas=JSON.parse(localStorage.getItem("sn_noticias_leidas")||"[]");
+    noticias.forEach(x=>{if(!leidas.includes(x.id))leidas.push(x.id);});
+    localStorage.setItem("sn_noticias_leidas",JSON.stringify(leidas));
+    setVisible(false);
+  }
+  const tipoColor=n.tipo==="urgente"?"#ff3d6e":n.tipo==="mejora"?"#00E5A0":n.tipo==="producto"?"#4FC3F7":"#CE93D8";
+  return <div style={{position:"fixed",inset:0,zIndex:8888,background:"rgba(0,0,0,0.7)",display:"flex",alignItems:"center",justifyContent:"center",padding:20}}>
+    <div style={{background:"#0d1425",border:`1px solid ${tipoColor}44`,borderRadius:20,padding:"24px",maxWidth:360,width:"100%",boxShadow:`0 0 40px ${tipoColor}22`}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16}}>
+        <div style={{background:`${tipoColor}22`,color:tipoColor,fontSize:"0.7rem",fontWeight:700,padding:"4px 10px",borderRadius:20,letterSpacing:1}}>{n.tipo?.toUpperCase()}</div>
+        <div style={{fontSize:"0.7rem",color:G.dim}}>{n.fecha}</div>
+      </div>
+      <div style={{fontWeight:800,fontSize:"1rem",marginBottom:10,color:G.text}}>{n.titulo}</div>
+      <div style={{fontSize:"0.82rem",color:G.dim,lineHeight:1.6,marginBottom:20}}>{n.mensaje}</div>
+      {noticias.length>1&&<div style={{display:"flex",gap:6,marginBottom:16,justifyContent:"center"}}>
+        {noticias.map((_,i)=><div key={i} onClick={()=>setIdx(i)} style={{width:6,height:6,borderRadius:"50%",background:i===idx?br.accent:G.dim2,cursor:"pointer"}}/>)}
+      </div>}
+      <Btn onClick={cerrar} full color={tipoColor}>Entendido ✓</Btn>
+    </div>
+  </div>;
+}
+
+// ── MI CUENTA ──────────────────────────────────────────────
+function MiCuenta({user}){
+  const br=DB.brand();
+  const[tab,setTab]=useState("cuenta");
+  const[rating,setRating]=useState(0);
+  const[hoverStar,setHoverStar]=useState(0);
+  const[sugerencia,setSugerencia]=useState("");
+  const[toast,setToast]=useState("");
+  const[notifOk,setNotifOk]=useState(false);
+  const[notifPerm,setNotifPerm]=useState(user?.notifEnabled||false);
+  function toast_(m,c){setToast({m,c});setTimeout(()=>setToast(""),3000);}
+  const plan=user?.plan==="lifetime"?"PREMIUM":user?.plan==="paid"?"BÁSICA":"PRUEBA";
+  const planColor=plan==="PREMIUM"?br.accent:plan==="BÁSICA"?G.blue:G.yellow;
+  const sincro=localStorage.getItem("sn_lastSync")||"Sin sincronizar";
+  function enviarSugerencia(){
+    if(!sugerencia.trim()){toast_("⚠ Escribe tu sugerencia","#ff3d6e");return;}
+    window.open(`mailto:rikaspalos@gmail.com?subject=Sugerencia USALA Suite&body=${encodeURIComponent(sugerencia)}`);
+    setSugerencia("");
+    toast_("✓ Abriendo correo...");
+  }
+  function toggleNotif(){
+    const users=DB.users();
+    const u=users[user.email];
+    if(u){u.notifEnabled=!notifPerm;users[user.email]=u;DB.saveUsers(users);}
+    setNotifPerm(!notifPerm);
+    toast_(!notifPerm?"✓ Notificaciones activadas":"Notificaciones desactivadas");
+  }
+  const tabs2=[{id:"cuenta",l:"Mi Cuenta"},{id:"datos",l:"Mis Datos"},{id:"opinion",l:"Opinión"},{id:"config",l:"Perfil"}];
+  return <div style={{display:"flex",flexDirection:"column",height:"100%"}}>
+    <div style={{padding:"14px 16px 0",borderBottom:`1px solid ${G.gb}`,flexShrink:0}}>
+      <div style={{fontWeight:800,fontSize:"1.1rem",marginBottom:12}}>👤 Mi Cuenta</div>
+      <div style={{display:"flex",gap:8,overflowX:"auto",paddingBottom:1}}>
+        {tabs2.map(t=><Pill key={t.id} active={tab===t.id} color={br.accent} onClick={()=>setTab(t.id)}>{t.l}</Pill>)}
+      </div>
+    </div>
+    <div style={{flex:1,overflowY:"auto",padding:"16px",paddingBottom:80}}>
+      {tab==="cuenta"&&<>
+        <Card style={{padding:"20px",marginBottom:12,textAlign:"center"}}>
+          <div style={{width:64,height:64,borderRadius:22,background:`${br.accent}22`,display:"flex",alignItems:"center",justifyContent:"center",fontSize:"1.8rem",margin:"0 auto 12px"}}>👤</div>
+          <div style={{fontWeight:800,fontSize:"1rem",marginBottom:4}}>{user?.email}</div>
+          <div style={{display:"inline-block",background:planColor,color:"#050812",fontWeight:800,fontSize:"0.72rem",padding:"4px 14px",borderRadius:20,letterSpacing:1}}>{plan}</div>
+        </Card>
+        <Card style={{padding:"16px",marginBottom:12}}>
+          <div style={{fontWeight:700,marginBottom:12,fontSize:"0.85rem"}}>Suscripción</div>
+          {[["Plan actual",plan],["Estado",user?.plan==="lifetime"?"Activo permanente":user?.approvedAt?"Activo":"Pendiente"],["Acceso",user?.role==="admin"?"Administrador":"Vendedor"]].map(([l,v])=><div key={l} style={{display:"flex",justifyContent:"space-between",padding:"8px 0",borderBottom:`1px solid ${G.dim2}`,fontSize:"0.82rem"}}><span style={{color:G.dim}}>{l}</span><span style={{fontWeight:600,color:v===plan?planColor:G.text}}>{v}</span></div>)}
+        </Card>
+        <Card style={{padding:"16px"}}>
+          <div style={{fontWeight:700,marginBottom:12,fontSize:"0.85rem"}}>Notificaciones</div>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+            <div><div style={{fontSize:"0.82rem"}}>Noticias y actualizaciones</div><div style={{fontSize:"0.7rem",color:G.dim}}>Recibe novedades del administrador</div></div>
+            <button onClick={toggleNotif} style={{width:48,height:26,borderRadius:13,border:"none",cursor:"pointer",background:notifPerm?br.accent:G.dim2,transition:"background 0.2s",position:"relative"}}>
+              <div style={{position:"absolute",top:3,left:notifPerm?24:3,width:20,height:20,borderRadius:"50%",background:"white",transition:"left 0.2s"}}/>
+            </button>
+          </div>
+        </Card>
+      </>}
+      {tab==="datos"&&<>
+        <Card style={{padding:"16px",marginBottom:12}}>
+          <div style={{fontWeight:700,marginBottom:12,fontSize:"0.85rem"}}>📋 Mis Datos</div>
+          {[
+            ["Correo",user?.email||"—"],
+            ["ID Usuario",user?.id||(user?.email?.split("@")[0])||"—"],
+            ["Rol",user?.role==="admin"?"Administrador":"Vendedor"],
+            ["Cuenta creada",user?.createdAt||user?.approvedAt||"—"],
+            ["Última sincronización",sincro],
+            ["Versión app",br.version||"1.0.0"],
+            ["Modo offline","Disponible (PWA)"],
+          ].map(([l,v])=><div key={l} style={{display:"flex",justifyContent:"space-between",padding:"10px 0",borderBottom:`1px solid ${G.dim2}`,fontSize:"0.82rem"}}><span style={{color:G.dim}}>{l}</span><span style={{fontWeight:600,color:G.text,textAlign:"right",maxWidth:"55%",wordBreak:"break-all"}}>{v}</span></div>)}
+        </Card>
+      </>}
+      {tab==="opinion"&&<>
+        <Card style={{padding:"20px",marginBottom:12,textAlign:"center"}}>
+          <div style={{fontWeight:700,fontSize:"0.9rem",marginBottom:16}}>⭐ Califica la app</div>
+          <div style={{display:"flex",justifyContent:"center",gap:8,marginBottom:8}}>
+            {[1,2,3,4,5].map(s=><button key={s} onMouseEnter={()=>setHoverStar(s)} onMouseLeave={()=>setHoverStar(0)} onClick={()=>{setRating(s);toast_(`✓ Gracias por tu calificación de ${s} estrellas`);}} style={{background:"none",border:"none",cursor:"pointer",fontSize:"2rem",color:(hoverStar||rating)>=s?"#FFCC02":"rgba(255,255,255,0.15)",transition:"color 0.1s"}}>★</button>)}
+          </div>
+          <div style={{fontSize:"0.75rem",color:G.dim}}>{rating===0?"Toca para calificar":rating===1?"Necesita mejorar":rating===2?"Regular":rating===3?"Buena":rating===4?"Muy buena":"¡Excelente!"}</div>
+        </Card>
+        <Card style={{padding:"16px"}}>
+          <div style={{fontWeight:700,fontSize:"0.85rem",marginBottom:12}}>💬 Sugerencias</div>
+          <textarea value={sugerencia} onChange={e=>setSugerencia(e.target.value)} placeholder="Escribe tu sugerencia, reporte de error o idea de mejora..." style={{width:"100%",minHeight:120,background:G.glass,border:`1px solid ${G.dim2}`,borderRadius:12,padding:"12px",color:G.text,fontFamily:G.font,fontSize:"0.82rem",resize:"vertical",outline:"none"}}/>
+          <Btn onClick={enviarSugerencia} full color={br.accent} style={{marginTop:12}}>📧 Enviar sugerencia</Btn>
+        </Card>
+      </>}
+      {tab==="config"&&<BrandingConfig/>}
+    </div>
+    {toast&&<Toast msg={toast.m} color={toast.c}/>}
+  </div>;
+}
+
+
+// ── APROBACIONES ───────────────────────────────────────────
+function Aprobaciones(){
+  const br=DB.brand();
+  const[pendientes,setPendientes]=useState(()=>DB.get("sn_pendientes",[]));
+  const[toast,setToast]=useState("");
+  function toast_(m,c){setToast({m,c});setTimeout(()=>setToast(""),3000);}
+
+  useEffect(()=>{
+    if(!window._db||!window._fs)return;
+    const unsub=window._fs.onSnapshot(window._fs.collection(window._db,"pendientes"),snap=>{
+      const items=[];
+      snap.forEach(d=>{const dat=d.data();if(dat.status==="pendiente")items.push(dat);});
+      setPendientes(items);
+      DB.set("sn_pendientes",items);
+    });
+    return()=>unsub();
+  },[]);
+
+  function aprobar(req){
+    const prods=DB.productos();
+    if(req.tipo==="nuevo_producto"){
+      const p={id:uid(),nombre:req.data.nombre,costo:0,precio:Number(req.data.precio),stock:Number(req.data.stock||0),categoria:req.data.categoria||"fundas",proveedor:req.data.proveedor||"",codigo:req.data.codigo||"",margen:0};
+      DB.saveProductos([...prods,p]);
+    } else if(req.tipo==="editar_producto"){
+      const np=prods.map(p=>p.id===req.productoId?{...p,nombre:req.data.nombre,precio:Number(req.data.precio),stock:Number(req.data.stock||0),categoria:req.data.categoria||p.categoria}:p);
+      DB.saveProductos(np);
+    }
+    eliminarPendiente(req.id);
+    toast_("✓ Solicitud aprobada y aplicada");
+  }
+
+  function rechazar(req){
+    eliminarPendiente(req.id);
+    toast_("Solicitud rechazada","#ff3d6e");
+  }
+
+  function eliminarPendiente(id){
+    const arr=pendientes.filter(p=>p.id!==id);
+    setPendientes(arr);
+    DB.set("sn_pendientes",arr);
+    if(window._db&&window._fs){window._fs.deleteDoc(window._fs.doc(window._db,"pendientes",id)).catch(()=>{});}
+  }
+
+  return <div style={{display:"flex",flexDirection:"column",height:"100%"}}>
+    <div style={{padding:"14px 16px",borderBottom:`1px solid ${G.gb}`,flexShrink:0}}>
+      <div style={{fontWeight:800,fontSize:"1.1rem"}}>✅ Aprobaciones</div>
+      <div style={{fontSize:"0.7rem",color:G.dim}}>{pendientes.length} solicitudes pendientes</div>
+    </div>
+    <div style={{flex:1,overflowY:"auto",padding:"16px",paddingBottom:80}}>
+      {pendientes.length===0&&<div style={{textAlign:"center",padding:"50px 0",color:G.dim,fontSize:"0.82rem"}}>Sin solicitudes pendientes ✓</div>}
+      {pendientes.map(req=><Card key={req.id} style={{padding:"16px",marginBottom:12,border:`1px solid ${G.yellow}33`}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",marginBottom:10}}>
+          <div>
+            <div style={{fontWeight:700,fontSize:"0.85rem",marginBottom:2}}>{req.tipo==="nuevo_producto"?"📦 Nuevo producto":"✏️ Editar producto"}</div>
+            <div style={{fontSize:"0.7rem",color:G.dim}}>{req.solicitante} · {req.fecha}</div>
+          </div>
+          <div style={{background:`${G.yellow}22`,color:G.yellow,fontSize:"0.65rem",fontWeight:700,padding:"3px 8px",borderRadius:10}}>PENDIENTE</div>
+        </div>
+        <div style={{background:G.glass,borderRadius:10,padding:"10px",marginBottom:12,fontSize:"0.78rem"}}>
+          {[["Nombre",req.data.nombre],["Precio",`$${req.data.precio}`],["Stock",req.data.stock||0],["Categoría",req.data.categoria]].map(([l,v])=><div key={l} style={{display:"flex",gap:8,marginBottom:4}}><span style={{color:G.dim,minWidth:70}}>{l}:</span><span style={{fontWeight:600}}>{v}</span></div>)}
+        </div>
+        <div style={{display:"flex",gap:8}}>
+          <Btn onClick={()=>aprobar(req)} color={G.green} style={{flex:1}}>✓ Aprobar</Btn>
+          <Btn onClick={()=>rechazar(req)} color={G.red} style={{flex:1}}>✕ Rechazar</Btn>
+        </div>
+      </Card>)}
+    </div>
+    {toast&&<Toast msg={toast.m} color={toast.c}/>}
+  </div>;
+}
+
+// ── ADMIN NOTICIAS ─────────────────────────────────────────
+function AdminNoticias(){
+  const br=DB.brand();
+  const[noticias,setNoticias]=useState(()=>DB.get("sn_noticias",[]));
+  const[form,setForm]=useState({titulo:"",mensaje:"",tipo:"noticia"});
+  const[toast,setToast]=useState("");
+  function toast_(m,c){setToast({m,c});setTimeout(()=>setToast(""),3000);}
+  function publicar(){
+    if(!form.titulo.trim()||!form.mensaje.trim()){toast_("⚠ Escribe título y mensaje","#ff3d6e");return;}
+    const n={id:uid(),titulo:form.titulo,mensaje:form.mensaje,tipo:form.tipo,fecha:today(),leida:false};
+    const arr=[n,...noticias];
+    setNoticias(arr);
+    DB.set("sn_noticias",arr);
+    // Save to Firebase for all users
+    if(window._db&&window._fs){
+      window._fs.setDoc(window._fs.doc(window._db,"noticias",n.id),{...n,ts:Date.now()});
+    }
+    setForm({titulo:"",mensaje:"",tipo:"noticia"});
+    toast_("✓ Noticia publicada para todos los usuarios");
+  }
+  function eliminar(id){
+    const arr=noticias.filter(n=>n.id!==id);
+    setNoticias(arr);
+    DB.set("sn_noticias",arr);
+    if(window._db&&window._fs){window._fs.deleteDoc(window._fs.doc(window._db,"noticias",id)).catch(()=>{});}
+  }
+  const tipos=[["noticia","📰 Noticia"],["mejora","✨ Mejora"],["producto","📦 Nuevo producto"],["urgente","🔴 Urgente"]];
+  return <div style={{display:"flex",flexDirection:"column",height:"100%"}}>
+    <div style={{padding:"14px 16px",borderBottom:`1px solid ${G.gb}`,flexShrink:0}}>
+      <div style={{fontWeight:800,fontSize:"1.1rem"}}>📢 Noticias y Anuncios</div>
+      <div style={{fontSize:"0.7rem",color:G.dim}}>Mensajes que verán todos los usuarios al abrir la app</div>
+    </div>
+    <div style={{flex:1,overflowY:"auto",padding:"16px",paddingBottom:80}}>
+      <Card style={{padding:"16px",marginBottom:16}}>
+        <div style={{fontWeight:700,fontSize:"0.85rem",marginBottom:12}}>Nueva noticia</div>
+        <div style={{display:"flex",gap:8,marginBottom:12,flexWrap:"wrap"}}>
+          {tipos.map(([v,l])=><Pill key={v} active={form.tipo===v} color={br.accent} onClick={()=>setForm(f=>({...f,tipo:v}))}>{l}</Pill>)}
+        </div>
+        <Inp label="Título" placeholder="Ej: Nueva versión disponible" value={form.titulo} onChange={v=>setForm(f=>({...f,titulo:v}))}/>
+        <textarea value={form.mensaje} onChange={e=>setForm(f=>({...f,mensaje:e.target.value}))} placeholder="Escribe el mensaje completo..." style={{width:"100%",minHeight:100,background:G.glass,border:`1px solid ${G.dim2}`,borderRadius:12,padding:"12px",color:G.text,fontFamily:G.font,fontSize:"0.82rem",resize:"vertical",outline:"none",marginBottom:12}}/>
+        <Btn onClick={publicar} full color={br.accent}>📢 Publicar para todos</Btn>
+      </Card>
+      <div style={{fontWeight:700,fontSize:"0.85rem",marginBottom:10}}>Publicadas ({noticias.length})</div>
+      {noticias.length===0&&<div style={{textAlign:"center",padding:"30px 0",color:G.dim,fontSize:"0.82rem"}}>Sin noticias publicadas</div>}
+      {noticias.map(n=><Card key={n.id} style={{padding:"14px",marginBottom:10}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
+          <div style={{flex:1}}><div style={{fontWeight:700,fontSize:"0.85rem",marginBottom:4}}>{n.titulo}</div><div style={{fontSize:"0.75rem",color:G.dim,marginBottom:6}}>{n.fecha} · {tipos.find(t=>t[0]===n.tipo)?.[1]||n.tipo}</div><div style={{fontSize:"0.8rem",color:G.text}}>{n.mensaje}</div></div>
+          <button onClick={()=>eliminar(n.id)} style={{marginLeft:12,width:28,height:28,borderRadius:8,background:"rgba(255,61,110,0.15)",border:"1px solid rgba(255,61,110,0.3)",color:"#ff3d6e",cursor:"pointer",fontSize:"0.8rem",flexShrink:0}}>✕</button>
+        </div>
+      </Card>)}
+    </div>
+    {toast&&<Toast msg={toast.m} color={toast.c}/>}
+  </div>;
+}
+
 // ── ADMIN PANEL ────────────────────────────────────────────
 function AdminPanel({onClose}){
   const br=DB.brand();
@@ -1049,7 +1391,8 @@ function MainApp({user,onLogout}){
   const[menu,setMenu]=useState(false);
   const[admin,setAdmin]=useState(false);
   const dl=getDaysLeft(user);
-  const isAdmin=user.role==="admin";
+  const isAdmin=user.role==="admin"||user.role==="admin2";
+  const isPrimaryAdmin=user.role==="admin";
   const tabs=[
     {id:"dashboard",icon:"◈",label:"Inicio"},
     {id:"ventas",icon:"🛍",label:"Ventas"},
@@ -1058,6 +1401,9 @@ function MainApp({user,onLogout}){
     ...(isAdmin?[{id:"proveedores",icon:"🏭",label:"Proveed."}]:[]),
     ...(isAdmin?[{id:"finanzas",icon:"💹",label:"Finanzas"}]:[]),
     ...(isAdmin?[{id:"entradas",icon:"📥",label:"Entradas"}]:[]),
+    {id:"micuenta",icon:"👤",label:"Mi Cuenta"},
+    ...(isPrimaryAdmin?[{id:"admin_noticias",icon:"📢",label:"Noticias"}]:[]),
+    ...(isAdmin?[{id:"aprobaciones",icon:"✅",label:`Aprob.${DB.get("sn_pendientes",[]).filter(p=>p.status==="pendiente").length>0?" ●":""}`}]:[]),
   ];
   if(admin)return <AdminPanel onClose={()=>setAdmin(false)}/>;
   return <div style={{display:"flex",flexDirection:"column",height:"100vh",background:G.bg,fontFamily:G.font,color:G.text,position:"relative",overflow:"hidden"}}>
@@ -1074,11 +1420,15 @@ function MainApp({user,onLogout}){
     <div style={{position:"relative",zIndex:1,flex:1,overflow:"hidden",display:"flex",flexDirection:"column"}}>
       {tab==="dashboard"&&<div style={{flex:1,overflowY:"auto"}}><Dashboard user={user}/></div>}
       {tab==="ventas"&&<Ventas user={user}/>}
-      {tab==="productos"&&<Productos/>}
+      {tab==="productos"&&<Productos user={user} isAdmin={isAdmin}/>}
       {tab==="colaboradores"&&isAdmin&&<Colaboradores/>}
       {tab==="proveedores"&&isAdmin&&<Proveedores/>}
       {tab==="finanzas"&&isAdmin&&<Finanzas/>}
       {tab==="entradas"&&isAdmin&&<Entradas/>}
+      {tab==="micuenta"&&<MiCuenta user={user}/>}
+      {tab==="admin_noticias"&&isAdmin&&<AdminNoticias/>}
+      {tab==="aprobaciones"&&isAdmin&&<Aprobaciones/>}
+      <UndoToast/>
     </div>
     {/* Bottom nav */}
     <div style={{position:"relative",zIndex:10,display:"flex",borderTop:`1px solid ${G.gb}`,background:"rgba(5,8,18,0.9)",backdropFilter:"blur(20px)",flexShrink:0}}>
@@ -1119,4 +1469,31 @@ function App(){
 }
 const root=ReactDOM.createRoot(document.getElementById('root'));
 root.render(<App/>);
-</script></body></html>
+</script>
+<script id="sw-code" type="text/sw-source">
+const CACHE="usala-v3";
+const ASSETS=["/README.md-a-index.html/","/README.md-a-index.html/index.html","https://unpkg.com/react@18/umd/react.production.min.js","https://unpkg.com/react-dom@18/umd/react-dom.production.min.js","https://unpkg.com/@babel/standalone/babel.min.js"];
+self.addEventListener("install",e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS).catch(()=>{}))));
+self.addEventListener("activate",e=>e.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k))))));
+self.addEventListener("fetch",e=>{if(e.request.method!=="GET")return;e.respondWith(caches.match(e.request).then(cached=>{const fresh=fetch(e.request).then(r=>{if(r&&r.status===200){const clone=r.clone();caches.open(CACHE).then(c=>c.put(e.request,clone));}return r;}).catch(()=>{});return cached||fresh;}));});
+</script>
+<script>
+// Register SW from inline code
+(async function(){
+  if(!("serviceWorker" in navigator))return;
+  try{
+    const swCode=document.getElementById("sw-code").textContent;
+    const blob=new Blob([swCode],{type:"application/javascript"});
+    const swUrl=URL.createObjectURL(blob);
+    const reg=await navigator.serviceWorker.register(swUrl,{scope:"/"});
+    window._swReg=reg;
+    console.log("SW ok");
+  }catch(e){console.warn("SW failed",e);}
+})();
+// Create manifest dynamically
+const manifest={name:"USALA Suite Negocios",short_name:"USALA Suite",start_url:"./",display:"standalone",background_color:"#050812",theme_color:"#050812",description:"Sistema de gestión para tu negocio",icons:[{src:"https://raw.githubusercontent.com/Rikas75/usala/main/icon.png",sizes:"192x192",type:"image/png"},{src:"https://raw.githubusercontent.com/Rikas75/usala/main/icon.png",sizes:"512x512",type:"image/png"}]};
+const mBlob=new Blob([JSON.stringify(manifest)],{type:"application/json"});
+const mUrl=URL.createObjectURL(mBlob);
+document.querySelector("link[rel=manifest]")?.setAttribute("href",mUrl);
+</script>
+</body></html>
