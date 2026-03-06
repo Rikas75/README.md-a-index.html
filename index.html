@@ -355,7 +355,7 @@ function Dashboard({user}){
 }
 
 // ── VENTAS ─────────────────────────────────────────────────
-function Ventas({user}){
+function Ventas({user,isAdmin}){
   const br=DB.brand();
   const[tab,setTab]=useState("historial");
   const[modal,setModal]=useState(false);
@@ -1419,7 +1419,7 @@ function MainApp({user,onLogout}){
     {/* Content */}
     <div style={{position:"relative",zIndex:1,flex:1,overflow:"hidden",display:"flex",flexDirection:"column"}}>
       {tab==="dashboard"&&<div style={{flex:1,overflowY:"auto"}}><Dashboard user={user}/></div>}
-      {tab==="ventas"&&<Ventas user={user}/>}
+      {tab==="ventas"&&<Ventas user={user} isAdmin={isAdmin}/>}
       {tab==="productos"&&<Productos user={user} isAdmin={isAdmin}/>}
       {tab==="colaboradores"&&isAdmin&&<Colaboradores/>}
       {tab==="proveedores"&&isAdmin&&<Proveedores/>}
