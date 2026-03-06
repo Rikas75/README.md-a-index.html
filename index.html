@@ -585,7 +585,7 @@ function Productos({user,isAdmin}){
 }
 
 // ── COLABORADORES ──────────────────────────────────────────
-function Colaboradores(){
+function Colaboradores({isAdmin,isPrimaryAdmin}){
   const br=DB.brand();
   const[colabs,setColabs]=useState(DB.colaboradores());
   const[users,setUsers]=useState(DB.users());
@@ -677,7 +677,7 @@ function Colaboradores(){
 }
 
 // ── PROVEEDORES ────────────────────────────────────────────
-function Proveedores(){
+function Proveedores({isAdmin}){
   const br=DB.brand();
   const[provs,setProvs]=useState(DB.proveedores());
   const[modal,setModal]=useState(null);
@@ -742,7 +742,7 @@ function Proveedores(){
 }
 
 // ── FINANZAS ───────────────────────────────────────────────
-function Finanzas(){
+function Finanzas({isAdmin}){
   const br=DB.brand();
   const[gastos,setGastos]=useState(DB.gastos());
   const[modal,setModal]=useState(false);
@@ -934,7 +934,7 @@ function Scanner({onScan,onClose}){
 }
 
 // ── ENTRADAS ───────────────────────────────────────────────
-function Entradas(){
+function Entradas({isAdmin}){
   const br=DB.brand();
   const[entradas,setEntradas]=useState(DB.entradas());
   const[modal,setModal]=useState(false);
@@ -1100,7 +1100,7 @@ function NoticiaBanner({user}){
 }
 
 // ── MI CUENTA ──────────────────────────────────────────────
-function MiCuenta({user}){
+function MiCuenta({user,isAdmin,isPrimaryAdmin}){
   const br=DB.brand();
   const[tab,setTab]=useState("cuenta");
   const[rating,setRating]=useState(0);
@@ -1191,7 +1191,7 @@ function MiCuenta({user}){
 
 
 // ── APROBACIONES ───────────────────────────────────────────
-function Aprobaciones(){
+function Aprobaciones({isAdmin}){
   const br=DB.brand();
   const[pendientes,setPendientes]=useState(()=>DB.get("sn_pendientes",[]));
   const[toast,setToast]=useState("");
@@ -1262,7 +1262,7 @@ function Aprobaciones(){
 }
 
 // ── ADMIN NOTICIAS ─────────────────────────────────────────
-function AdminNoticias(){
+function AdminNoticias({isAdmin}){
   const br=DB.brand();
   const[noticias,setNoticias]=useState(()=>DB.get("sn_noticias",[]));
   const[form,setForm]=useState({titulo:"",mensaje:"",tipo:"noticia"});
@@ -1421,13 +1421,13 @@ function MainApp({user,onLogout}){
       {tab==="dashboard"&&<div style={{flex:1,overflowY:"auto"}}><Dashboard user={user}/></div>}
       {tab==="ventas"&&<Ventas user={user} isAdmin={isAdmin}/>}
       {tab==="productos"&&<Productos user={user} isAdmin={isAdmin}/>}
-      {tab==="colaboradores"&&isAdmin&&<Colaboradores/>}
-      {tab==="proveedores"&&isAdmin&&<Proveedores/>}
-      {tab==="finanzas"&&isAdmin&&<Finanzas/>}
-      {tab==="entradas"&&isAdmin&&<Entradas/>}
-      {tab==="micuenta"&&<MiCuenta user={user}/>}
-      {tab==="admin_noticias"&&isAdmin&&<AdminNoticias/>}
-      {tab==="aprobaciones"&&isAdmin&&<Aprobaciones/>}
+      {tab==="colaboradores"&&isAdmin&&<Colaboradores isAdmin={isAdmin} isPrimaryAdmin={isPrimaryAdmin}/>}
+      {tab==="proveedores"&&isAdmin&&<Proveedores isAdmin={isAdmin}/>}
+      {tab==="finanzas"&&isAdmin&&<Finanzas isAdmin={isAdmin}/>}
+      {tab==="entradas"&&isAdmin&&<Entradas isAdmin={isAdmin}/>}
+      {tab==="micuenta"&&<MiCuenta user={user} isAdmin={isAdmin} isPrimaryAdmin={isPrimaryAdmin}/>}
+      {tab==="admin_noticias"&&isAdmin&&<AdminNoticias isAdmin={isAdmin}/>}
+      {tab==="aprobaciones"&&isAdmin&&<Aprobaciones isAdmin={isAdmin}/>}
       <UndoToast/>
     </div>
     {/* Bottom nav */}
