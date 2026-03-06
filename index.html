@@ -412,7 +412,7 @@ function Ventas({user,isAdmin}){
   const totalFiltro=filtered.reduce((a,v)=>a+Number(v.total||0),0);
   const utilidadFiltro=filtered.reduce((a,v)=>a+Number(v.utilidad||0),0);
   // informe por vendedor
-  const porVendedor={};filtered.forEach(v=>{if(!porVendedor[v.vendedor])porVendedor[v.vendedor]={ventas:0,total:0,utilidad:0,comision:0};porVendedor[v.vendedor].ventas++;porVendedor[v.vendedor].total+=Number(v.total||0);porVendedor[v.vendedor].utilidad+=Number(v.utilidad||0);porVendedor[v.vendedor].comision+=Number(v.comisionMonto||0);});
+  const porVendedor={};filtered.forEach(v=>{const key=v.vendedor||"Sin asignar";if(!porVendedor[key])porVendedor[key]={ventas:0,total:0,utilidad:0,comision:0};porVendedor[key].ventas++;porVendedor[key].total+=Number(v.total||0);porVendedor[key].utilidad+=Number(v.utilidad||0);porVendedor[key].comision+=Number(v.comisionMonto||0);});
   return <div style={{display:"flex",flexDirection:"column",height:"100%"}}>
     <div style={{padding:"14px 16px",borderBottom:`1px solid ${G.gb}`,flexShrink:0}}>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
