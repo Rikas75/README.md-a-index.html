@@ -1317,6 +1317,36 @@ function AdminNoticias({isAdmin}){
   </div>;
 }
 
+
+// ── BRANDING CONFIG (standalone) ───────────────────────────
+function BrandingConfig(){
+  const[brand,setBrand]=useState(DB.brand());
+  const[toast,setToast]=useState("");
+  function toast_(m,c){setToast({m,c});setTimeout(()=>setToast(""),3000);}
+  const up=(k,v)=>setBrand(b=>({...b,[k]:v}));
+  const PRESETS=[{n:"Verde",a:"#00E5A0",b:"#4FC3F7"},{n:"Cyan",a:"#4FC3F7",b:"#00B8D4"},{n:"Púrpura",a:"#CE93D8",b:"#F48FB1"},{n:"Naranja",a:"#FF8A65",b:"#FFCC02"},{n:"Rojo",a:"#FF3D6E",b:"#FF8A65"}];
+  function guardar(){DB.saveBrand(brand);toast_("✓ Guardado — recargando...");setTimeout(()=>window.location.reload(),1200);}
+  return <div style={{paddingBottom:20}}>
+    <div style={{fontWeight:700,fontSize:"0.85rem",marginBottom:12}}>🎨 Personalizar negocio</div>
+    <Card style={{padding:"16px",marginBottom:12}}>
+      <Inp label="Nombre del negocio" value={brand.name} onChange={v=>up("name",v)} placeholder="Mi Negocio"/>
+      <Inp label="Subtítulo" value={brand.sub} onChange={v=>up("sub",v)} placeholder="SUITE NEGOCIOS"/>
+    </Card>
+    <Card style={{padding:"16px",marginBottom:12}}>
+      <div style={{fontWeight:600,fontSize:"0.8rem",marginBottom:10,color:G.dim}}>Color principal</div>
+      <div style={{display:"flex",gap:8,flexWrap:"wrap",marginBottom:10}}>
+        {PRESETS.map(p=><button key={p.n} onClick={()=>{up("accent",p.a);up("accent2",p.b);}} style={{padding:"6px 12px",borderRadius:20,border:`2px solid ${brand.accent===p.a?"white":"transparent"}`,background:`${p.a}22`,color:p.a,fontSize:"0.75rem",fontWeight:600,cursor:"pointer"}}>{p.n}</button>)}
+      </div>
+      <div style={{display:"flex",gap:12,alignItems:"center"}}>
+        <input type="color" value={brand.accent} onChange={e=>up("accent",e.target.value)} style={{width:44,height:44,borderRadius:10,border:"none",cursor:"pointer",background:"none"}}/>
+        <div style={{fontSize:"0.78rem",color:G.dim}}>Color personalizado</div>
+      </div>
+    </Card>
+    <Btn onClick={guardar} full color={brand.accent}>💾 Guardar cambios</Btn>
+    {toast&&<Toast msg={toast.m} color={toast.c}/>}
+  </div>;
+}
+
 // ── ADMIN PANEL ────────────────────────────────────────────
 function AdminPanel({onClose}){
   const br=DB.brand();
