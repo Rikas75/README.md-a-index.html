@@ -103,10 +103,10 @@ select.form-input{appearance:none;}
 .tx-amt.ing{color:#00A86B;}
 .tx-amt.gas{color:#e53935;}
 .bot-nav{position:fixed;bottom:0;left:0;right:0;background:var(--nav);display:flex;z-index:100;border-top:1px solid rgba(255,255,255,0.08);}
-.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:9px 4px;cursor:pointer;border:none;background:none;color:var(--navtext);opacity:0.5;transition:opacity 0.2s;}
+.nav-btn{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 2px;cursor:pointer;border:none;background:none;color:var(--navtext);opacity:0.5;transition:opacity 0.2s;}
 .nav-btn.active{opacity:1;}
-.nav-btn .n-ico{font-size:1.25rem;margin-bottom:2px;}
-.nav-btn .n-lbl{font-size:0.52rem;font-weight:600;letter-spacing:0.04em;}
+.nav-btn .n-ico{font-size:1.1rem;margin-bottom:1px;}
+.nav-btn .n-lbl{font-size:0.48rem;font-weight:600;letter-spacing:0.02em;}
 
 /* MODAL */
 .modal{position:fixed;inset:0;z-index:300;display:none;align-items:flex-end;}
@@ -239,6 +239,7 @@ select.form-input{appearance:none;}
     <button class="nav-btn" onclick="goTab('ingresos',this)"><div class="n-ico">💰</div><div class="n-lbl">Ingresos</div></button>
     <button class="nav-btn" onclick="goTab('gastos',this)"><div class="n-ico">💳</div><div class="n-lbl">Gastos</div></button>
     <button class="nav-btn" onclick="goTab('analisis',this)"><div class="n-ico">📊</div><div class="n-lbl">Análisis</div></button>
+    <button class="nav-btn" onclick="goTab('creditos',this)"><div class="n-ico">🤝</div><div class="n-lbl">Créditos</div></button>
     <button class="nav-btn" onclick="goTab('mas',this)"><div class="n-ico">⋯</div><div class="n-lbl">Más</div></button>
   </nav>
 </div>
@@ -563,7 +564,8 @@ function renderTab(tab){
     analisis:renderAnalisis, mas:renderMas, balance:renderBalance,
     metas:renderMetas, presupuesto:renderPresupuesto, recordatorios:renderRecordatorios,
     historial:renderHistorial, conversor:renderConversor, alertas:renderAlertas,
-    codigos:renderCodigos, config:renderConfig, ayuda:renderAyuda, version:renderVersion
+    codigos:renderCodigos, config:renderConfig, ayuda:renderAyuda, version:renderVersion,
+    creditos:renderCreditos, credito_nuevo:renderCreditoNuevo
   };
   var fn=renders[tab]||function(){ return renderModulo(tab); };
   c.innerHTML=fn();
@@ -620,6 +622,8 @@ function guardarTx(){
 }
 
 // ── RENDERS ────────────────────────────────────────
+
+function sumCred(tipo){ return load('creditos',[]).filter(function(c){return c.tipo===tipo&&c.estado!=='pagado';}).reduce(function(s,c){return s+Number(c.monto-(c.abonado||0));},0).toLocaleString('es-MX',{minimumFractionDigits:2}); }
 function renderInicio(){
   var txs=getTxs();
   var ing=txs.filter(function(t){return t.tipo==='ingreso';}).reduce(function(a,t){return a+Number(t.monto);},0);
@@ -629,6 +633,7 @@ function renderInicio(){
   }).join('')||'<div style="text-align:center;padding:18px;color:var(--dim);font-size:0.84rem;">Sin transacciones aún</div>';
   return '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;"><div><div style="font-size:1.2rem;font-weight:900;">Hola 👋 '+(STATE.user?STATE.user.name.split(' ')[0]:'')+'</div><div style="font-size:0.76rem;color:var(--dim);">Tus finanzas personales</div></div><button onclick="openTxModal()" style="padding:9px 14px;background:var(--accent);color:var(--navtext);border:none;border-radius:12px;font-family:inherit;font-weight:700;cursor:pointer;font-size:0.82rem;">+ Nueva</button></div>'
   +'<div class="stat-grid"><div class="stat-card" onclick="goTab(\'ingresos\',document.querySelectorAll(\'.nav-btn\')[1])" style="cursor:pointer;"><div class="stat-label">Ingresos ›</div><div class="stat-val">'+fmt(ing)+'</div></div><div class="stat-card" onclick="goTab(\'gastos\',document.querySelectorAll(\'.nav-btn\')[2])" style="cursor:pointer;"><div class="stat-label">Gastos ›</div><div class="stat-val red">'+fmt(gas)+'</div></div><div class="stat-card full" onclick="goTabSub(\'balance\')" style="cursor:pointer;"><div class="stat-label">Balance Neto ›</div><div class="stat-val gold">'+fmt(ing-gas)+'</div></div></div>'
+  +(function(){var sd=sumCred('deuda'),sp=sumCred('prestamo');return '<div class="card" onclick="goTab(\'creditos\',document.querySelectorAll(\'.nav-btn\')[4])" style="cursor:pointer;margin-bottom:12px"><div style="display:flex;justify-content:space-between;align-items:center"><div class="card-title" style="margin:0">🤝 Créditos</div><span style="font-size:0.75rem;color:var(--accent);font-weight:700;">Ver todos ›</span></div><div style="display:flex;gap:10px;margin-top:8px"><div style="flex:1;font-size:0.75rem;color:var(--dim)">📤 Debo<br><span style="font-weight:700;color:#e53935;font-size:0.9rem;">$'+sd+'</span></div><div style="flex:1;font-size:0.75rem;color:var(--dim)">📥 Me deben<br><span style="font-weight:700;color:#007A4D;font-size:0.9rem;">$'+sp+'</span></div></div></div>';}())
   +'<div class="card"><div class="card-title">Últimas transacciones</div>'+recHTML+'</div>';
 }
 
@@ -644,7 +649,7 @@ function renderGastos(){
   +'<div class="mod-item" onclick="goTabSub(\'inversiones\')"><div class="mod-icon">📈</div><div><div class="mod-label">Inversiones</div></div><div class="mod-arrow">›</div></div>'
   +'<div class="mod-item" onclick="goTabSub(\'pagos\')"><div class="mod-icon">💳</div><div><div class="mod-label">Pagos</div></div><div class="mod-arrow">›</div></div>'
   +'<div class="mod-item" onclick="goTabSub(\'compras\')"><div class="mod-icon">🛒</div><div><div class="mod-label">Compras</div></div><div class="mod-arrow">›</div></div>'
-  +'<div class="mod-item" onclick="goTabSub(\'creditos\')"><div class="mod-icon">🏦</div><div><div class="mod-label">Créditos por Pagar</div></div><div class="mod-arrow">›</div></div>'
+  
   +'</div>';
 }
 
@@ -785,7 +790,7 @@ function renderHistorial(){
 }
 
 function renderConversor(){
-  return '<div style="display:flex;align-items:center;margin-bottom:14px;">'+backBtn('mas',4)+'<div style="font-size:1.05rem;font-weight:800;">💱 Conversor de Monedas</div></div>'
+  return '<div style="display:flex;align-items:center;margin-bottom:14px;">'+backBtn('mas',5)+'<div style="font-size:1.05rem;font-weight:800;">💱 Conversor de Monedas</div></div>'
   +'<div class="card"><label class="form-label">Cantidad</label><input class="form-input" id="cvAmt" type="number" placeholder="100" oninput="convertir()"><label class="form-label">De</label><select class="form-input" id="cvFrom" onchange="convertir()"><option>MXN</option><option>USD</option><option>EUR</option><option>CAD</option></select><label class="form-label">A</label><select class="form-input" id="cvTo" onchange="convertir()"><option>USD</option><option>MXN</option><option>EUR</option><option>CAD</option></select><div id="cvResult" style="text-align:center;padding:14px;font-size:1.5rem;font-weight:800;color:var(--accent);"></div></div>';
 }
 
@@ -820,7 +825,7 @@ function renderAlertas(){
     return '<div class="alerta-item"><div style="flex:1"><div style="font-weight:700;font-size:0.88rem">'+estado+' '+a.nombre+'</div><div style="font-size:0.7rem;color:var(--dim);margin-top:3px">📂 '+a.categoria+' · 💰 '+fmt(a.limite)+(a.fecha?' · 📅 '+a.fecha+(a.hora?' 🕐 '+a.hora:''):'')+'</div></div><div style="display:flex;gap:6px"><button class="alerta-del" style="background:var(--bg2);color:var(--accent);border:1px solid var(--border)" onclick="editarAlerta('+i+')">✏️</button><button class="alerta-del" onclick="borrarAlerta('+i+')">🗑️</button></div></div>';
   }).join('')||'<div style="text-align:center;padding:14px;color:var(--dim);font-size:0.83rem;">Sin alertas programadas</div>';
 
-  return '<div style="display:flex;align-items:center;margin-bottom:14px;">'+backBtn('mas',4)+'<div style="font-size:1.05rem;font-weight:800;">🔔 Alertas de Gasto</div></div>'
+  return '<div style="display:flex;align-items:center;margin-bottom:14px;">'+backBtn('mas',5)+'<div style="font-size:1.05rem;font-weight:800;">🔔 Alertas de Gasto</div></div>'
   +notifStatus
   +'<div class="card" style="margin-bottom:12px">'
   +'<div class="card-title">Programar nueva alerta</div>'
@@ -985,6 +990,163 @@ function revisarAlertasHoy(){
   }
 }
 
+
+// ── MÓDULO CRÉDITOS ────────────────────────────────
+function getCreditos(){ return load('creditos',[]); }
+function saveCreditos(c){ save('creditos',c); }
+
+function renderCreditos(){
+  var creds = getCreditos();
+  var misDeu = creds.filter(function(c){return c.tipo==='deuda';});
+  var misPres = creds.filter(function(c){return c.tipo==='prestamo';});
+
+  function totalPend(arr){ return arr.filter(function(c){return c.estado!=='pagado';}).reduce(function(s,c){return s+Number(c.monto);},0); }
+
+  function renderLista(arr, tipo){
+    if(!arr.length) return '<div style="text-align:center;padding:16px;color:var(--dim);font-size:0.83rem;">Sin registros</div>';
+    return arr.map(function(c,i){
+      var pct = c.monto>0 ? Math.min(100,Math.round(((c.abonado||0)/c.monto)*100)) : 0;
+      var estado_color = c.estado==='pagado'?'#00A86B':c.estado==='vencido'?'#e53935':'#FF9800';
+      var hoy = new Date(); 
+      var fv = c.fechaLimite ? new Date(c.fechaLimite.split('-').join('/')) : null;
+      var vencido = fv && fv < hoy && c.estado!=='pagado';
+      return '<div class="card" style="margin-bottom:8px">'
+        +'<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px">'
+        +'<div style="flex:1"><div style="font-weight:700;font-size:0.9rem">'+c.descripcion+'</div>'
+        +'<div style="font-size:0.7rem;color:var(--dim);margin-top:2px">'+c.persona+(c.interes?'  · '+c.interes+'% interés':'')+(c.fechaLimite?' · 📅 '+c.fechaLimite:'')+'</div></div>'
+        +'<span style="font-size:0.68rem;padding:3px 9px;border-radius:10px;font-weight:700;background:'+(vencido?'rgba(229,57,53,0.1)':c.estado==='pagado'?'rgba(0,168,107,0.1)':'rgba(255,152,0,0.1)')+';color:'+(vencido?'#e53935':c.estado==='pagado'?'#00A86B':'#FF9800')+';">'+(vencido?'🔴 Vencido':c.estado==='pagado'?'✅ Pagado':'⏳ Pendiente')+'</span>'
+        +'</div>'
+        +'<div style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--dim);margin-bottom:5px"><span>Abonado: $'+Number(c.abonado||0).toLocaleString('es-MX',{minimumFractionDigits:2})+'</span><span>Total: $'+Number(c.monto).toLocaleString('es-MX',{minimumFractionDigits:2})+'</span></div>'
+        +'<div style="background:var(--bg2);border-radius:4px;height:6px;overflow:hidden;margin-bottom:10px"><div style="width:'+pct+'%;height:100%;background:'+(pct>=100?'#00A86B':'var(--accent)')+';border-radius:4px;"></div></div>'
+        +'<div style="display:flex;gap:6px">'
+        +(c.estado!=='pagado'?'<button onclick="abonarCredito('+i+',\''+tipo+'\')" style="flex:1;padding:7px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:0.76rem;font-weight:600;color:var(--accent);cursor:pointer">+ Abonar</button>':'')
+        +(c.estado!=='pagado'?'<button onclick="marcarPagado('+i+',\''+tipo+'\')" style="padding:7px 10px;background:rgba(0,168,107,0.1);border:1px solid rgba(0,168,107,0.3);border-radius:8px;font-family:inherit;font-size:0.76rem;color:#00A86B;cursor:pointer">✅</button>':'')
+        +'<button onclick="editarCredito('+i+',\''+tipo+'\')" style="padding:7px 10px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:0.76rem;cursor:pointer">✏️</button>'
+        +'<button onclick="borrarCredito('+i+',\''+tipo+'\')" style="padding:7px 10px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;font-family:inherit;font-size:0.76rem;cursor:pointer;opacity:0.5">🗑️</button>'
+        +'</div></div>';
+    }).join('');
+  }
+
+  return '<div style="font-size:1.05rem;font-weight:800;margin-bottom:4px;">🤝 Créditos</div>'
+  +'<div style="font-size:0.75rem;color:var(--dim);margin-bottom:14px;">Gestiona lo que debes y lo que te deben</div>'
+
+  // Resumen
+  +'<div class="stat-grid" style="margin-bottom:14px">'
+  +'<div class="stat-card"><div class="stat-label">Debo 📤</div><div class="stat-val red">$'+Number(totalPend(misDeu)).toLocaleString('es-MX',{minimumFractionDigits:2})+'</div></div>'
+  +'<div class="stat-card"><div class="stat-label">Me deben 📥</div><div class="stat-val">$'+Number(totalPend(misPres)).toLocaleString('es-MX',{minimumFractionDigits:2})+'</div></div>'
+  +'</div>'
+
+  // Sección: Lo que debo
+  +'<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">'
+  +'<div style="font-size:0.85rem;font-weight:800;">📤 Mis Deudas <span style="font-size:0.7rem;color:var(--dim);font-weight:400;">(pedí prestado)</span></div>'
+  +'<button onclick="abrirNuevoCredito(\'deuda\')" style="padding:7px 12px;background:var(--accent);color:var(--navtext);border:none;border-radius:10px;font-family:inherit;font-weight:700;cursor:pointer;font-size:0.78rem;">+ Agregar</button>'
+  +'</div>'
+  +renderLista(misDeu,'deuda')
+
+  // Sección: Lo que me deben
+  +'<div style="display:flex;align-items:center;justify-content:space-between;margin:14px 0 8px">'
+  +'<div style="font-size:0.85rem;font-weight:800;">📥 Créditos por Cobrar <span style="font-size:0.7rem;color:var(--dim);font-weight:400;">(presté a otros)</span></div>'
+  +'<button onclick="abrirNuevoCredito(\'prestamo\')" style="padding:7px 12px;background:var(--accent);color:var(--navtext);border:none;border-radius:10px;font-family:inherit;font-weight:700;cursor:pointer;font-size:0.78rem;">+ Agregar</button>'
+  +'</div>'
+  +renderLista(misPres,'prestamo');
+}
+
+function abrirNuevoCredito(tipo){
+  STATE._creditoTipo = tipo;
+  STATE._creditoEdit = null;
+  document.getElementById('mainContent').innerHTML = renderFormCredito(tipo, null);
+}
+
+function editarCredito(i, tipo){
+  var creds = getCreditos().filter(function(c){return c.tipo===tipo;});
+  STATE._creditoTipo = tipo;
+  STATE._creditoEdit = {i:i, tipo:tipo};
+  document.getElementById('mainContent').innerHTML = renderFormCredito(tipo, creds[i]);
+}
+
+function renderFormCredito(tipo, data){
+  var esDeuda = tipo==='deuda';
+  var titulo = esDeuda ? '📤 '+(data?'Editar':'Nueva')+' Deuda' : '📥 '+(data?'Editar':'Nuevo')+' Crédito por Cobrar';
+  var d = data||{};
+  return '<div style="display:flex;align-items:center;margin-bottom:14px;"><button onclick="goTab(\'creditos\',document.querySelectorAll(\'.nav-btn\')[4])" style="background:none;border:none;font-size:1.3rem;cursor:pointer;color:var(--text);padding:0 8px 0 0;">‹</button><div style="font-size:1.05rem;font-weight:800;">'+titulo+'</div></div>'
+  +'<div class="card">'
+  +'<label class="form-label">'+(esDeuda?'¿A quién le debo?':'¿Quién me debe?')+'</label>'
+  +'<input class="form-input" id="crPersona" placeholder="Nombre" value="'+(d.persona||'')+'">'
+  +'<label class="form-label">Descripción</label>'
+  +'<input class="form-input" id="crDesc" placeholder="Ej: Préstamo para auto" value="'+(d.descripcion||'')+'">'
+  +'<div class="form-row">'
+  +'<div><label class="form-label">Monto total ($)</label><input class="form-input" id="crMonto" type="number" placeholder="0.00" value="'+(d.monto||'')+'">'+'</div>'
+  +'<div><label class="form-label">Interés (%)</label><input class="form-input" id="crInteres" type="number" placeholder="0" value="'+(d.interes||0)+'">'+'</div>'
+  +'</div>'
+  +'<label class="form-label">📅 Fecha límite</label>'
+  +'<input class="form-input" id="crFecha" type="date" value="'+(d.fechaLimite||'')+'">'
+  +'<button class="form-btn" onclick="guardarCredito()">💾 '+(data?'Guardar cambios':'Registrar crédito')+'</button>'
+  +'</div>';
+}
+
+function guardarCredito(){
+  var persona = document.getElementById('crPersona').value.trim();
+  var desc = document.getElementById('crDesc').value.trim();
+  var monto = parseFloat(document.getElementById('crMonto').value);
+  var interes = parseFloat(document.getElementById('crInteres').value)||0;
+  var fecha = document.getElementById('crFecha').value;
+  if(!persona||!desc||!monto){ showToast('⚠ Completa persona, descripción y monto'); return; }
+  var tipo = STATE._creditoTipo;
+  var creds = getCreditos();
+  if(STATE._creditoEdit!==null && STATE._creditoEdit!==undefined){
+    // Editar — encontrar el índice real en el array completo
+    var tipoFilter = creds.filter(function(c){return c.tipo===tipo;});
+    var itemEdit = tipoFilter[STATE._creditoEdit.i];
+    var realIdx = creds.indexOf(itemEdit);
+    if(realIdx>-1) creds[realIdx]=Object.assign(creds[realIdx],{descripcion:desc,persona:persona,monto:monto,interes:interes,fechaLimite:fecha});
+    showToast('✓ Crédito actualizado');
+  } else {
+    creds.push({tipo:tipo,descripcion:desc,persona:persona,monto:monto,interes:interes,fechaLimite:fecha,abonado:0,estado:'pendiente',creado:today()});
+    showToast('✓ Crédito registrado');
+  }
+  saveCreditos(creds);
+  STATE._creditoEdit=null;
+  goTab('creditos',document.querySelectorAll('.nav-btn')[4]);
+}
+
+function abonarCredito(i, tipo){
+  var creds = getCreditos();
+  var tipoFilter = creds.filter(function(c){return c.tipo===tipo;});
+  var item = tipoFilter[i];
+  var realIdx = creds.indexOf(item);
+  var abono = parseFloat(prompt('Monto a abonar ($):')); if(!abono) return;
+  creds[realIdx].abonado = (creds[realIdx].abonado||0)+abono;
+  if(creds[realIdx].abonado >= creds[realIdx].monto) creds[realIdx].estado='pagado';
+  saveCreditos(creds); showToast('✓ Abono registrado');
+  goTab('creditos',document.querySelectorAll('.nav-btn')[4]);
+}
+
+function marcarPagado(i, tipo){
+  var creds = getCreditos();
+  var tipoFilter = creds.filter(function(c){return c.tipo===tipo;});
+  var item = tipoFilter[i];
+  var realIdx = creds.indexOf(item);
+  creds[realIdx].estado='pagado'; creds[realIdx].abonado=creds[realIdx].monto;
+  saveCreditos(creds); showToast('✅ Marcado como pagado');
+  goTab('creditos',document.querySelectorAll('.nav-btn')[4]);
+}
+
+function borrarCredito(i, tipo){
+  var creds = getCreditos();
+  var tipoFilter = creds.filter(function(c){return c.tipo===tipo;});
+  var item = tipoFilter[i];
+  var realIdx = creds.indexOf(item);
+  if(!confirm('¿Borrar este crédito?')) return;
+  var eliminado = creds[realIdx];
+  creds.splice(realIdx,1);
+  saveCreditos(creds);
+  goTab('creditos',document.querySelectorAll('.nav-btn')[4]);
+  mostrarDeshacer('Crédito eliminado', function(){
+    var c2=getCreditos(); c2.splice(realIdx,0,eliminado); saveCreditos(c2);
+    showToast('✓ Crédito restaurado'); goTab('creditos',document.querySelectorAll('.nav-btn')[4]);
+  });
+}
+
 // ── CÓDIGOS ────────────────────────────────────────
 function renderCodigos(){
   var cs=getCodigos();
@@ -994,7 +1156,7 @@ function renderCodigos(){
     return '<div class="code-item"><div><div class="code-key">'+e[0]+'</div><div class="code-meta">'+(e[1].nota||'Sin nota')+(e[1].vence?' · Vence: '+e[1].vence:'')+'</div></div><button class="code-copy" onclick="copiarCodigo(\''+e[0]+'\')">📋</button></div>';
   }).join('')||'<div style="color:var(--dim);font-size:0.81rem;padding:6px 0;">Sin códigos activos</div>';
   var usadosHTML=usados.length?'<div style="font-size:0.68rem;color:var(--dim);letter-spacing:0.1em;text-transform:uppercase;margin:14px 0 8px;">Usados ('+usados.length+')</div>'+usados.map(function(e){ return '<div class="code-item" style="opacity:0.55"><div><div class="code-key" style="color:var(--dim)">'+e[0]+'</div><div class="code-meta">'+(e[1].usadoPor||'?')+' · '+(e[1].telefono||'')+' · '+(e[1].usadoEn||'').split('T')[0]+'</div></div></div>'; }).join(''):'';
-  return '<div style="display:flex;align-items:center;margin-bottom:14px;">'+backBtn('mas',4)+'<div style="font-size:1.05rem;font-weight:800;">🔑 Códigos de Acceso</div></div>'
+  return '<div style="display:flex;align-items:center;margin-bottom:14px;">'+backBtn('mas',5)+'<div style="font-size:1.05rem;font-weight:800;">🔑 Códigos de Acceso</div></div>'
   +'<div class="card" style="margin-bottom:12px"><div class="card-title">Generar código</div>'
   +'<label class="form-label">Prefijo</label><input class="form-input" id="codPre" placeholder="FIN" oninput="this.value=this.value.toUpperCase()" value="FIN">'
   +'<label class="form-label">Vence (opcional)</label><input class="form-input" id="codVence" type="date">'
@@ -1034,7 +1196,7 @@ function renderAyuda(){
   var rows=faqs.map(function(f,i){
     return '<div class="help-section"><div class="help-q" onclick="toggleHelp('+i+')"><span>'+f[0]+'</span><span id="hico'+i+'">+</span></div><div class="help-a" id="hans'+i+'">'+f[1]+'</div></div>';
   }).join('');
-  return '<div style="display:flex;align-items:center;margin-bottom:14px;">'+backBtn('mas',4)+'<div style="font-size:1.05rem;font-weight:800;">❓ Ayuda</div></div>'
+  return '<div style="display:flex;align-items:center;margin-bottom:14px;">'+backBtn('mas',5)+'<div style="font-size:1.05rem;font-weight:800;">❓ Ayuda</div></div>'
   +'<div class="card" style="margin-bottom:12px;padding:12px 14px;"><div style="font-size:0.8rem;color:var(--dim);line-height:1.6;">USALA Suite Finanzas Personales es una app para gestionar tus ingresos, gastos, metas y presupuesto de forma privada y segura.</div></div>'
   +rows;
 }
@@ -1050,7 +1212,7 @@ function toggleHelp(i){
 function renderConfig(){
   var isAdmin = STATE.user && STATE.user.isAdmin;
   var cambioPass = isAdmin ? '<div style="height:12px"></div><div class="card"><div class="card-title">🔐 Contraseña de administrador</div><label class="form-label">Nueva contraseña</label><input class="form-input" id="newPass1" type="password" placeholder="Nueva contraseña"><label class="form-label">Confirmar contraseña</label><input class="form-input" id="newPass2" type="password" placeholder="Repite la contraseña"><button class="form-btn" onclick="cambiarPassAdmin()">Cambiar contraseña</button></div>' : '';
-  return '<div style="display:flex;align-items:center;margin-bottom:14px;">'+backBtn('mas',4)+'<div style="font-size:1.05rem;font-weight:800;">⚙️ Configuración</div></div>'
+  return '<div style="display:flex;align-items:center;margin-bottom:14px;">'+backBtn('mas',5)+'<div style="font-size:1.05rem;font-weight:800;">⚙️ Configuración</div></div>'
   +'<div class="mod-list">'
   +'<div class="mod-item" onclick="pickThemeAgain()"><div class="mod-icon">🎨</div><div><div class="mod-label">Cambiar tema</div></div><div class="mod-arrow">›</div></div>'
   +'<div class="mod-item" onclick="cerrarSesion()"><div class="mod-icon">🚪</div><div><div class="mod-label" style="color:#e53935">Cerrar sesión</div></div><div class="mod-arrow">›</div></div>'
@@ -1065,7 +1227,7 @@ function renderConfig(){
   +'<button class="danger-btn" onclick="confirmar(\'borrarTxs\',\'Borrar transacciones\',\'Se eliminarán todas tus transacciones. Tus metas y presupuesto se conservan.\')">🗑️ Borrar solo transacciones</button>'
   +'<button class="danger-btn" onclick="confirmar(\'borrarMetas\',\'Borrar metas\',\'Se eliminarán todas tus metas de ahorro.\')">🎯 Borrar metas de ahorro</button>'
   +'<button class="danger-btn" onclick="confirmar(\'borrarAlertas\',\'Borrar alertas\',\'Se eliminarán todas tus alertas programadas.\')">🔔 Borrar alertas</button>'
-  +'<button class="danger-btn" onclick="confirmar(\'resetTotal\',\'Restablecer todo\',\'Se borrará TODA tu información: transacciones, metas, presupuesto, alertas y recordatorios. Esta acción no se puede deshacer.\')">♻️ Restablecer toda mi cuenta</button>'
+  +'<button class="danger-btn" onclick="confirmar(\'resetTotal\',\'Restablecer todo\',\'Se borrará TODA tu información: transacciones, metas, créditos, presupuesto, alertas y recordatorios. Quedará como nuevo. Esta acción no se puede deshacer.\')">♻️ Restablecer toda mi cuenta</button>'
   +'</div></div>';
 }
 
@@ -1151,8 +1313,18 @@ function ejecutarAccion(){
   else if(pendingAction==='borrarMetas'){ save('metas',[]); showToast('✓ Metas borradas'); }
   else if(pendingAction==='borrarAlertas'){ save('alertas',[]); showToast('✓ Alertas borradas'); }
   else if(pendingAction==='resetTotal'){
-    ['txs','metas','presupuesto','alertas','recs'].forEach(function(k){ save(k,null); localStorage.removeItem(userKey(k)); });
-    showToast('✓ Cuenta restablecida');
+    // Borrar todas las claves del usuario
+    var claves=['txs','metas','presupuesto','alertas','recs','creditos'];
+    claves.forEach(function(k){
+      localStorage.removeItem(userKey(k));
+    });
+    // Borrar también presupuesto mensual y cualquier otra clave con prefijo del usuario
+    var uid = STATE.user.isAdmin ? 'admin' : ('u_'+(STATE.user.codigo||'guest'));
+    var prefix = 'fp_'+uid+'_';
+    Object.keys(localStorage).filter(function(k){ return k.indexOf(prefix)===0; }).forEach(function(k){ localStorage.removeItem(k); });
+    showToast('✅ Cuenta restablecida — todo borrado');
+    // Regresar al inicio
+    setTimeout(function(){ goTab('inicio', document.querySelector('.nav-btn')); }, 800);
   }
   renderTab('config');
 }
@@ -1302,5 +1474,6 @@ function iniciarRevisionAlertas(){
 </script>
 </body>
 </html>
+
 
 
