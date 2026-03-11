@@ -83,16 +83,10 @@ html,body{height:100%;font-family:Outfit,sans-serif;background:var(--bg);color:v
 
 /* ── THEME PICKER ── */
 #themePicker{align-items:center;justify-content:center;padding:32px 24px;}
-.tp-logo{font-size:2.4rem;font-weight:900;letter-spacing:-0.03em;color:var(--accent);margin-bottom:6px;}
-.tp-sub{font-size:0.82rem;color:var(--dim);margin-bottom:36px;text-align:center;}
-.tp-title{font-size:0.72rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--dim);margin-bottom:16px;}
-.themes-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;}
+
 .theme-card{padding:20px 16px;border-radius:16px;cursor:pointer;border:2px solid transparent;transition:all 0.2s;text-align:left;}
 .theme-card:active{transform:scale(0.97);}
 .theme-card.selected{border-color:currentColor;}
-.tc-name{font-weight:700;font-size:0.9rem;margin-top:8px;}
-.tc-dot{width:28px;height:28px;border-radius:50%;}
-.tp-btn{margin-top:24px;width:100%;padding:16px;background:var(--accent);color:var(--navtext);border:none;border-radius:14px;font-family:Outfit,sans-serif;font-size:1rem;font-weight:700;cursor:pointer;letter-spacing:0.02em;}
 
 /* ── ACCESS SCREEN ── */
 #accessScreen{
@@ -101,8 +95,8 @@ html,body{height:100%;font-family:Outfit,sans-serif;background:var(--bg);color:v
   overflow-y:auto;
 }
 .lg-wrap{width:100%;max-width:390px;margin:0 auto;padding:32px 22px 48px;display:flex;flex-direction:column;align-items:center;}
-.lg-logo{font-size:2.6rem;font-weight:900;letter-spacing:-0.04em;color:var(--accent);line-height:1;}
-.lg-sub{font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--dim);margin-top:4px;margin-bottom:36px;}
+.lg-logo{font-size:2.6rem;font-weight:900;letter-spacing:-0.04em;color:var(--accent);line-height:1;text-align:center;}
+.lg-sub{font-size:0.72rem;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:var(--dim);margin-top:4px;margin-bottom:0;text-align:center;}
 .lg-card{width:100%;background:var(--card);border-radius:24px;padding:28px 24px;box-shadow:var(--shadow);margin-bottom:16px;}
 .lg-avatar{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:1.8rem;font-weight:900;color:#fff;margin:0 auto 12px;box-shadow:0 8px 24px rgba(0,0,0,0.15);}
 .lg-greeting{font-size:0.65rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--dim);text-align:center;margin-bottom:4px;}
@@ -115,7 +109,7 @@ html,body{height:100%;font-family:Outfit,sans-serif;background:var(--bg);color:v
 .lg-btn-ghost:active{background:var(--inp);}
 .lg-link{font-size:0.78rem;color:var(--accent);cursor:pointer;font-weight:700;text-align:center;margin-top:14px;display:block;}
 /* Código: dots visuales */
-.lg-code-dots{display:flex;gap:10px;justify-content:center;margin-bottom:18px;}
+
 .lg-dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--border);background:transparent;transition:all 0.15s;}
 .lg-dot.filled{background:var(--accent);border-color:var(--accent);transform:scale(1.1);}
 /* Input código monospace */
@@ -139,22 +133,13 @@ html,body{height:100%;font-family:Outfit,sans-serif;background:var(--bg);color:v
 /* Solicitud */
 .lg-dashed-btn{width:100%;padding:16px;border:2.5px dashed var(--accent);background:rgba(0,0,0,0.02);color:var(--accent);border-radius:18px;font-family:Outfit,sans-serif;font-size:0.9rem;font-weight:800;cursor:pointer;transition:background 0.15s;margin-top:6px;}
 .lg-dashed-btn:active{background:rgba(45,158,95,0.06);}
-.access-err{display:none;padding:10px 14px;background:rgba(229,57,53,0.08);border:1px solid rgba(229,57,53,0.25);border-radius:12px;font-size:0.8rem;color:var(--danger);margin-bottom:14px;}
 
 /* ── THEME PICKER ── */
 #themePicker{align-items:center;justify-content:center;padding:32px 24px;}
-.tp-logo{font-size:2.4rem;font-weight:900;letter-spacing:-0.03em;color:var(--accent);margin-bottom:6px;}
-.tp-sub{font-size:0.82rem;color:var(--dim);margin-bottom:36px;text-align:center;}
-.tp-title{font-size:0.72rem;font-weight:700;letter-spacing:0.12em;text-transform:uppercase;color:var(--dim);margin-bottom:16px;}
-.themes-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;width:100%;}
+
 .theme-card{padding:20px 16px;border-radius:16px;cursor:pointer;border:2px solid transparent;transition:all 0.2s;text-align:left;}
 .theme-card:active{transform:scale(0.97);}
 .theme-card.selected{border-color:currentColor;}
-.tc-name{font-weight:700;font-size:0.9rem;margin-top:8px;}
-.tc-dot{width:28px;height:28px;border-radius:50%;}
-.tp-btn{margin-top:24px;width:100%;padding:16px;background:var(--accent);color:var(--navtext);border:none;border-radius:14px;font-family:Outfit,sans-serif;font-size:1rem;font-weight:700;cursor:pointer;letter-spacing:0.02em;}
-
-
 
 /* ── DASHBOARD ── */
 #dashboard{display:none;flex-direction:column;}
@@ -163,7 +148,7 @@ html,body{height:100%;font-family:Outfit,sans-serif;background:var(--bg);color:v
 .top-logo{font-size:1rem;font-weight:900;color:var(--accent);flex:1;letter-spacing:-0.02em;}
 .top-ver{font-size:0.58rem;font-weight:800;opacity:1;margin-left:6px;color:var(--navtext);background:var(--accent);padding:2px 8px;border-radius:10px;vertical-align:middle;letter-spacing:0.02em;}
 .top-icon{width:36px;height:36px;border-radius:50%;background:var(--inp);border:none;cursor:pointer;font-size:1rem;display:flex;align-items:center;justify-content:center;color:var(--text);}
-.top-avatar{width:36px;height:36px;border-radius:50%;background:var(--accent);color:var(--navtext);font-weight:800;font-size:0.85rem;display:flex;align-items:center;justify-content:center;cursor:pointer;}
+
 .content{flex:1;overflow-y:auto;padding:0 16px 90px;}
 .bot-nav{position:fixed;bottom:0;left:0;right:0;background:var(--nav);display:flex;border-top:1px solid rgba(255,255,255,0.06);z-index:50;padding-bottom:env(safe-area-inset-bottom);}
 .nb{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 2px 8px;border:none;background:none;color:var(--navtext);opacity:0.4;cursor:pointer;font-family:Outfit,sans-serif;transition:opacity 0.2s;}
@@ -206,7 +191,7 @@ html,body{height:100%;font-family:Outfit,sans-serif;background:var(--bg);color:v
 .mod-arrow{margin-left:auto;color:var(--dim);font-size:1.1rem;}
 
 /* ── FORMS ── */
-.form-section{margin-bottom:16px;}
+
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
 .btn-sec{width:100%;padding:15px;background:var(--inp);color:var(--accent);border:1.5px solid var(--border);border-radius:12px;font-family:Outfit,sans-serif;font-size:0.88rem;font-weight:700;cursor:pointer;margin-bottom:8px;}
 .back-btn{background:none;border:none;font-size:1.4rem;cursor:pointer;color:var(--text);padding:0 10px 0 0;line-height:1;}
@@ -218,11 +203,6 @@ html,body{height:100%;font-family:Outfit,sans-serif;background:var(--bg);color:v
 .prog-bar{height:100%;background:var(--accent);border-radius:6px;transition:width 0.4s;}
 
 /* ── ALERTAS ── */
-.alerta-item{display:flex;align-items:flex-start;gap:10px;padding:14px;background:var(--card);border-radius:14px;margin-bottom:8px;box-shadow:var(--shadow);}
-.alerta-info{flex:1;min-width:0;}
-.alerta-nombre{font-weight:700;font-size:0.88rem;}
-.alerta-meta{font-size:0.68rem;color:var(--dim);margin-top:3px;}
-.alerta-actions{display:flex;gap:6px;flex-shrink:0;}
 
 /* ── CRÉDITOS ── */
 .cred-item{background:var(--card);border-radius:14px;padding:16px;margin-bottom:10px;box-shadow:var(--shadow);}
@@ -233,7 +213,7 @@ html,body{height:100%;font-family:Outfit,sans-serif;background:var(--bg);color:v
 .badge-pend{background:rgba(255,152,0,0.12);color:#f57c00;}
 .badge-pagado{background:rgba(45,158,95,0.12);color:var(--accent2);}
 .badge-vencido{background:rgba(229,57,53,0.10);color:var(--danger);}
-.cred-amounts{display:flex;justify-content:space-between;font-size:0.72rem;color:var(--dim);margin-bottom:6px;}
+
 .cred-btns{display:flex;gap:6px;margin-top:10px;}
 .cred-btn{flex:1;padding:8px 6px;border-radius:10px;border:1.5px solid var(--border);background:var(--inp);font-family:Outfit,sans-serif;font-size:0.72rem;font-weight:700;cursor:pointer;color:var(--accent);}
 .cred-btn.danger{color:var(--danger);border-color:rgba(229,57,53,0.2);}
@@ -272,13 +252,13 @@ html,body{height:100%;font-family:Outfit,sans-serif;background:var(--bg);color:v
 .pp-empty{text-align:center;padding:32px 20px;color:var(--dim);font-size:0.82rem;}
 .pp-item{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);}
 .pp-item:last-child{border-bottom:none;}
-.pp-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+
 .pp-ico{width:40px;height:40px;border-radius:13px;background:var(--inp);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
 .pp-info{flex:1;min-width:0;}
 .pp-name{font-weight:700;font-size:0.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .pp-when{font-size:0.68rem;color:var(--dim);margin-top:2px;}
 .pp-amt{font-weight:900;font-size:0.92rem;font-family:JetBrains Mono,monospace;flex-shrink:0;}
-.pp-badge{font-size:0.62rem;font-weight:800;padding:2px 7px;border-radius:20px;margin-left:4px;flex-shrink:0;}
+
 .pp-section-title{font-size:0.62rem;font-weight:800;text-transform:uppercase;letter-spacing:0.09em;color:var(--dim);padding:12px 0 6px;}
 .pp-btn-abrir{display:flex;flex-direction:column;align-items:center;justify-content:center;background:var(--card);border-radius:14px;padding:14px 10px;box-shadow:var(--shadow);cursor:pointer;border:1.5px solid var(--border);gap:2px;transition:all 0.15s;}
 .pp-btn-abrir:active{transform:scale(0.96);}
@@ -325,14 +305,8 @@ html,body{height:100%;font-family:Outfit,sans-serif;background:var(--bg);color:v
 
 /* ── CHIPS & TAGS ── */
 .chip{display:inline-flex;align-items:center;gap:4px;padding:4px 10px;border-radius:20px;font-size:0.68rem;font-weight:700;}
-.chip-green{background:rgba(45,158,95,0.1);color:var(--accent2);}
-.chip-red{background:rgba(229,57,53,0.1);color:var(--danger);}
-.chip-orange{background:rgba(255,152,0,0.1);color:#f57c00;}
 
 /* ── CÓDIGOS ── */
-.code-item{background:var(--card);border-radius:12px;padding:14px;margin-bottom:8px;box-shadow:var(--shadow);display:flex;align-items:center;gap:12px;}
-.code-text{font-family:JetBrains Mono,monospace;font-weight:700;font-size:0.9rem;color:var(--accent);flex:1;}
-.code-info{font-size:0.68rem;color:var(--dim);}
 
 /* ── SETTINGS ── */
 .set-item{display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-bottom:1px solid var(--border);}
@@ -342,13 +316,10 @@ html,body{height:100%;font-family:Outfit,sans-serif;background:var(--bg);color:v
 .set-arrow{color:var(--dim);}
 
 /* ── BANNER ADMIN ── */
-.admin-banner{background:rgba(45,158,95,0.12);border:1px solid rgba(45,158,95,0.25);border-radius:12px;padding:10px 14px;margin-bottom:12px;font-size:0.75rem;color:var(--accent2);font-weight:600;text-align:center;}
 
 /* ── PRESUPUESTO ── */
 .pres-item{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid var(--border);}
 .pres-item:last-child{border-bottom:none;}
-.pres-name{flex:1;font-size:0.85rem;font-weight:600;}
-.pres-val{font-family:JetBrains Mono,monospace;font-size:0.8rem;font-weight:700;}
 
 select.inp{appearance:none;-webkit-appearance:none;}
 .ck{padding:16px 6px;border:none;background:rgba(255,255,255,0.08);color:#fff;font-family:Outfit,sans-serif;font-size:1.15rem;font-weight:600;cursor:pointer;transition:background 0.1s,transform 0.08s;-webkit-tap-highlight-color:transparent;border-radius:4px;}
@@ -372,9 +343,9 @@ select.inp{appearance:none;-webkit-appearance:none;}
 <div class="lg-wrap">
 
   <!-- Logo -->
-  <div style="text-align:center;margin-bottom:32px;">
-    <div class="lg-logo">USALA</div>
-    <div class="lg-sub">Finanzas Personales</div>
+  <div style="text-align:center;width:100%;margin-bottom:32px;">
+    <div class="lg-logo" style="text-align:center;">USALA</div>
+    <div class="lg-sub" style="text-align:center;">Finanzas Personales</div>
   </div>
 
   <!-- ── PANEL: Sesión recordada ── -->
@@ -529,7 +500,6 @@ select.inp{appearance:none;-webkit-appearance:none;}
     <button class="nb" onclick="goTab('mas',this)"><div class="nb-ico">⋯</div><div class="nb-lbl">Más</div></button>
   </nav>
 </div>
-
 
 <!-- ══ TX MODAL ══ -->
 <!-- ══ BIENVENIDA MODAL ══ -->
@@ -1135,9 +1105,10 @@ function mostrarPanelConNip(nombre){
   _actualizarNipDots();
 }
 
-// Mantener compatibilidad con nipSig/nipBack viejos (por si quedaron refs)
-function nipSig(el,nextId){ }
-function nipBack(e,el,prevId){ }
+function nipKey(){
+  if(!_sesionPendiente) return null;
+  return _sesionPendiente.isAdmin ? 'usala_nip_admin' : 'usala_nip_u_' + _sesionPendiente.codigo;
+}
 
 function verificarNip(){
   var key=nipKey();
@@ -1217,8 +1188,6 @@ function limpiarTodasSolicitudes(){
   showToast('✓ Solicitudes borradas');
   goSub('codigos');
 }
-
-
 
 // ══════════════════════════════════════════
 // DASHBOARD
@@ -2297,7 +2266,6 @@ function renderListaCreds(tipo){
     // Agregar histDiv al div principal (ya como nodo DOM, no como string)
     if(histDiv) div.appendChild(histDiv);
 
-
     // Botones via DOM (sin comillas problemáticas)
     var btnsDiv = div.querySelector('#btns_'+tipo+'_'+i);
 
@@ -2341,7 +2309,6 @@ function renderListaCreds(tipo){
   var mc = document.getElementById('mainContent');
   mc.appendChild(fragment);
 }
-
 
 // ══════════════════════════════════════════════════════
 // PAGOS MENSUALES
@@ -2451,7 +2418,6 @@ function loadPagosBase(){ return load('pagos_mensuales',[]); }
 function savePagosBase(p){ save('pagos_mensuales',p); }
 function loadPagosEstado(){ try{ return JSON.parse(localStorage.getItem(keyPagosMes())||'{}'); }catch(e){ return {}; } }
 function savePagosEstado(e){ localStorage.setItem(keyPagosMes(), JSON.stringify(e)); }
-
 
 // ══════════════════════════════════════════════════════
 // ACTIVOS
@@ -2931,7 +2897,7 @@ function renderPagosMes(){
     });
   }
 
-  function renderHistorial(){
+  function renderHistorialPagos(){
     var cont = document.getElementById('pmListaCont');
     if(!cont) return;
     cont.innerHTML='';
@@ -3126,13 +3092,12 @@ function renderPagosMes(){
     if(el) el.classList.add('active');
     if(tab==='pendientes')  renderPendientes();
     else if(tab==='pagados') renderPagadosMes();
-    else                     renderHistorial();
+    else                     renderHistorialPagos();
   };
 
   // Render inicial: pendientes
   renderPendientes();
 }
-
 
 function renderPagarPago(pid, montoEst){
   var mc = document.getElementById('mainContent');
@@ -3246,7 +3211,6 @@ function renderCreditosCobrar(){
   mc.appendChild(bNew);
   renderListaCreds('prestamo');
 }
-
 
 function renderFormCredito(tipo, data){
   var esD = tipo==='deuda';
@@ -3504,7 +3468,6 @@ function borrarCred(i,tipo){
 // ══════════════════════════════════════════
 // MÁS
 // ══════════════════════════════════════════
-
 
 function renderMas(){
   var isAdmin = S.user && S.user.isAdmin;
@@ -3885,7 +3848,6 @@ function renderHistorial(){
     +'<div class="card">'+items+'</div>';
 }
 
-
 // ══════════════════════════════════════════
 // CONVERSOR
 // ══════════════════════════════════════════
@@ -4005,34 +3967,74 @@ function renderCodigos(){
       +'<div class="stat-card"><div class="stat-label">👥 Total registrados</div><div class="stat-val">'+codigos.length+'</div></div>'
       +'<div class="stat-card"><div class="stat-label">✅ Con acceso activo</div><div class="stat-val" style="color:var(--accent2);">'+activos.length+'</div></div>'
     +'</div>'
-    +'<div class="card" style="margin-bottom:14px;border:1.5px solid rgba(37,211,102,0.25);">'
-      +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">'
-        +'<div style="font-size:1.4rem;">📲</div>'
-        +'<div><div style="font-weight:900;font-size:0.88rem;">¿Te mandaron una solicitud?</div>'
-        +'<div style="font-size:0.72rem;color:var(--dim);">Pega el mensaje del usuario para registrarla al instante</div></div>'
-        +'<button onclick="document.getElementById(\'importSolPanel\').style.display=document.getElementById(\'importSolPanel\').style.display===\'none\'?\'block\':\'none\'" style="margin-left:auto;background:rgba(37,211,102,0.12);color:#25D366;border:1.5px solid rgba(37,211,102,0.25);border-radius:10px;padding:6px 12px;font-family:Outfit,sans-serif;font-size:0.75rem;font-weight:800;cursor:pointer;flex-shrink:0;">+ Pegar</button>'
+    +'<div class="card" style="margin-bottom:14px;">'
+      +'<div style="display:flex;align-items:center;gap:12px;">'
+        +'<div style="width:40px;height:40px;border-radius:12px;background:var(--inp);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;">📲</div>'
+        +'<div style="flex:1;min-width:0;">'
+          +'<div style="font-weight:900;font-size:0.88rem;">¿Te mandaron una solicitud?</div>'
+          +'<div style="font-size:0.72rem;color:var(--dim);margin-top:2px;">Pega el mensaje para registrarla al instante</div>'
+        +'</div>'
+        +'<button onclick="_toggleImportPanel()" id="btnToggleImport" style="flex-shrink:0;padding:8px 14px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-family:Outfit,sans-serif;font-size:0.75rem;font-weight:800;cursor:pointer;">+ Pegar</button>'
       +'</div>'
-      +'<div id="importSolPanel" style="display:none;">'
-        +'<textarea class="inp" id="importSolInp" placeholder="Pega aquí el mensaje completo que te mandó el usuario por WhatsApp..." style="height:90px;resize:none;font-size:0.75rem;"></textarea>'
-        +'<button onclick="importarSolicitud()" style="width:100%;padding:11px;background:#25D366;color:#fff;border:none;border-radius:12px;font-family:Outfit,sans-serif;font-weight:800;font-size:0.85rem;cursor:pointer;margin-top:6px;">✅ Registrar solicitud</button>'
-      +'<button onclick="limpiarTodasSolicitudes()" style="width:100%;padding:8px;background:none;border:none;color:var(--dim);font-family:Outfit,sans-serif;font-size:0.72rem;cursor:pointer;margin-top:4px;">🗑 Limpiar todas las solicitudes</button>'
+      +'<div id="importSolPanel" style="display:none;margin-top:14px;">'
+        +'<textarea class="inp" id="importSolInp" placeholder="Pega aquí el mensaje completo..." style="height:90px;resize:none;font-size:0.8rem;margin-bottom:8px;"></textarea>'
+        +'<button onclick="importarSolicitud()" class="btn-main" style="margin-top:0;">✅ Registrar solicitud</button>'
+        +'<button onclick="limpiarTodasSolicitudes()" style="width:100%;padding:8px;background:none;border:none;color:var(--dim);font-family:Outfit,sans-serif;font-size:0.72rem;cursor:pointer;margin-top:4px;">🗑 Limpiar todas las solicitudes</button>'
       +'</div>'
     +'</div>'
     +'<div class="card" style="margin-bottom:14px;">'
-      +'<div class="card-title">➕ Nuevo usuario</div>'
-      +'<div class="form-row">'
-        +'<div><label class="inp-label">Nombre completo</label><input class="inp" id="codNota" placeholder="Ej: María García"></div>'
-        +'<div><label class="inp-label">Contacto (WhatsApp o email)</label><input class="inp" id="codContacto" inputmode="tel" autocomplete="tel" placeholder="Ej: 55 1234 5678" oninput="formatearContacto(this)"></div>'
+      +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;">'
+        +'<div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;">➕</div>'
+        +'<div><div style="font-weight:900;font-size:0.95rem;">Nuevo usuario</div>'
+        +'<div style="font-size:0.72rem;color:var(--dim);margin-top:1px;">Genera un código de acceso personalizado</div></div>'
       +'</div>'
-      +'<div class="form-row">'
-        +'<div><label class="inp-label">Prefijo</label><input class="inp" id="codPrefijo" placeholder="Ej: FIN" value="FIN"></div>'
-        +'<div><label class="inp-label">Vence en</label><select class="inp" id="codVence"><option value="7">7 días</option><option value="15">15 días</option><option value="30" selected>1 mes</option><option value="90">3 meses</option><option value="365">1 año</option></select></div>'
+      // Nombre
+      +'<div style="margin-bottom:12px;">'
+        +'<div style="font-size:0.68rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;">👤 Nombre completo</div>'
+        +'<input style="width:100%;padding:13px 14px;background:var(--inp);border:1.5px solid var(--border);border-radius:12px;font-family:Outfit,sans-serif;font-size:0.92rem;color:var(--text);outline:none;box-sizing:border-box;" id="codNota" placeholder="Ej: María García" onfocus="this.style.borderColor=\'var(--accent)\'" onblur="this.style.borderColor=\'var(--border)\'">'
       +'</div>'
-      +'<button class="btn-main" onclick="generarCodigo()">🔑 Generar código</button>'
+      // Contacto
+      +'<div style="margin-bottom:12px;">'
+        +'<div style="font-size:0.68rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;">📱 WhatsApp o email</div>'
+        +'<input style="width:100%;padding:13px 14px;background:var(--inp);border:1.5px solid var(--border);border-radius:12px;font-family:Outfit,sans-serif;font-size:0.92rem;color:var(--text);outline:none;box-sizing:border-box;" id="codContacto" inputmode="tel" autocomplete="tel" placeholder="55 1234 5678 o correo@email.com" oninput="formatearContacto(this)" onfocus="this.style.borderColor=\'var(--accent)\'" onblur="this.style.borderColor=\'var(--border)\'">'
+      +'</div>'
+      // Prefijo + Vigencia en fila
+      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px;">'
+        +'<div>'
+          +'<div style="font-size:0.68rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;">🔤 Prefijo</div>'
+          +'<input style="width:100%;padding:13px 14px;background:var(--inp);border:1.5px solid var(--border);border-radius:12px;font-family:JetBrains Mono,monospace;font-size:0.95rem;font-weight:700;color:var(--text);outline:none;box-sizing:border-box;letter-spacing:0.08em;text-transform:uppercase;" id="codPrefijo" placeholder="FIN" value="FIN" oninput="this.value=this.value.toUpperCase();_actualizarCodPreview()" onfocus="this.style.borderColor=\'var(--accent)\'" onblur="this.style.borderColor=\'var(--border)\'">'
+        +'</div>'
+        +'<div>'
+          +'<div style="font-size:0.68rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--accent);margin-bottom:6px;">⏱ Vigencia</div>'
+          +'<select style="width:100%;padding:13px 14px;background:var(--inp);border:1.5px solid var(--border);border-radius:12px;font-family:Outfit,sans-serif;font-size:0.88rem;font-weight:600;color:var(--text);outline:none;box-sizing:border-box;appearance:none;-webkit-appearance:none;" id="codVence">'
+            +'<option value="7">7 días</option>'
+            +'<option value="15">15 días</option>'
+            +'<option value="30" selected>1 mes</option>'
+            +'<option value="90">3 meses</option>'
+            +'<option value="180">6 meses</option>'
+            +'<option value="365">1 año</option>'
+          +'</select>'
+        +'</div>'
+      +'</div>'
+      // Preview del código
+      +'<div style="background:var(--inp);border-radius:12px;padding:12px 14px;margin-bottom:16px;display:flex;align-items:center;gap:10px;">'
+        +'<div style="font-size:0.7rem;color:var(--dim);font-weight:700;flex-shrink:0;">Vista previa:</div>'
+        +'<div style="font-family:JetBrains Mono,monospace;font-weight:900;font-size:1rem;color:var(--accent);letter-spacing:0.1em;" id="codPreview">FIN-????</div>'
+      +'</div>'
+      +'<button onclick="generarCodigo()" style="width:100%;padding:15px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;border-radius:14px;font-family:Outfit,sans-serif;font-size:0.95rem;font-weight:800;cursor:pointer;letter-spacing:0.01em;box-shadow:0 6px 18px rgba(0,0,0,0.15);">🔑 Generar código</button>'
     +'</div>'
     +(activos.length?'<div style="font-size:0.7rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent2);margin-bottom:8px;">✅ ACCESO ACTIVO ('+activos.length+')</div>'+activos.map(mkFicha).join(''):'')
     +(vencidos.length?'<div style="font-size:0.7rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--dim);margin:14px 0 8px;">⏸ INACTIVOS / VENCIDOS ('+vencidos.length+')</div>'+vencidos.map(mkFicha).join(''):'')
     +(!codigos.length?'<div style="text-align:center;padding:32px 0;color:var(--dim);"><div style="font-size:2.5rem;margin-bottom:10px;">👥</div><div style="font-weight:800;margin-bottom:4px;">Sin usuarios registrados</div><div style="font-size:0.78rem;">Genera el primer código arriba</div></div>':'');
+}
+
+function _toggleImportPanel(){
+  var p=document.getElementById('importSolPanel');
+  var b=document.getElementById('btnToggleImport');
+  if(!p) return;
+  var open = p.style.display==='none';
+  p.style.display = open ? 'block' : 'none';
+  if(b) b.textContent = open ? '✕ Cerrar' : '+ Pegar';
 }
 
 function _generarCodigoUnico(prefijo){
@@ -4113,6 +4115,12 @@ function rechazarSolicitud(idx){
   localStorage.setItem('usala_solicitudes',JSON.stringify(solicitudes));
   showToast('✓ Solicitud rechazada');
   goSub('codigos');
+}
+
+function _actualizarCodPreview(){
+  var pref = (document.getElementById('codPrefijo').value||'FIN').toUpperCase().slice(0,4);
+  var prev = document.getElementById('codPreview');
+  if(prev) prev.textContent = pref + '-????';
 }
 
 function generarCodigo(){
@@ -4458,7 +4466,6 @@ var _catModalTipo  = null;  // tipo activo en el modal
 var _catSelectId   = null;  // id del <select> a refrescar
 var _catSelectVal  = null;  // valor actualmente seleccionado
 
-
 // Abrir modal categoría según tipo activo en txModal
 function abrirCatModalTx(){
   var tipo = document.getElementById('tipoGasto') &&
@@ -4724,7 +4731,6 @@ function _ppMkItem(p){
   return row;
 }
 
-
 // ══════════════════════════════════════════════════════
 // SISTEMA AUTOLOCK — Bloqueo automático por inactividad
 // ══════════════════════════════════════════════════════
@@ -4853,7 +4859,6 @@ function _lockIniciarEscuchas(){
   });
 }
 
-
 function abrirConfigAutolock(){
   var mc = document.getElementById('mainContent');
   mc.innerHTML = '';
@@ -4920,7 +4925,6 @@ function abrirConfigAutolock(){
   // Redirigir a goSub config al usar backSubBtn
   S.subtab = 'config';
 }
-
 
 // ══════════════════════════════════════════
 // BANNER INTELIGENTE DE SEGURIDAD
@@ -5456,7 +5460,6 @@ function guardarMovEfectivo(){
   showToast('✓ '+(tipo==='ingreso'?'Entrada':'Salida')+' registrada en Efectivo');
   goSub('efectivo');
 }
-
 
 // ── CHEQUES / BANCO ──
 function renderCheques(){
@@ -6053,7 +6056,6 @@ var FAQS = [
    a:'Toca 🔢 en la barra superior. Arrástrala, minimízala con − sin perder el cálculo, o ciérrala con ×.'},
 ];
 
-
 function renderAyuda(){
   var st = _getSecurityStatus();
   var nipOk   = st.nip;
@@ -6241,7 +6243,6 @@ function procesarComandoVoz(t){
   }
   showToast('❓ No entendí: "' + t + '"');
 }
-
 
 function verFichaCodigo(codigo){
   var cods=JSON.parse(localStorage.getItem('usala_codigos')||'[]');
@@ -6344,16 +6345,6 @@ function renovarCodigo(codigo){
   goSub('codigos');
 }
 
-function resetearNipUsuario(codigo){
-  var cods=JSON.parse(localStorage.getItem('usala_codigos')||'[]');
-  var c=cods.find(function(x){ return x.codigo===codigo; });
-  var nombre=c?(c.nombreUsuario||c.nota||codigo):codigo;
-  if(!confirm('¿Resetear el NIP de '+nombre+'?\nEl usuario podrá entrar sin NIP y configurar uno nuevo.')) return;
-  localStorage.removeItem('usala_nip_u_'+codigo);
-  showToast('🔓 NIP de '+nombre+' reseteado');
-  goSub('codigos');
-}
-
 function desactivarCodigo(codigo){
   if(!confirm('¿Desactivar el acceso de '+codigo+'?')) return;
   var cods=JSON.parse(localStorage.getItem('usala_codigos')||'[]');
@@ -6363,2110 +6354,6 @@ function desactivarCodigo(codigo){
   goSub('codigos');
 }
 
-function copiarCodigo(c){ navigator.clipboard.writeText(c).catch(function(){}); showToast('✓ Copiado: '+c); }
-
-
-function copiarCodigo(c){ navigator.clipboard.writeText(c).catch(function(){}); showToast('✓ Copiado: '+c); }
-
-// ══════════════════════════════════════════
-// CONFIGURACIÓN
-// ══════════════════════════════════════════
-function renderConfig(){
-  var isAdmin=S.user&&S.user.isAdmin;
-  return '<div class="page-header">'+backBtn('mas',4)+'<div class="page-title">⚙️ Configuración</div></div>'
-    +'<div class="card">'
-    +'<div class="set-item" onclick="pickTema()"><div><div class="set-label">🎨 Cambiar tema</div></div><div class="set-arrow">›</div></div>'
-    +'<div class="set-item" onclick="abrirSelectorMoneda()"><div><div class="set-label">💱 Moneda de la app</div><div class="set-sub">'+_getMonedaApp()+'</div></div><div class="set-arrow">›</div></div>'
-    +'<div class="set-item" onclick="abrirConfigNip()"><div><div class="set-label">🔒 NIP de seguridad</div><div class="set-sub">'+(localStorage.getItem('usala_nip_'+(S.user&&S.user.isAdmin?'admin':'u_'+(S.user&&S.user.codigo)))?'Activado ✓':'Sin NIP')+'</div></div><div class="set-arrow">›</div></div>'
-    +'<div class="set-item" onclick="abrirConfigAutolock()"><div><div class="set-label">⏱ Bloqueo automático</div><div class="set-sub" id="autolockSubLabel">'
-    +(function(){ var m=getLockTimeout(); var op=LOCK_OPCIONES.find(function(o){return o.val===m;}); return op?op.label:'Desactivado'; })()
-    +'</div></div><div class="set-arrow">›</div></div>'
-    +'<div class="set-item" onclick="restablecerMic()"><div><div class="set-label">🎤 Restablecer micrófono</div><div class="set-sub" id="micEstadoLabel">'+_getMicEstado()+'</div></div><div class="set-arrow">›</div></div>'
-    +'<div class="set-item" onclick="goSub(\'version\')"><div><div class="set-label">📋 Versión</div><div class="set-sub">v'+APP_VERSION+'</div></div><div class="set-arrow">›</div></div>'
-    +'<div class="set-item" onclick="cerrarSesion()"><div><div class="set-label" style="color:var(--danger);">🚪 Cerrar sesión</div></div><div class="set-arrow">›</div></div>'
-    +'</div>'
-    +(isAdmin?'<div class="card" style="margin-top:12px;"><div class="card-title">Admin</div>'
-    +'<div class="set-item"><div><div class="set-label">🔐 Nueva contraseña</div></div></div>'
-    +'<input class="inp" id="np1" type="password" placeholder="Nueva contraseña" style="margin-bottom:8px;">'
-    +'<input class="inp" id="np2" type="password" placeholder="Confirmar contraseña" style="margin-bottom:10px;">'
-    +'<button class="btn-main" onclick="cambiarPass()">Cambiar contraseña</button>'
-    +'</div>':'')
-    +'<div class="card" style="margin-top:12px;">'
-    +'<div class="card-title" style="margin-top:14px;">🏷️ Mis categorías</div>'
-  +'<div style="font-size:0.75rem;color:var(--dim);margin-bottom:10px;">Categorías personalizadas en toda la app</div>'
-  +'<div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;">'
-  +'<button class="cat-add-btn" onclick="abrirCatModal(\'gasto\',null)">💸 Gastos</button>'
-  +'<button class="cat-add-btn" onclick="abrirCatModal(\'ingreso\',null)">💰 Ingresos</button>'
-  +'<button class="cat-add-btn" onclick="abrirCatModal(\'activos\',null)">🏦 Activos</button>'
-  +'<button class="cat-add-btn" onclick="abrirCatModal(\'pagos\',null)">📅 Pagos fijos</button>'
-  +'</div>'
-  +'<div class="danger-zone">'
-    +'<div class="danger-title">⚠️ Zona de peligro</div>'
-    +'<button class="danger-btn" onclick="resetTxs()">🗑️ Borrar mis transacciones</button>'
-    +'<button class="danger-btn" onclick="resetCuenta()">♻️ Restablecer toda mi cuenta</button>'
-    +'</div></div>';
-}
-
-function pickTema(){
-  // Mostrar selector de temas inline en mainContent
-  var html = '<div class="page-header">'
-    + '<button onclick="goSub(&quot;config&quot;)" style="background:none;border:none;color:var(--accent);font-size:1rem;cursor:pointer;padding:4px 8px;">← Atrás</button>'
-    + '<div class="page-title">🎨 Tema visual</div></div>'
-    + '<div class="card">'
-    + '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">'
-    + '<div class="theme-card" data-theme="default" style="background:#f0f4f0;color:#1e6b3c;border:2px solid transparent;" onclick="elegirTema(this,&quot;default&quot;)">'
-    +   '<div style="width:28px;height:28px;border-radius:50%;background:#1e6b3c;margin-bottom:8px;"></div>'
-    +   '<div style="font-weight:700;font-size:0.9rem;">Verde Natural</div></div>'
-    + '<div class="theme-card" data-theme="dark" style="background:#162016;color:#2d9e5f;border:2px solid transparent;" onclick="elegirTema(this,&quot;dark&quot;)">'
-    +   '<div style="width:28px;height:28px;border-radius:50%;background:#2d9e5f;margin-bottom:8px;"></div>'
-    +   '<div style="font-weight:700;font-size:0.9rem;color:#e8f5e8;">Oscuro Pro</div></div>'
-    + '<div class="theme-card" data-theme="gold" style="background:#140f00;color:#c9841a;border:2px solid transparent;" onclick="elegirTema(this,&quot;gold&quot;)">'
-    +   '<div style="width:28px;height:28px;border-radius:50%;background:#c9841a;margin-bottom:8px;"></div>'
-    +   '<div style="font-weight:700;font-size:0.9rem;color:#f5e6c0;">Dorado Élite</div></div>'
-    + '<div class="theme-card" data-theme="ocean" style="background:#e8f4fd;color:#0066cc;border:2px solid transparent;" onclick="elegirTema(this,&quot;ocean&quot;)">'
-    +   '<div style="width:28px;height:28px;border-radius:50%;background:#0066cc;margin-bottom:8px;"></div>'
-    +   '<div style="font-weight:700;font-size:0.9rem;">Océano</div></div>'
-    + '<div class="theme-card" data-theme="rose" style="background:#fff5f7;color:#c02040;border:2px solid transparent;grid-column:1/-1;" onclick="elegirTema(this,&quot;rose&quot;)">'
-    +   '<div style="width:28px;height:28px;border-radius:50%;background:#c02040;margin-bottom:8px;"></div>'
-    +   '<div style="font-weight:700;font-size:0.9rem;">Rosa Elegante</div></div>'
-    + '</div></div>';
-  document.getElementById('mainContent').innerHTML = html;
-  // Marcar el tema activo
-  var activo = document.querySelector('.theme-card[data-theme="'+(S.theme||'default')+'"]');
-  if(activo) activo.style.border = '2px solid currentColor';
-}
-
-function elegirTema(el, t){
-  // Quitar selección anterior
-  document.querySelectorAll('.theme-card').forEach(function(c){ c.style.border='2px solid transparent'; });
-  el.style.border = '2px solid currentColor';
-  S.theme = t;
-  applyTheme(t);
-  localStorage.setItem('usala_theme', t);
-  showToast('🎨 Tema aplicado');
-}
-
-function _getMicEstado(){
-  var p = localStorage.getItem('usala_mic_permiso');
-  if(!p)    return 'No solicitado aún';
-  if(p === 'granted') return '✅ Permitido';
-  if(p === 'denied')  return '❌ Denegado';
-  return p;
-}
-
-function _getMonedaApp(){
-  var key = 'usala_moneda_app_' + (S.user ? (S.user.isAdmin ? 'admin' : S.user.codigo) : 'anon');
-  try{ var m = JSON.parse(localStorage.getItem(key)||'null');
-    return m ? (m.bandera+' '+m.nombre+' ('+m.simbolo+')') : '🇲🇽 Pesos mexicanos ($)'; }
-  catch(e){ return '🇲🇽 Pesos mexicanos ($)'; }
-}
-
-function abrirSelectorMoneda(){
-  var monedas = [
-    {codigo:'MXN', nombre:'Pesos mexicanos', simbolo:'$', bandera:'🇲🇽'},
-    {codigo:'USD', nombre:'Dólares',          simbolo:'$', bandera:'🇺🇸'},
-    {codigo:'EUR', nombre:'Euros',            simbolo:'€', bandera:'🇪🇺'},
-    {codigo:'CAD', nombre:'Dólar canadiense', simbolo:'$', bandera:'🇨🇦'},
-    {codigo:'GBP', nombre:'Libras',           simbolo:'£', bandera:'🇬🇧'},
-    {codigo:'COP', nombre:'Pesos colombianos',simbolo:'$', bandera:'🇨🇴'},
-    {codigo:'ARS', nombre:'Pesos argentinos', simbolo:'$', bandera:'🇦🇷'},
-    {codigo:'GTQ', nombre:'Quetzales',        simbolo:'Q', bandera:'🇬🇹'},
-    {codigo:'PEN', nombre:'Soles',            simbolo:'S/',bandera:'🇵🇪'},
-  ];
-  var key = 'usala_moneda_app_' + (S.user ? (S.user.isAdmin ? 'admin' : S.user.codigo) : 'anon');
-  var actual;
-  try{ actual = JSON.parse(localStorage.getItem(key)||'null'); }catch(e){ actual = null; }
-  var html = '<div class="page-header">'
-    +'<button onclick="goSub(&quot;config&quot;)" style="background:none;border:none;color:var(--accent);font-size:1rem;cursor:pointer;padding:4px 8px;">← Atrás</button>'
-    +'<div class="page-title">💱 Moneda de la app</div></div>'
-    +'<div class="card">'
-    +'<div style="font-size:0.8rem;color:var(--dim);margin-bottom:14px;line-height:1.5;">El símbolo se mostrará en toda la app: saldos, historial y reportes.</div>'
-    + monedas.map(function(m){
-        var activa = actual && actual.codigo === m.codigo;
-        return '<div onclick="guardarMonedaApp(&quot;'+m.codigo+'&quot;)" style="display:flex;align-items:center;gap:12px;padding:14px 12px;border-radius:14px;margin-bottom:6px;cursor:pointer;background:'+(activa?'rgba(30,107,60,0.10)':'var(--inp)')+';border:2px solid '+(activa?'var(--accent)':'transparent')+';">'
-          +'<span style="font-size:1.4rem;">'+m.bandera+'</span>'
-          +'<div style="flex:1;"><div style="font-weight:700;font-size:0.9rem;color:var(--text);">'+m.nombre+'</div>'
-          +'<div style="font-size:0.72rem;color:var(--dim);">'+m.codigo+' · símbolo: '+m.simbolo+'</div></div>'
-          +(activa?'<span style="color:var(--accent);font-size:1.1rem;">✓</span>':'')
-          +'</div>';
-      }).join('')
-    +'</div>';
-  document.getElementById('mainContent').innerHTML = html;
-}
-
-function guardarMonedaApp(codigo){
-  var monedas = {
-    MXN:{codigo:'MXN',nombre:'Pesos mexicanos', simbolo:'$', bandera:'🇲🇽'},
-    USD:{codigo:'USD',nombre:'Dólares',          simbolo:'$', bandera:'🇺🇸'},
-    EUR:{codigo:'EUR',nombre:'Euros',            simbolo:'€', bandera:'🇪🇺'},
-    CAD:{codigo:'CAD',nombre:'Dólar canadiense', simbolo:'$', bandera:'🇨🇦'},
-    GBP:{codigo:'GBP',nombre:'Libras',           simbolo:'£', bandera:'🇬🇧'},
-    COP:{codigo:'COP',nombre:'Pesos colombianos',simbolo:'$', bandera:'🇨🇴'},
-    ARS:{codigo:'ARS',nombre:'Pesos argentinos', simbolo:'$', bandera:'🇦🇷'},
-    GTQ:{codigo:'GTQ',nombre:'Quetzales',        simbolo:'Q', bandera:'🇬🇹'},
-    PEN:{codigo:'PEN',nombre:'Soles',            simbolo:'S/',bandera:'🇵🇪'},
-  };
-  var m = monedas[codigo];
-  if(!m) return;
-  var key = 'usala_moneda_app_' + (S.user ? (S.user.isAdmin ? 'admin' : S.user.codigo) : 'anon');
-  localStorage.setItem(key, JSON.stringify(m));
-  showToast(m.bandera+' Moneda cambiada a '+m.nombre);
-  renderTab(S.tab); // refrescar pantalla actual
-  abrirSelectorMoneda(); // refrescar selector con nuevo check
-}
-
-function restablecerMic(){
-  localStorage.removeItem('usala_mic_permiso');
-  showToast('🎤 Micrófono restablecido');
-  var el = document.getElementById('micEstadoLabel');
-  if(el) el.textContent = 'No solicitado aún';
-}
-
-function restablecerMonedaIA(){
-  var key = 'usala_ia_moneda_' + (S.user ? (S.user.isAdmin ? 'admin' : S.user.codigo) : 'anon');
-  localStorage.removeItem(key);
-  _iaMoneda = null;
-  _iaHistorial = [];
-  _iaInicializado = false;
-  _iaAbierto = false;
-  if(p){ p.style.display = 'none'; }
-  if(bub) bub.innerHTML = '';
-  showToast('💱 Moneda restablecida. Abre el asistente 🎙️ para elegir de nuevo.');
-  var el = document.getElementById('monedaEstadoLabel');
-  if(el) el.textContent = 'No configurada';
-}
-function toggleUMenu(){
-  var menu = document.getElementById('uFabMenu');
-  var btn  = document.getElementById('uFabBtn');
-  if(!menu) return;
-  var abierto = menu.style.display === 'block';
-  if(abierto){
-    cerrarUMenu();
-  } else {
-    actualizarUMenu();
-    menu.style.display = 'block';
-    requestAnimationFrame(function(){
-      menu.style.opacity = '1';
-      menu.style.transform = 'scale(1) translateY(0)';
-    });
-    if(btn) btn.style.background = 'var(--accent2,#4f8ef7)';
-    // Cerrar al tocar fuera — esperar 300ms para que no cierre al instante
-    setTimeout(function(){
-      function cerrarFuera(e){
-        var dentroMenu = menu.contains(e.target);
-        var esBtn = btn && (btn === e.target || btn.contains(e.target));
-        if(!dentroMenu && !esBtn){
-          cerrarUMenu();
-          document.removeEventListener('touchstart', cerrarFuera);
-          document.removeEventListener('click', cerrarFuera);
-        }
-      }
-      document.addEventListener('touchstart', cerrarFuera, {passive:true});
-      document.addEventListener('click', cerrarFuera);
-    }, 300);
-  }
-}
-
-function cerrarUMenu(){
-  var menu = document.getElementById('uFabMenu');
-  var btn  = document.getElementById('uFabBtn');
-  if(!menu) return;
-  menu.style.opacity = '0';
-  menu.style.transform = 'scale(0.85) translateY(-10px)';
-  setTimeout(function(){ menu.style.display = 'none'; }, 220);
-  if(btn) btn.style.background = 'linear-gradient(135deg,var(--accent),var(--accent2))';
-}
-
-function actualizarUMenu(){
-  var c = getCuentas();
-  var efectivo = Number(c.efectivo||0);
-  var banco = (c.cheques||[]).reduce(function(s,x){ return s+Number(x.saldo||0); },0);
-  var deudaTC = (c.tarjetas||[]).reduce(function(s,t){ return s+Number(t.balance||0); },0);
-  var ef = document.getElementById('uMenuEfectivo');
-  var ba = document.getElementById('uMenuBanco');
-  var tc = document.getElementById('uMenuTC');
-  if(ef) ef.textContent = '$' + efectivo.toLocaleString('es-MX', {minimumFractionDigits:2});
-  if(ba) ba.textContent = '$' + banco.toLocaleString('es-MX', {minimumFractionDigits:2});
-  if(tc) tc.textContent = 'Deuda: $' + deudaTC.toLocaleString('es-MX', {minimumFractionDigits:2});
-}
-
-function irACuenta(sub){
-  cerrarUMenu();
-  goTab('cuentas', document.querySelectorAll('.nb')[1]);
-  setTimeout(function(){ goSub(sub); }, 120);
-}
-
-function cerrarSesion(){
-  if(!confirm('¿Seguro que quieres cerrar sesión?\n\nTus datos quedan guardados y podrás volver a entrar con tu código.')) return;
-  localStorage.removeItem('usala_session');
-  S.user=null; S.tab='inicio';
-  document.getElementById('accNombre').value='';
-  document.getElementById('accCodigo').value='';
-  _accMostrarNombreRow(true);  // resetear UI al estado inicial
-  document.getElementById('panelSesion').style.display='none';
-  document.getElementById('panelCodigo').style.display='block';
-  // Ocultar botón U
-  var ub = document.getElementById('uFabBtn');
-  var um = document.getElementById('uFabMenu');
-  if(ub) ub.style.display='none';
-  if(um) um.style.display='none';
-  showScreen('accessScreen');
-}
-function cambiarPass(){
-  var p1=document.getElementById('np1').value;
-  var p2=document.getElementById('np2').value;
-  if(!p1||p1.length<4){ showToast('⚠ Mínimo 4 caracteres'); return; }
-  if(p1!==p2){ showToast('⚠ Las contraseñas no coinciden'); return; }
-  localStorage.setItem('usala_admin_pass',p1);
-  showToast('✓ Contraseña actualizada');
-}
-function resetTxs(){
-  if(!confirm('¿Borrar todas tus transacciones?\n\nTambién se resetearán los saldos de Efectivo y Cuentas bancarias vinculados.')) return;
-  save('txs',[]);
-  // También limpiar saldos de cuentas que se calculan desde txs
-  var uid = S.user.isAdmin ? 'admin' : 'u_'+S.user.codigo;
-  var cu = JSON.parse(localStorage.getItem('usala_cuentas_'+uid)||'{}');
-  cu.efectivo = 0;
-  cu.movEfectivo = [];
-  (cu.cheques||[]).forEach(function(ch){ ch.saldo = 0; });
-  localStorage.setItem('usala_cuentas_'+uid, JSON.stringify(cu));
-  showToast('✓ Transacciones y saldos borrados');
-  goSub('config');
-}
-function resetCuenta(){
-  if(!confirm('¿BORRAR TODA tu información?\n\nSe eliminarán transacciones, cuentas, créditos, metas, alertas y presupuestos.\n\nEsta acción NO se puede deshacer.')) return;
-  if(!confirm('⚠️ Última confirmación\n\n¿Estás completamente seguro?')) return;
-  var uid = S.user.isAdmin ? 'admin' : 'u_'+S.user.codigo;
-  var prefix = 'usala_'+uid+'_';
-  // Borrar claves con prefijo estándar
-  Object.keys(localStorage).filter(function(k){
-    return k.indexOf(prefix)===0;
-  }).forEach(function(k){ localStorage.removeItem(k); });
-  // Borrar clave de cuentas (usa formato diferente)
-  localStorage.removeItem('usala_cuentas_'+uid);
-  showToast('✅ Cuenta restablecida completamente');
-  setTimeout(function(){ goTab('inicio',document.querySelector('.nb')); },600);
-}
-
-// ══════════════════════════════════════════
-// VERSIÓN
-// ══════════════════════════════════════════
-// ══════════════════════════════════════════════════════
-// MOTOR DE CATEGORÍAS PERSONALIZADAS
-// Tipos soportados: gasto | ingreso | activos | pagos
-// ══════════════════════════════════════════════════════
-
-// Claves de storage por tipo
-var _CAT_KEYS = {
-  gasto:   'cats_gasto_custom',
-  ingreso: 'cats_ingreso_custom',
-  activos: 'cats_activos_custom',
-  pagos:   'cats_pagos_custom'
-};
-
-// Categorías base por tipo (para mostrar las fijas como referencia)
-var _CAT_BASE = {
-  gasto:   GASTO_CATS_BASE.map(function(c){ return c.id; }),
-  ingreso: INGRESO_CATS_BASE.map(function(c){ return c.id; }),
-  activos: ACTIVOS_CATS.slice(),
-  pagos:   PAGOS_CATS.slice()
-};
-
-// Títulos del modal por tipo
-var _CAT_TITLES = {
-  gasto:   { title:'💸 Categorías de Gasto',   sub:'Añade tus propias categorías de gasto' },
-  ingreso: { title:'💰 Categorías de Ingreso',  sub:'Añade tus propias fuentes de ingreso' },
-  activos: { title:'🏦 Tipos de Activo',        sub:'Añade tipos de activo personalizados' },
-  pagos:   { title:'📅 Tipos de Pago Fijo',     sub:'Añade categorías de pagos recurrentes' }
-};
-
-var _catModalTipo  = null;  // tipo activo en el modal
-var _catSelectId   = null;  // id del <select> a refrescar
-var _catSelectVal  = null;  // valor actualmente seleccionado
-
-
-// Abrir modal categoría según tipo activo en txModal
-function abrirCatModalTx(){
-  var tipo = document.getElementById('tipoGasto') &&
-    document.getElementById('tipoGasto').classList.contains('selected') ? 'gasto' : 'ingreso';
-  abrirCatModal(tipo, 'txCat');
-}
-// Efectivo
-function abrirCatModalEf(){
-  var esEnt = document.getElementById('efTipoEnt') &&
-    document.getElementById('efTipoEnt').classList.contains('selected');
-  abrirCatModal(esEnt ? 'ingreso' : 'gasto', 'efCat');
-}
-// Banco
-function abrirCatModalBk(){
-  var esEnt = document.getElementById('bkTipoEnt') &&
-    document.getElementById('bkTipoEnt').classList.contains('selected');
-  abrirCatModal(esEnt ? 'ingreso' : 'gasto', 'bkCat');
-}
-
-// ══════════════════════════════════════════════════════
-// PANEL PAGOS PENDIENTES
-// ══════════════════════════════════════════════════════
-var _ppTab = 'hoy';
-
-function abrirPP(){
-  // Decidir qué tab abrir: si hay vencidos → Hoy, si no → Semana
-  var _todos = _ppGetPagos();
-  var _hayVenc = _todos.some(function(p){ return p.diffDias < 0; });
-  _ppTab = _hayVenc ? 'hoy' : 'semana';
-  document.querySelectorAll('.pp-tab').forEach(function(b,i){
-    var tabs=['hoy','semana','mes','año'];
-    b.classList.toggle('active', tabs[i]===_ppTab);
-  });
-  _ppRender();
-  document.getElementById('ppOverlay').style.display='flex';
-}
-function cerrarPP(){ document.getElementById('ppOverlay').style.display='none'; }
-function ppSetTab(tab, btn){
-  _ppTab = tab;
-  document.querySelectorAll('.pp-tab').forEach(function(b){ b.classList.remove('active'); });
-  if(btn) btn.classList.add('active');
-  _ppRender();
-}
-
-// Construir lista unificada de pagos pendientes desde todas las fuentes
-function _ppGetPagos(){
-  var hoy     = new Date(); hoy.setHours(0,0,0,0);
-  var anioAct = hoy.getFullYear();
-  var mesAct  = hoy.getMonth();    // 0-11
-  var diaAct  = hoy.getDate();
-
-  var lista = [];
-
-  // ── FUENTE 1: Pagos del mes (pagos_mensuales) ──
-  var pagosBase  = loadPagosBase();
-  var pagosEst   = loadPagosEstado();
-  var _meses = ['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
-
-  pagosBase.forEach(function(p){
-    var pid = p.id;
-    // Si ya está pagado este mes, saltar
-    if(pagosEst[pid] && pagosEst[pid].pagado) return;
-
-    // Calcular próxima fecha de vencimiento
-    var freq = p.frecuencia || 'mensual';
-    var diasFrec = {mensual:1,bimestral:2,trimestral:3,cuatrimestral:4,semestral:6,anual:12};
-    var mesesFrec = diasFrec[freq] || 1;
-
-    // Generar ocurrencias para este año
-    var fechasOcurr = [];
-    // Fecha de vencimiento: siempre usar el día de ESTE mes.
-    // Si ya pasó = vencido. Si no = próximo. Sin magia, sin adelantar.
-    var fechaRel = null;
-
-    if(p.proximoPago){
-      // Tiene fecha específica configurada — usarla directamente
-      var _pts = p.proximoPago.split('-');
-      fechaRel = new Date(+_pts[0], +_pts[1]-1, +_pts[2]);
-      fechaRel.setHours(0,0,0,0);
-    } else if(p.dia){
-      // Día del mes: usar este mes, sea pasado o futuro
-      var dia = Math.min(p.dia, 28);
-      fechaRel = new Date(anioAct, mesAct, dia);
-      fechaRel.setHours(0,0,0,0);
-    }
-
-    if(fechaRel){
-      var diffDias = Math.round((fechaRel - hoy) / 86400000);
-      lista.push({
-        nombre:   p.nombre||'Sin nombre',
-        monto:    p.monto||0,
-        fecha:    fechaRel,
-        diffDias: diffDias,
-        cat:      p.categoria||'📦 Otros',
-        freq:     freq,
-        fuente:   'pago',
-        pagado:   false,
-        urgencia: diffDias<0?'vencido': diffDias===0?'hoy': diffDias<=2?'urgente': diffDias<=7?'pronto':'ok'
-      });
-    }
-  });
-
-  // ── FUENTE 2: Créditos con fecha límite ──
-  var creds = load('creditos',[]);
-  creds.forEach(function(c){
-    if(c.estado==='pagado') return;
-    if(!c.fechaLimite) return;
-    var parts = c.fechaLimite.split('-');
-    var fecha = new Date(+parts[0], +parts[1]-1, +parts[2]); fecha.setHours(0,0,0,0);
-    if(fecha.getFullYear() < anioAct) return;
-    var diffDias = Math.round((fecha - hoy) / 86400000);
-    var pendiente = (c.monto||0) - (c.abonado||0);
-    lista.push({
-      nombre:   (c.tipo==='deuda'?'💳 Debo a ':'📥 Me debe ')+c.persona,
-      monto:    pendiente,
-      fecha:    fecha,
-      diffDias: diffDias,
-      cat:      c.tipo==='deuda'?'🤝 Crédito':'📥 Por cobrar',
-      freq:     'único',
-      fuente:   c.tipo==='deuda'?'deuda':'cobrar',
-      pagado:   false,
-      urgencia: diffDias<=0?'vencido': diffDias<=2?'urgente': diffDias<=7?'pronto':'ok'
-    });
-  });
-
-  return lista.sort(function(a,b){ return a.fecha-b.fecha; });
-}
-
-function _ppFiltrar(lista, tab){
-  var hoy   = new Date(); hoy.setHours(0,0,0,0);
-  var fin;
-  if(tab==='hoy'){
-    // Hoy = vencidos + vence hoy
-    return lista.filter(function(p){ return p.diffDias <= 0; });
-  }
-  if(tab==='semana'){
-    fin = new Date(hoy); fin.setDate(fin.getDate()+7);
-    // Incluir vencidos + los de esta semana
-    return lista.filter(function(p){ return p.fecha<=fin; });
-  }
-  if(tab==='mes'){
-    fin = new Date(hoy.getFullYear(), hoy.getMonth()+1, 0);
-    return lista.filter(function(p){ return p.fecha<=fin; });
-  }
-  // año
-  return lista;
-}
-
-function _ppFechaLabel(p){
-  var hoy = new Date(); hoy.setHours(0,0,0,0);
-  var d = p.diffDias;
-  if(d<0)  return '⚠️ Vencido hace '+Math.abs(d)+' día'+(Math.abs(d)!==1?'s':'');
-  if(d===0) return '📍 Hoy';
-  if(d===1) return '⏰ Mañana';
-  if(d<=7)  return 'En '+d+' días · '+p.fecha.toLocaleDateString('es-MX',{weekday:'long'});
-  return p.fecha.toLocaleDateString('es-MX',{day:'numeric',month:'long'})
-    +(p.freq!=='único'&&p.freq!=='mensual'?' · '+p.freq:'');
-}
-
-function _ppUrgColor(u){
-  return u==='vencido'?'#e53935': u==='urgente'?'#f57c00': u==='pronto'?'#f9a825':'var(--accent2)';
-}
-
-function _ppRender(){
-  var body  = document.getElementById('ppBody');
-  var sub   = document.getElementById('ppSubtitle');
-  if(!body) return;
-
-  var todos  = _ppGetPagos();
-  var lista  = _ppFiltrar(todos, _ppTab);
-  var total  = lista.reduce(function(s,p){ return s+p.monto; },0);
-  var labels = {hoy:'Hoy, '+new Date().toLocaleDateString('es-MX',{weekday:'long',day:'numeric',month:'long'}),
-    semana:'Semana del '+new Date().toLocaleDateString('es-MX',{day:'numeric',month:'short'}),
-    mes:new Date().toLocaleDateString('es-MX',{month:'long',year:'numeric'}),
-    año:new Date().getFullYear()+' completo'};
-  sub.textContent = labels[_ppTab];
-  body.innerHTML = '';
-
-  if(!lista.length){
-    body.innerHTML = '<div class="pp-empty">'
-      +'<div style="font-size:2.5rem;margin-bottom:10px;">🎉</div>'
-      +'<div style="font-weight:800;margin-bottom:6px;">¡Todo al corriente!</div>'
-      +'<div>No hay pagos pendientes para '+labels[_ppTab].toLowerCase()+'</div>'
-      +'</div>';
-    return;
-  }
-
-  // Resumen total
-  var vencidos = lista.filter(function(p){ return p.urgencia==='vencido'; }).length;
-  var urgentes = lista.filter(function(p){ return p.urgencia==='urgente'; }).length;
-  var resumen  = document.createElement('div');
-  resumen.style.cssText='background:var(--inp);border-radius:14px;padding:14px;margin-bottom:14px;display:flex;justify-content:space-between;align-items:center;';
-  resumen.innerHTML =
-    '<div>'
-      +'<div style="font-size:1.45rem;font-weight:900;color:var(--danger);">'+fmt(total)+'</div>'
-      +'<div style="font-size:0.72rem;color:var(--dim);">'+lista.length+' pago'+(lista.length!==1?'s':'')+'</div>'
-    +'</div>'
-    +'<div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end;">'
-    +(vencidos?'<div style="font-size:0.7rem;font-weight:800;padding:4px 10px;border-radius:20px;background:rgba(229,57,53,0.12);color:#e53935;">⚠️ '+vencidos+' vencido'+(vencidos!==1?'s':'')+'</div>':'')
-    +(urgentes?'<div style="font-size:0.7rem;font-weight:800;padding:4px 10px;border-radius:20px;background:rgba(245,124,0,0.12);color:#f57c00;">⏰ '+urgentes+' urgente'+(urgentes!==1?'s':'')+'</div>':'')
-    +'</div>';
-  body.appendChild(resumen);
-
-  // Agrupar por mes si es vista anual
-  if(_ppTab==='año'){
-    var grupos = {};
-    lista.forEach(function(p){
-      var k = p.fecha.toLocaleDateString('es-MX',{month:'long',year:'numeric'});
-      if(!grupos[k]) grupos[k]=[];
-      grupos[k].push(p);
-    });
-    Object.keys(grupos).forEach(function(mes){
-      var secTit = document.createElement('div');
-      secTit.className='pp-section-title';
-      var totMes = grupos[mes].reduce(function(s,p){ return s+p.monto; },0);
-      secTit.innerHTML = mes.charAt(0).toUpperCase()+mes.slice(1)
-        +' <span style="font-weight:900;color:var(--text);">'+fmt(totMes)+'</span>';
-      body.appendChild(secTit);
-      grupos[mes].forEach(function(p){ body.appendChild(_ppMkItem(p)); });
-    });
-  } else {
-    lista.forEach(function(p){ body.appendChild(_ppMkItem(p)); });
-  }
-
-  // Botón ir a Pagos del Mes
-  var link = document.createElement('div');
-  link.style.cssText='text-align:center;padding:16px 0 4px;';
-  link.innerHTML='<button onclick="cerrarPP();goSub(\'pagos_mes\')" style="background:none;border:1.5px solid var(--border);border-radius:20px;padding:8px 20px;font-family:\'Outfit\',sans-serif;font-size:0.78rem;font-weight:700;cursor:pointer;color:var(--dim);">📅 Gestionar pagos del mes ›</button>';
-  body.appendChild(link);
-}
-
-function _ppMkItem(p){
-  var col = _ppUrgColor(p.urgencia);
-  var row = document.createElement('div');
-  row.className='pp-item';
-
-  var ico = document.createElement('div');
-  ico.className='pp-ico';
-  ico.style.background = col+'18';
-  ico.textContent = p.fuente==='deuda'?'💳': p.fuente==='cobrar'?'📥': '📅';
-
-  var info = document.createElement('div');
-  info.className='pp-info';
-  var name = document.createElement('div'); name.className='pp-name'; name.textContent=p.nombre;
-  var when = document.createElement('div'); when.className='pp-when'; when.textContent=_ppFechaLabel(p);
-
-  info.appendChild(name); info.appendChild(when);
-
-  var right = document.createElement('div');
-  right.style.cssText='display:flex;flex-direction:column;align-items:flex-end;gap:4px;flex-shrink:0;';
-  var amt = document.createElement('div');
-  amt.className='pp-amt'; amt.style.color=col; amt.textContent=fmt(p.monto);
-  var cat = document.createElement('div');
-  cat.style.cssText='font-size:0.62rem;color:var(--dim);';
-  cat.textContent=p.cat;
-  right.appendChild(amt); right.appendChild(cat);
-
-  // Línea de urgencia izquierda
-  var dot = document.createElement('div');
-  dot.style.cssText='width:3px;align-self:stretch;border-radius:99px;background:'+col+';flex-shrink:0;margin-right:-4px;';
-
-  row.appendChild(dot); row.appendChild(ico); row.appendChild(info); row.appendChild(right);
-  return row;
-}
-
-
-// ══════════════════════════════════════════════════════
-// SISTEMA AUTOLOCK — Bloqueo automático por inactividad
-// ══════════════════════════════════════════════════════
-var _lockTimer    = null;
-var _lockPin      = '';
-var _lockActivo   = false;
-
-// Tiempos disponibles en minutos (0 = desactivado)
-var LOCK_OPCIONES = [
-  {val:0,   label:'Desactivado'},
-  {val:1,   label:'1 minuto'},
-  {val:2,   label:'2 minutos'},
-  {val:5,   label:'5 minutos'},
-  {val:10,  label:'10 minutos'},
-  {val:15,  label:'15 minutos'},
-  {val:30,  label:'30 minutos'},
-  {val:60,  label:'1 hora'}
-];
-
-function _lockKey(){
-  var u = S.user;
-  if(!u) return null;
-  return 'usala_autolock_' + (u.isAdmin ? 'admin' : 'u_'+u.codigo);
-}
-
-function getLockTimeout(){
-  var k = _lockKey();
-  if(!k) return 0;
-  return parseInt(localStorage.getItem(k)||'0', 10);
-}
-
-function setLockTimeout(minutos){
-  var k = _lockKey();
-  if(!k) return;
-  if(minutos===0){ localStorage.removeItem(k); }
-  else { localStorage.setItem(k, String(minutos)); }
-  _lockReiniciar();
-  showToast(minutos===0 ? '🔓 Bloqueo automático desactivado' : '⏱ Se bloqueará tras '+minutos+' min de inactividad');
-}
-
-// Reiniciar el timer cada vez que hay actividad
-function _lockReiniciar(){
-  if(_lockTimer) clearTimeout(_lockTimer);
-  var mins = getLockTimeout();
-  if(!mins || _lockActivo) return;
-  _lockTimer = setTimeout(function(){ _lockBloqueAhora(); }, mins * 60 * 1000);
-}
-
-// Actividades que resetean el timer
-function _lockActividad(){
-  if(_lockActivo) return;
-  _lockReiniciar();
-}
-
-// Bloquear ahora
-function _lockBloqueAhora(){
-  if(!S.user) return;
-  _lockActivo = true;
-  if(_lockTimer) clearTimeout(_lockTimer);
-  // Preparar pantalla
-  var nombre = S.user.nombre || 'Usuario';
-  document.getElementById('lockNombre').textContent = nombre.split(' ')[0];
-  var mins = getLockTimeout();
-  document.getElementById('lockTimeBadge').textContent = '⏱ Bloqueado tras '+mins+' min sin uso';
-  // Ver si tiene NIP
-  var nipK = S.user.isAdmin ? 'usala_nip_admin' : 'usala_nip_u_'+S.user.codigo;
-  var tieneNip = !!localStorage.getItem(nipK);
-  document.getElementById('lockNoNipMsg').style.display = tieneNip ? 'none' : 'block';
-  // Reset dots
-  _lockPin = '';
-  _lockActualizarDots();
-  document.getElementById('lockErr').textContent = '';
-  document.getElementById('lockScreen').style.display = 'flex';
-}
-
-// Teclado del lock
-function lockKey(d){
-  if(_lockPin.length >= 4) return;
-  _lockPin += d;
-  _lockActualizarDots();
-  if(_lockPin.length === 4) setTimeout(_lockVerificar, 120);
-}
-function lockDel(){
-  _lockPin = _lockPin.slice(0,-1);
-  _lockActualizarDots();
-  document.getElementById('lockErr').textContent='';
-}
-function _lockActualizarDots(){
-  for(var i=0;i<4;i++){
-    var dot = document.getElementById('ld'+i);
-    dot.classList.toggle('filled', i < _lockPin.length);
-    dot.classList.remove('error');
-  }
-}
-function _lockVerificar(){
-  var nipK = S.user.isAdmin ? 'usala_nip_admin' : 'usala_nip_u_'+S.user.codigo;
-  var nip  = localStorage.getItem(nipK);
-  if(nip && _lockPin === nip){
-    lockDesbloquear();
-  } else {
-    // Error visual
-    for(var i=0;i<4;i++) document.getElementById('ld'+i).classList.add('error');
-    document.getElementById('lockErr').textContent = '⚠ NIP incorrecto';
-    setTimeout(function(){
-      _lockPin=''; _lockActualizarDots();
-      document.getElementById('lockErr').textContent='';
-    }, 900);
-  }
-}
-function lockDesbloquear(){
-  _lockActivo = false;
-  _lockPin    = '';
-  document.getElementById('lockScreen').style.display = 'none';
-  _lockReiniciar(); // reiniciar timer
-}
-function lockCerrarSesion(){
-  document.getElementById('lockScreen').style.display = 'none';
-  _lockActivo = false;
-  cerrarSesion();
-}
-
-// Capturar TODA actividad del usuario
-function _lockIniciarEscuchas(){
-  ['touchstart','mousedown','keydown','scroll'].forEach(function(ev){
-    document.addEventListener(ev, _lockActividad, {passive:true});
-  });
-}
-
-
-function abrirConfigAutolock(){
-  var mc = document.getElementById('mainContent');
-  mc.innerHTML = '';
-  var actual = getLockTimeout();
-
-  var d = document.createElement('div');
-  d.style.padding = '20px 16px';
-
-  // Header
-  d.innerHTML =
-    '<div class="page-header">'+backSubBtn()+'<div class="page-title">⏱ Bloqueo automático</div></div>'
-    +'<div style="font-size:0.8rem;color:var(--dim);margin-bottom:20px;line-height:1.5;">'
-      +'Bloquea la app automáticamente si no la usas durante el tiempo elegido. '
-      +'Al bloquearse pedirá tu NIP para volver a entrar.'
-    +'</div>';
-
-  // Opciones de tiempo como lista de selección
-  var lista = document.createElement('div');
-  lista.className = 'card';
-  lista.style.padding = '4px 0';
-
-  LOCK_OPCIONES.forEach(function(op){
-    var row = document.createElement('div');
-    row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:14px 18px;cursor:pointer;border-bottom:1px solid var(--border);transition:background 0.1s;';
-    row.innerHTML =
-      '<div style="font-weight:600;font-size:0.9rem;">'+(op.val===0?'🔓 ':'⏱ ')+op.label+'</div>'
-      +'<div id="lockOpt_'+op.val+'" style="font-size:1.1rem;">'+(op.val===actual?'✅':'')+'</div>';
-    row.onmouseenter = function(){ this.style.background='var(--inp)'; };
-    row.onmouseleave = function(){ this.style.background=''; };
-    (function(v, lbl){
-      row.onclick = function(){
-        setLockTimeout(v);
-        // Actualizar checkmarks
-        LOCK_OPCIONES.forEach(function(o){
-          var el=document.getElementById('lockOpt_'+o.val);
-          if(el) el.textContent = (o.val===v?'✅':'');
-        });
-        // Actualizar sublabel en config
-        var sub = document.getElementById('autolockSubLabel');
-        if(sub) sub.textContent = lbl;
-      };
-    })(op.val, op.label);
-    lista.appendChild(row);
-  });
-
-  // Quitar borde al último
-  lista.lastChild.style.borderBottom = 'none';
-
-  // Nota si no tiene NIP
-  var nipK = S.user && S.user.isAdmin ? 'usala_nip_admin' : 'usala_nip_u_'+(S.user&&S.user.codigo);
-  var tieneNip = !!localStorage.getItem(nipK);
-  var nota = document.createElement('div');
-  nota.style.cssText = 'font-size:0.74rem;margin-top:12px;padding:10px 14px;border-radius:12px;'
-    +(tieneNip
-      ? 'background:rgba(45,158,95,0.08);color:var(--accent2);border:1px solid rgba(45,158,95,0.2);'
-      : 'background:rgba(245,124,0,0.08);color:#f57c00;border:1px solid rgba(245,124,0,0.2);');
-  nota.innerHTML = tieneNip
-    ? '🔒 Tienes NIP activo — se pedirá al desbloquear'
-    : '⚠️ No tienes NIP configurado. Al bloquearse solo habrá un botón de desbloquear. <b>Configura tu NIP para mayor seguridad.</b>';
-
-  d.appendChild(lista);
-  d.appendChild(nota);
-  mc.appendChild(d);
-  // Redirigir a goSub config al usar backSubBtn
-  S.subtab = 'config';
-}
-
-
-// ══════════════════════════════════════════
-// BANNER INTELIGENTE DE SEGURIDAD
-// ══════════════════════════════════════════
-function _getSecurityStatus(){
-  if(!S.user) return {nip:false, autolock:false};
-  var uid    = S.user.isAdmin ? 'admin' : 'u_' + S.user.codigo;
-  var nipKey = 'usala_nip_' + uid;
-  var lockKey2 = 'usala_autolock_' + uid;
-  return {
-    nip:      !!localStorage.getItem(nipKey),
-    autolock: parseInt(localStorage.getItem(lockKey2)||'0',10) > 0
-  };
-}
-
-function cerrarBannerSeg(){ var b=document.getElementById('secBanner'); if(b) b.style.display='none'; }
-function _bannerSeguridad(){
-  var st = _getSecurityStatus();
-  if(st.nip && st.autolock) return ''; // Todo protegido — sin banner
-
-  var nivel  = (!st.nip && !st.autolock) ? 'critico' : 'medio';
-  var titulo, msg, acciones;
-
-  if(nivel === 'critico'){
-    titulo  = '⚠️ Tu cuenta no está protegida';
-    msg     = 'Cualquier persona que acceda a este dispositivo podría ver tus finanzas. Activa al menos el NIP y el bloqueo automático.';
-    acciones = [
-      {label:'🔒 Activar NIP',     fn:"goSub('config_nip')"},
-      {label:'⏱ Bloqueo auto',     fn:"abrirConfigAutolock()"}
-    ];
-  } else if(!st.nip){
-    titulo  = '🔑 Falta tu NIP de seguridad';
-    msg     = 'Tienes bloqueo automático, pero sin NIP cualquiera puede desbloquear con un toque. Añade tu NIP para protección real.';
-    acciones = [{label:'🔒 Configurar NIP', fn:"goSub('config_nip')"}];
-  } else {
-    titulo  = '⏱ Sin bloqueo automático';
-    msg     = 'Tienes NIP, pero si dejas la app abierta queda expuesta. Programa un tiempo de bloqueo automático.';
-    acciones = [{label:'⏱ Activar bloqueo', fn:"abrirConfigAutolock()"}];
-  }
-
-  var colorBg  = nivel==='critico' ? 'rgba(229,57,53,0.07)'  : 'rgba(245,124,0,0.07)';
-  var colorBrd = nivel==='critico' ? 'rgba(229,57,53,0.25)'  : 'rgba(245,124,0,0.25)';
-  var colorTxt = nivel==='critico' ? '#c62828'                : '#e65100';
-  var icoBig   = nivel==='critico' ? '🛡️'                     : '🔐';
-
-  var btns = acciones.map(function(a){
-    return '<button onclick="'+a.fn+'" style="'
-      +'background:'+colorTxt+';color:#fff;border:none;border-radius:20px;'
-      +'padding:7px 16px;font-family:Outfit,sans-serif;font-size:0.72rem;'
-      +'font-weight:800;cursor:pointer;white-space:nowrap;">'+a.label+'</button>';
-  }).join('');
-
-  return '<div id="secBanner" style="'
-    +'background:'+colorBg+';border:1.5px solid '+colorBrd+';'
-    +'border-radius:16px;padding:14px 16px;margin-bottom:14px;'
-    +'animation:fadeIn 0.4s;">'
-    // Fila superior: ícono grande + texto
-    +'<div style="display:flex;gap:12px;align-items:flex-start;margin-bottom:10px;">'
-      +'<div style="font-size:1.8rem;line-height:1;flex-shrink:0;">'+icoBig+'</div>'
-      +'<div>'
-        +'<div style="font-weight:900;font-size:0.85rem;color:'+colorTxt+';margin-bottom:3px;">'+titulo+'</div>'
-        +'<div style="font-size:0.75rem;color:var(--dim);line-height:1.5;">'+msg+'</div>'
-      +'</div>'
-    +'</div>'
-    // Fila botones + cerrar
-    +'<div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;">'
-      +btns
-      +'<button onclick="cerrarBannerSeg()" '
-        +'style="margin-left:auto;background:none;border:none;color:var(--dim);'
-        +'font-size:0.7rem;cursor:pointer;white-space:nowrap;padding:4px 6px;">Ahora no ✕</button>'
-    +'</div>'
-    +'</div>';
-}
-
-function abrirCatModal(tipo, selectId){
-  _catModalTipo = tipo;
-  _catSelectId  = selectId;
-  _catSelectVal = (document.getElementById(selectId)||{}).value || '';
-  var t = _CAT_TITLES[tipo] || {title:'🏷️ Categorías', sub:''};
-  document.getElementById('catModalTitle').textContent = t.title;
-  document.getElementById('catModalSub').textContent   = t.sub;
-  document.getElementById('catModalInp').value = '';
-  _renderCatChips();
-  var m = document.getElementById('catModal');
-  m.style.display = 'flex';
-  setTimeout(function(){ document.getElementById('catModalInp').focus(); }, 200);
-}
-
-function cerrarCatModal(){
-  document.getElementById('catModal').style.display = 'none';
-  _catModalTipo = null; _catSelectId = null;
-}
-
-function _renderCatChips(){
-  var wrap = document.getElementById('catModalChips');
-  if(!wrap) return;
-  wrap.innerHTML = '';
-  var custom = load(_CAT_KEYS[_catModalTipo], []);
-
-  // Chips de base (solo informativas, no borrables)
-  var base = _CAT_BASE[_catModalTipo] || [];
-  base.forEach(function(c){
-    var chip = document.createElement('div');
-    chip.className = 'cat-chip';
-    chip.style.opacity = '0.55';
-    chip.innerHTML = '<span>'+c+'</span>';
-    wrap.appendChild(chip);
-  });
-
-  // Chips custom (borrables)
-  custom.forEach(function(c, i){
-    var chip = document.createElement('div');
-    chip.className = 'cat-chip';
-    chip.style.borderColor = 'var(--accent)';
-    chip.style.background = 'var(--accent)18';
-    var txt = document.createElement('span'); txt.textContent = c;
-    var del = document.createElement('button'); del.className='del-chip'; del.textContent='×';
-    del.title = 'Eliminar';
-    (function(idx){ del.onclick = function(){
-      var c2=load(_CAT_KEYS[_catModalTipo],[]); var eli=c2[idx];
-      c2.splice(idx,1); save(_CAT_KEYS[_catModalTipo],c2);
-      _renderCatChips();
-      _refrescarSelect(_catSelectVal);
-      mostrarUndo('🏷️ "'+eli+'" eliminada', function(){
-        var c3=load(_CAT_KEYS[_catModalTipo],[]); c3.splice(idx,0,eli);
-        save(_CAT_KEYS[_catModalTipo],c3); _renderCatChips(); _refrescarSelect(eli);
-      });
-    }; })(i);
-    chip.appendChild(txt); chip.appendChild(del);
-    wrap.appendChild(chip);
-  });
-
-  if(!custom.length){
-    var hint = document.createElement('div');
-    hint.style.cssText='font-size:0.75rem;color:var(--dim);padding:8px 0;width:100%;';
-    hint.textContent = 'Aún no tienes categorías personalizadas. ¡Agrega la primera!';
-    wrap.appendChild(hint);
-  }
-}
-
-function guardarNuevaCat(){
-  var inp = document.getElementById('catModalInp');
-  var val = inp ? inp.value.trim() : '';
-  if(!val){ showToast('⚠ Escribe un nombre'); inp && inp.focus(); return; }
-  if(val.length > 40){ showToast('⚠ Máximo 40 caracteres'); return; }
-  var custom = load(_CAT_KEYS[_catModalTipo], []);
-  var base   = _CAT_BASE[_catModalTipo] || [];
-  var todas  = base.concat(custom).map(function(c){ return c.toLowerCase(); });
-  if(todas.indexOf(val.toLowerCase())>=0){ showToast('⚠ Ya existe "'+val+'"'); return; }
-  custom.push(val);
-  save(_CAT_KEYS[_catModalTipo], custom);
-  inp.value = '';
-  _renderCatChips();
-  _refrescarSelect(val);   // seleccionar la nueva en el select
-  showToast('✅ "'+val+'" agregada');
-  inp.focus();
-}
-
-// Refresca el <select> y selecciona val
-function _refrescarSelect(val){
-  var sel = _catSelectId ? document.getElementById(_catSelectId) : null;
-  if(!sel) return;
-  var tipo = _catModalTipo;
-  if(tipo==='gasto'){
-    sel.innerHTML = buildGastoCatSelect(_catSelectId, val);
-  } else if(tipo==='ingreso'){
-    sel.innerHTML = buildIngresoCatSelect(_catSelectId, val);
-  } else if(tipo==='activos'){
-    var all = ACTIVOS_CATS.concat(load('cats_activos_custom',[]));
-    sel.innerHTML = all.map(function(c){ return '<option'+(c===val?' selected':'')+'>'+c+'</option>'; }).join('');
-  } else if(tipo==='pagos'){
-    var all2 = PAGOS_CATS.concat(load('cats_pagos_custom',[]));
-    sel.innerHTML = all2.map(function(c){ return '<option'+(c===val?' selected':'')+'>'+c+'</option>'; }).join('');
-  }
-}
-
-// Helper: crea el botón "+ Categoría" para poner debajo de cualquier select
-function mkCatBtn(tipo, selectId){
-  var btn = document.createElement('button');
-  btn.type = 'button';
-  btn.className = 'cat-add-btn';
-  btn.innerHTML = '＋ Categoría';
-  btn.onclick = function(e){ e.preventDefault(); abrirCatModal(tipo, selectId); };
-  return btn;
-}
-
-function agregarCatCustom(){
-  // Alias mantenido — redirige al modal moderno desde config
-  abrirCatModal('gasto', null);
-}
-function borrarActivo(i){
-  var aa=load('activos_personales',[]);
-  if(!aa[i]) return;
-  var eli=JSON.parse(JSON.stringify(aa[i]));
-  aa.splice(i,1); save('activos_personales',aa);
-  renderActivos();
-  mostrarUndo('🏦 '+eli.nombre+' eliminado', function(){
-    var aa2=load('activos_personales',[]); aa2.splice(i,0,eli); save('activos_personales',aa2); renderActivos();
-  });
-}
-function borrarPago(i){
-  var pp=loadPagosBase();
-  if(!pp[i]) return;
-  var eli=JSON.parse(JSON.stringify(pp[i]));
-  pp.splice(i,1); savePagosBase(pp);
-  renderPagosMes();
-  mostrarUndo('📅 '+eli.nombre+' eliminado', function(){
-    var pp2=loadPagosBase(); pp2.splice(i,0,eli); savePagosBase(pp2); renderPagosMes();
-  });
-}
-function borrarCatCustom(i){
-  var custom = load('cats_gasto_custom',[]);
-  var _eliCat = custom[i];
-  custom.splice(i,1); save('cats_gasto_custom',custom);
-  goSub('config');
-  mostrarUndo('🏷️ Categoría eliminada', function(){
-    var c2=load('cats_gasto_custom',[]); c2.splice(i,0,_eliCat); save('cats_gasto_custom',c2); goSub('config');
-  });
-}
-
-function renderVersion(){
-  var isAdmin=S.user&&S.user.isAdmin;
-  return '<div class="page-header">'+backBtn('mas',4)+'<div class="page-title">📋 Versión</div></div>'
-    +'<div class="card" style="text-align:center;padding:28px 20px;">'
-    +'<div style="font-size:2rem;font-weight:900;color:var(--accent);font-family:\'JetBrains Mono\',monospace;">v'+APP_VERSION+'</div>'
-    +'<div style="font-size:0.8rem;color:var(--dim);margin-top:8px;">'+APP_NOTAS+'</div>'
-    +'</div>'
-    +(isAdmin?'<div class="card"><div class="card-title">Editar versión</div>'
-    +'<label class="inp-label">Número</label><input class="inp" id="vNum" value="'+APP_VERSION+'">'
-    +'<label class="inp-label">Notas</label><textarea class="inp" id="vNotas" rows="3" style="resize:none;">'+APP_NOTAS+'</textarea>'
-    +'<button class="btn-main" onclick="guardarVersion()">💾 Guardar</button>'
-    +'</div>':'');
-}
-function guardarVersion(){
-  var v=document.getElementById('vNum').value.trim();
-  var n=document.getElementById('vNotas').value.trim();
-  if(!v) return;
-  localStorage.setItem('usala_version',v);
-  localStorage.setItem('usala_notas',n);
-  APP_VERSION=v; APP_NOTAS=n;
-  showToast('✓ Versión actualizada');
-  document.getElementById('verBadge').textContent='v'+v;
-  goSub('version');
-}
-
-// ══════════════════════════════════════════
-// AYUDA
-// ══════════════════════════════════════════
-function abrirAyuda(){ goTab('mas',document.querySelectorAll('.nb')[4]); setTimeout(function(){ goSub('ayuda'); },10); }
-
-// ══════════════════════════════════════════
-// MENÚ USUARIO
-// ══════════════════════════════════════════
-function abrirMenu(){
-  var u = S.user;
-  document.getElementById('menuNombre').textContent = u.isAdmin ? '⚙️ Administrador' : '👤 ' + u.nombre;
-
-  var opciones = [
-    {ico:'🎨', label:'Cambiar tema', accion:'tema'},
-    {ico:'⚙️', label:'Configuración', accion:'config'},
-    {ico:'🔑', label:'Códigos de acceso', accion:'codigos', soloAdmin:true},
-    {ico:'🚪', label:'Cerrar sesión', accion:'salir', rojo:true}
-  ];
-
-  var cont = document.getElementById('menuItems');
-  cont.innerHTML = '';
-
-  opciones.forEach(function(op){
-    if(op.soloAdmin && !S.user.isAdmin) return;
-    var div = document.createElement('div');
-    div.className = 'set-item';
-    div.style.cursor = 'pointer';
-    div.innerHTML = '<div class="set-label"'+(op.rojo?' style="color:var(--danger);"':'')+'>'+op.ico+' '+op.label+'</div><div class="set-arrow">›</div>';
-    div.addEventListener('click', function(){ menuAccion(op.accion); });
-    cont.appendChild(div);
-  });
-
-  document.getElementById('menuModal').classList.add('open');
-}
-// ══════════════════════════════════════════
-// NOTICIAS / CENTRO DE MENSAJES
-// ══════════════════════════════════════════
-function getNoticias(){ return JSON.parse(localStorage.getItem('usala_noticias')||'[]'); }
-function saveNoticias(n){ localStorage.setItem('usala_noticias', JSON.stringify(n)); }
-
-function renderNoticias(){
-  var isAdmin = S.user && S.user.isAdmin;
-  var noticias = getNoticias();
-
-  if(isAdmin){
-    // Vista admin: crear y gestionar mensajes
-    var lista = noticias.length ? noticias.slice().reverse().map(function(n,i){
-      var ri = noticias.length - 1 - i;
-      var leidas = JSON.parse(localStorage.getItem('usala_leidas_count_'+n.id)||'0');
-      return '<div class="card" style="margin-bottom:8px;">'
-        +'<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:8px;">'
-        +'<div style="flex:1;">'
-        +'<div style="font-weight:800;font-size:0.88rem;">'+n.titulo+'</div>'
-        +'<div style="font-size:0.75rem;color:var(--dim);margin-top:4px;line-height:1.5;">'+n.mensaje+'</div>'
-        +'<div style="font-size:0.65rem;color:var(--dim);margin-top:6px;">📅 '+n.fecha+' &nbsp; 👁️ '+leidas+' lecturas</div>'
-        +'</div>'
-        +'<button class="ic-btn" onclick="borrarNoticia('+ri+')" style="flex-shrink:0;">🗑️</button>'
-        +'</div></div>';
-    }).join('') : '<div style="text-align:center;padding:20px;color:var(--dim);font-size:0.83rem;">Sin mensajes enviados</div>';
-
-    return '<div class="page-header">'+backBtn('mas',4)+'<div class="page-title">📢 Centro de Mensajes</div></div>'
-      +'<div class="card" style="margin-bottom:14px;">'
-      +'<div class="card-title">✍️ Nuevo mensaje</div>'
-      +'<label class="inp-label">Título</label>'
-      +'<input class="inp" id="notTitulo" placeholder="Ej: Nueva actualización disponible">'
-      +'<label class="inp-label">Mensaje</label>'
-      +'<textarea class="inp" id="notMensaje" rows="4" placeholder="Escribe aquí las novedades, mejoras o información importante para tus invitados..." style="resize:none;line-height:1.5;"></textarea>'
-      +'<label class="inp-label">Tipo</label>'
-      +'<select class="inp" id="notTipo">'
-      +'<option value="📢">📢 Anuncio general</option>'
-      +'<option value="🆕">🆕 Nueva función</option>'
-      +'<option value="🔧">🔧 Mejora / corrección</option>'
-      +'<option value="⚠️">⚠️ Aviso importante</option>'
-      +'<option value="🎉">🎉 Celebración</option>'
-      +'</select>'
-      +'<button class="btn-main" onclick="publicarNoticia()">📤 Publicar para todos los invitados</button>'
-      +'</div>'
-      +'<div style="font-size:0.72rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--dim);margin-bottom:8px;">Mensajes publicados ('+noticias.length+')</div>'
-      + lista;
-
-  } else {
-    // Vista invitado: leer mensajes
-    var leidas = JSON.parse(localStorage.getItem('usala_leidas_'+S.user.codigo)||'[]');
-    var items = noticias.length ? noticias.slice().reverse().map(function(n){
-      var yaLeida = leidas.indexOf(n.id) !== -1;
-      // Marcar como leída
-      if(!yaLeida){
-        leidas.push(n.id);
-        localStorage.setItem('usala_leidas_'+S.user.codigo, JSON.stringify(leidas));
-        // Contar lecturas
-        var cnt = parseInt(localStorage.getItem('usala_leidas_count_'+n.id)||'0');
-        localStorage.setItem('usala_leidas_count_'+n.id, cnt+1);
-      }
-      return '<div class="card" style="margin-bottom:10px;'+(yaLeida?'':'border-left:3px solid var(--accent);')+'">'
-        +'<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;">'
-        +'<span style="font-size:1.2rem;">'+n.tipo+'</span>'
-        +'<div style="font-weight:800;font-size:0.9rem;flex:1;">'+n.titulo+'</div>'
-        +(yaLeida?'':'<span style="font-size:0.6rem;background:var(--accent);color:var(--navtext);padding:2px 7px;border-radius:10px;font-weight:700;">NUEVO</span>')
-        +'</div>'
-        +'<div style="font-size:0.8rem;color:var(--dim);line-height:1.6;">'+n.mensaje+'</div>'
-        +'<div style="font-size:0.65rem;color:var(--dim);margin-top:8px;">'+n.fecha+'</div>'
-        +'</div>';
-    }).join('') : '<div style="text-align:center;padding:30px;color:var(--dim);font-size:0.83rem;">📭 No hay mensajes aún</div>';
-
-    return '<div class="page-header">'+backBtn('mas',4)+'<div class="page-title">📢 Mensajes</div></div>'
-      + items;
-  }
-}
-
-function publicarNoticia(){
-  var titulo = document.getElementById('notTitulo').value.trim();
-  var mensaje = document.getElementById('notMensaje').value.trim();
-  var tipo = document.getElementById('notTipo').value;
-  if(!titulo || !mensaje){ showToast('⚠ Escribe título y mensaje'); return; }
-  var noticias = getNoticias();
-  noticias.push({
-    id: Date.now(),
-    titulo: titulo,
-    mensaje: mensaje,
-    tipo: tipo,
-    fecha: today()
-  });
-  saveNoticias(noticias);
-  showToast('✅ Mensaje publicado para todos los invitados');
-  goSub('noticias');
-}
-
-function borrarNoticia(i){
-  var noticias = getNoticias();
-  var _eliNot = JSON.parse(JSON.stringify(noticias[i]));
-  noticias.splice(i, 1);
-  saveNoticias(noticias);
-  goSub('noticias');
-  mostrarUndo('📢 Mensaje eliminado', function(){
-    var n2=getNoticias(); n2.splice(i,0,_eliNot); saveNoticias(n2); goSub('noticias');
-  });
-}
-
-// ── Helper: construye opciones de cuentas para selects ──
-function buildCuentaOpts(selVal){
-  var c = getCuentas();
-  var ops = '<option value="">— Sin asignar —</option>'
-    +'<option value="efectivo"'+(selVal==='efectivo'?' selected':'')+'>💵 Efectivo</option>';
-  (c.cheques||[]).forEach(function(ch, i){
-    var val='cheque_'+i;
-    ops+='<option value="'+val+'"'+(selVal===val?' selected':'')+'>🏧 '+ch.banco+' — '+ch.tipo+'</option>';
-  });
-  return ops;
-}
-
-// ── Calcula saldo real de una cuenta sumando transacciones vinculadas ──
-function saldoRealCuenta(cuentaVal){
-  var txs = getTxs().filter(function(t){ return t.cuenta===cuentaVal; });
-  return txs.reduce(function(s,t){
-    return s + (t.tipo==='ingreso' ? Number(t.monto) : -Number(t.monto));
-  }, 0);
-}
-
-// ══════════════════════════════════════════
-// MÓDULO CUENTAS
-// ══════════════════════════════════════════
-function getCuentas(){ return JSON.parse(localStorage.getItem('usala_cuentas_'+(S.user.isAdmin?'admin':'u_'+S.user.codigo))||'{"efectivo":0,"cheques":[],"tarjetas":[]}'); }
-function saveCuentas(c){ localStorage.setItem('usala_cuentas_'+(S.user.isAdmin?'admin':'u_'+S.user.codigo), JSON.stringify(c)); }
-
-function renderCuentas(){
-  var c = getCuentas();
-  var saldoEfec = (c.efectivo||0);
-  var totalCheques = (c.cheques||[]).reduce(function(s,x){ return s+Number(x.saldo||0); },0);
-  var totalTC = (c.tarjetas||[]).reduce(function(s,t){ return s+Number(t.balance||0); },0);
-  var totalActivos = saldoEfec + totalCheques;
-  var totalActivosPersonales = load('activos_personales',[]).reduce(function(s,a){ return s+(a.valor||0); },0);
-  var numActivos = load('activos_personales',[]).length;
-
-  var resCheques = (c.cheques||[]).map(function(ch){
-    return '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);">'
-      +'<div style="font-size:0.8rem;font-weight:700;">🏧 '+ch.banco+' <span style="font-size:0.65rem;color:var(--dim);font-weight:400;">'+ch.tipo+'</span></div>'
-      +'<div style="font-weight:900;color:var(--accent);">'+fmt(ch.saldo||0)+'</div></div>';
-  }).join('');
-
-  return '<div style="font-size:1.05rem;font-weight:900;margin-bottom:4px;padding-top:4px;">🏦 Mis Cuentas</div>'
-    +'<div style="font-size:0.74rem;color:var(--dim);margin-bottom:14px;">Saldos actualizados con cada transacción</div>'
-    +'<div class="stat-grid" style="margin-bottom:14px;">'
-    +'<div class="stat-card" onclick="goSub(\'efectivo\')"><div class="stat-label">💵 Efectivo ›</div><div class="stat-val">'+fmt(saldoEfec)+'</div></div>'
-    +'<div class="stat-card" onclick="goSub(\'cheques\')"><div class="stat-label">🏧 Banco ›</div><div class="stat-val">'+fmt(totalCheques)+'</div></div>'
-    +'<div class="stat-card" style="background:rgba(45,158,95,0.08);border:1.5px solid rgba(45,158,95,0.2);"><div class="stat-label">✅ Total disponible</div><div class="stat-val">'+fmt(totalActivos)+'</div></div>'
-    +'<div class="stat-card" onclick="goSub(\'tarjetas_credito\')" style="background:rgba(229,57,53,0.05);"><div class="stat-label">💳 Deuda TC ›</div><div class="stat-val red">'+fmt(totalTC)+'</div></div>'
-    +'</div>'
-    +(resCheques?'<div class="card" style="margin-bottom:14px;"><div class="card-title">Cuentas bancarias</div>'+resCheques+'</div>':'')
-    +'<div class="mod-list">'
-    +'<div class="mod-item" onclick="goSub(\'efectivo\')"><div class="mod-icon">💵</div><div><div class="mod-label">Efectivo</div><div class="mod-sub">Saldo: '+fmt(saldoEfec)+'</div></div><div class="mod-arrow">›</div></div>'
-    +'<div class="mod-item" onclick="goSub(\'cheques\')"><div class="mod-icon">🏧</div><div><div class="mod-label">Cheques / Banco</div><div class="mod-sub">Transferencias, depósitos, ahorro</div></div><div class="mod-arrow">›</div></div>'
-    +'<div class="mod-item" onclick="goSub(\'tarjetas_credito\')"><div class="mod-icon">💳</div><div><div class="mod-label">Tarjetas de Crédito</div><div class="mod-sub">'+(c.tarjetas||[]).length+' tarjeta'+(((c.tarjetas||[]).length)!==1?'s':'')+' · Deuda: '+fmt(totalTC)+'</div></div><div class="mod-arrow">›</div></div>'
-    +'<div class="mod-item" onclick="goSub(\'activos\')"><div class="mod-icon">🏦</div><div><div class="mod-label">Mis Activos</div><div class="mod-sub">'+numActivos+' activo'+(numActivos!==1?'s':'')+' · Valor: '+fmt(totalActivosPersonales)+'</div></div><div class="mod-arrow">›</div></div>'
-    +'</div>';
-}
-
-// ── EFECTIVO ──
-function renderEfectivo(){
-  var c = getCuentas();
-  // Movimientos = todas las txs vinculadas a efectivo
-  var txs = getTxs().filter(function(t){ return t.cuenta==='efectivo'; });
-  var items = txs.slice().reverse().map(function(t){
-    return '<div class="tx-item">'
-      +'<div class="tx-ico">'+(t.tipo==='ingreso'?'💵':'💸')+'</div>'
-      +'<div class="tx-info"><div class="tx-name">'+t.desc+'</div>'
-      +'<div class="tx-date">'+t.fecha+' · '+t.cat+'</div></div>'
-      +'<div class="tx-right"><div class="tx-amt '+(t.tipo==='ingreso'?'ing':'gas')+'">'
-      +(t.tipo==='ingreso'?'+':'-')+fmt(t.monto)+'</div>'
-      +'<div style="display:flex;gap:4px;">'
-      +'<button class="ic-btn" onclick="editarTx('+t.id+')">✏️</button>'
-      +'<button class="ic-btn" onclick="borrarTx('+t.id+')">🗑️</button>'
-      +'</div></div></div>';
-  }).join('')||'<div style="text-align:center;padding:20px;color:var(--dim);font-size:0.83rem;">Sin movimientos</div>';
-
-  var catEnt = getIngresoCats();
-  var catSal = getGastoCats();
-
-  return '<div class="page-header">'+backBtn('cuentas',1)+'<div class="page-title">💵 Efectivo</div></div>'
-    +'<div class="card" style="margin-bottom:14px;text-align:center;padding:22px;">'
-    +'<div style="font-size:0.65rem;font-weight:700;color:var(--dim);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;">Saldo en efectivo</div>'
-    +'<div style="font-size:2.4rem;font-weight:900;color:var(--accent);">'+fmt(c.efectivo||0)+'</div>'
-    +'</div>'
-    +'<div class="card" style="margin-bottom:14px;">'
-    +'<div class="card-title">Registrar movimiento</div>'
-    +'<div class="tipo-selector" style="margin-bottom:12px;">'
-    +'<div class="tipo-opt selected" id="efTipoEnt" onclick="selEfTipo(\'ingreso\')">💵 Entrada (ingreso)</div>'
-    +'<div class="tipo-opt" id="efTipoSal" onclick="selEfTipo(\'gasto\')">💸 Salida (gasto)</div>'
-    +'</div>'
-    +'<label class="inp-label">Descripción</label>'
-    +'<input class="inp" id="efDesc" placeholder="Ej: Cobré trabajo / Compré despensa" autocomplete="off">'
-    +'<div class="form-row">'
-    +'<div><label class="inp-label">Monto ($)</label><input class="inp" id="efMonto" type="number" inputmode="decimal" placeholder="0.00"></div>'
-    +'<div><label class="inp-label">Categoría</label>'
-    +'<select class="inp" id="efCat">'
-    + catEnt.map(function(cat){ return '<option>'+cat+'</option>'; }).join('')
-    +'</select>'
-    +'<button type="button" class="cat-add-btn" id="efCatAddBtn" onclick="abrirCatModalEf()">＋ Categoría</button></div>'
-    +'</div>'
-    +'<label class="inp-label">Fecha</label>'
-    +'<input class="inp" id="efFecha" type="date" value="'+today()+'">'
-    +'<div id="efDestRow" style="display:none;">'
-    +'<label class="inp-label">¿A qué banco? (opcional)</label>'
-    +'<select class="inp" id="efDestBanco"><option value="">— Solo registrar salida —</option>'
-    + (c.cheques||[]).map(function(ch,i){ return '<option value="cheque_'+i+'">🏦 '+ch.banco+'</option>'; }).join('')
-    +'</select></div>'
-    +'<button class="btn-main" onclick="guardarMovEfectivo()">💾 Guardar</button>'
-    +'</div>'
-    +'<div class="card"><div class="card-title">Movimientos ('+txs.length+')</div>'+items+'</div>';
-}
-function selEfTipo(t){
-  var esEnt = t==='ingreso';
-  document.getElementById('efTipoEnt').classList.toggle('selected', esEnt);
-  document.getElementById('efTipoSal').classList.toggle('selected', !esEnt);
-  var sel = document.getElementById('efCat');
-  if(sel) sel.innerHTML = esEnt ? buildIngresoCatSelect('efCat','') : buildGastoCatSelect('efCat','');
-  // Mostrar/ocultar selector de banco destino
-  var destRow = document.getElementById('efDestRow');
-  if(destRow) destRow.style.display = esEnt ? 'none' : 'block';
-}
-function guardarMovEfectivo(){
-  var desc  = document.getElementById('efDesc').value.trim();
-  var monto = parseFloat(document.getElementById('efMonto').value);
-  var fecha = document.getElementById('efFecha').value||today();
-  var cat   = document.getElementById('efCat').value;
-  var tipo  = document.getElementById('efTipoEnt').classList.contains('selected')?'ingreso':'gasto';
-  var destEl = document.getElementById('efDestBanco');
-  var dest  = destEl ? destEl.value : '';
-  if(!desc||!monto||monto<=0){ showToast('⚠ Completa descripción y monto'); return; }
-  var id = Date.now();
-  var txs = getTxs();
-  txs.push({id:id, tipo:tipo, desc:desc, monto:monto, cat:cat, fecha:fecha, cuenta:'efectivo'});
-  saveTxs(txs);
-  var c = getCuentas();
-  // Restar de efectivo
-  c.efectivo = (c.efectivo||0) + (tipo==='ingreso'?monto:-monto);
-  // Si es salida con banco destino → sumar al banco
-  if(tipo==='gasto' && dest && dest.indexOf('cheque_')===0){
-    var idx = parseInt(dest.replace('cheque_',''));
-    if(c.cheques && c.cheques[idx]){
-      c.cheques[idx].saldo = (Number(c.cheques[idx].saldo)||0) + monto;
-      // Registrar también tx en el banco destino
-      var txs2 = getTxs();
-      txs2.push({id:Date.now()+1, tipo:'ingreso', desc:'Transferencia desde Efectivo: '+desc, monto:monto, cat:'Transferencia recibida', fecha:fecha, cuenta:dest});
-      saveTxs(txs2);
-    }
-  }
-  saveCuentas(c);
-  showToast('✓ '+(tipo==='ingreso'?'Entrada':'Salida')+' registrada en Efectivo');
-  goSub('efectivo');
-}
-
-
-// ── CHEQUES / BANCO ──
-function renderCheques(){
-  var c=getCuentas(); var cuentas=c.cheques||[];
-  var total=cuentas.reduce(function(s,x){ return s+Number(x.saldo||0); },0);
-
-  // Sub-vista por banco seleccionado o lista
-  var items=cuentas.length ? cuentas.map(function(ct,i){
-    var cval='cheque_'+i;
-    var txsCuenta=getTxs().filter(function(t){ return t.cuenta===cval; });
-    var ultMov=txsCuenta.length ? txsCuenta[txsCuenta.length-1] : null;
-    return '<div class="cred-item" onclick="goSub(\'banco_\'+'+i+')" style="cursor:pointer;">'
-      +'<div class="cred-top"><div><div class="cred-persona">🏧 '+ct.banco+'</div>'
-      +'<div class="cred-desc">'+ct.tipo+(ct.numCuenta?' · ***'+ct.numCuenta.slice(-4):'')+(ultMov?' · Último mov: '+ultMov.fecha:'')+'</div></div>'
-      +'<div><div style="font-size:1.1rem;font-weight:900;color:var(--accent);">'+fmt(ct.saldo||0)+'</div>'
-      +'<div style="font-size:0.62rem;color:var(--dim);text-align:right;">'+txsCuenta.length+' mov.</div></div></div>'
-      +(ct.nota?'<div style="font-size:0.72rem;color:var(--dim);margin-top:2px;">📝 '+ct.nota+'</div>':'')
-      +'</div>';
-  }).join('') : '<div style="text-align:center;padding:20px;color:var(--dim);font-size:0.83rem;">Sin cuentas bancarias. Agrega una abajo.</div>';
-
-  return '<div class="page-header">'+backBtn('cuentas',1)+'<div class="page-title">🏧 Mis Bancos</div></div>'
-    +'<div class="card" style="text-align:center;padding:18px;margin-bottom:14px;">'
-    +'<div style="font-size:0.65rem;font-weight:700;color:var(--dim);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:6px;">Total en bancos</div>'
-    +'<div style="font-size:2rem;font-weight:900;color:var(--accent);">'+fmt(total)+'</div>'
-    +'</div>'
-    + items
-    +'<div class="card" style="margin-top:14px;" id="chequesForm">'
-    +'<div class="card-title" id="chFormTitle">+ Agregar cuenta bancaria</div>'
-    +'<label class="inp-label">Banco / Institución</label>'
-    +'<input class="inp" id="chBanco" placeholder="Ej: BBVA, Santander, HSBC...">'
-    +'<div class="form-row">'
-    +'<div><label class="inp-label">Tipo</label>'
-    +'<select class="inp" id="chTipo"><option>Débito</option><option>Ahorro</option><option>Nómina</option><option>Inversión</option><option>Otro</option></select></div>'
-    +'<div><label class="inp-label">Saldo inicial ($)</label><input class="inp" id="chSaldo" type="number" inputmode="decimal" placeholder="0.00"></div>'
-    +'</div>'
-    +'<label class="inp-label">No. cuenta (últimos 4 dígitos)</label>'
-    +'<input class="inp" id="chNum" placeholder="Ej: 4521" maxlength="4" inputmode="numeric">'
-    +'<label class="inp-label">Nota (opcional)</label>'
-    +'<input class="inp" id="chNota" placeholder="Ej: Cuenta de nómina principal">'
-    +'<button class="btn-main" id="chSaveBtn" onclick="guardarCuenta()">💾 Guardar cuenta</button>'
-    +'</div>';
-}
-
-// Vista detalle de un banco específico con sus movimientos
-function renderBancoDetalle(idx){
-  var c=getCuentas(); var ct=c.cheques[idx];
-  if(!ct) return renderCheques();
-  var cval='cheque_'+idx;
-  var txs=getTxs().filter(function(t){ return t.cuenta===cval; });
-  var catEnt=['Salario','Depósito','Transferencia recibida','Nómina','Inversión','Otros ingresos'];
-  var catSal=getGastoCats();
-  var items=txs.slice().reverse().map(function(t){
-    return '<div class="tx-item">'
-      +'<div class="tx-ico">'+(t.tipo==='ingreso'?'📥':'📤')+'</div>'
-      +'<div class="tx-info"><div class="tx-name">'+t.desc+'</div>'
-      +'<div class="tx-date">'+t.fecha+' · '+t.cat+'</div></div>'
-      +'<div class="tx-right"><div class="tx-amt '+(t.tipo==='ingreso'?'ing':'gas')+'">'
-      +(t.tipo==='ingreso'?'+':'-')+fmt(t.monto)+'</div>'
-      +'<button class="ic-btn" onclick="borrarTxBanco('+t.id+','+idx+')">🗑️</button></div></div>';
-  }).join('')||'<div style="text-align:center;padding:20px;color:var(--dim);font-size:0.83rem;">Sin movimientos</div>';
-
-  return '<div class="page-header">'+backBtn('cheques',1)+'<div class="page-title">🏧 '+ct.banco+'</div></div>'
-    +'<div class="card" style="text-align:center;padding:18px;margin-bottom:14px;">'
-    +'<div style="font-size:0.65rem;font-weight:700;color:var(--dim);letter-spacing:0.1em;text-transform:uppercase;margin-bottom:4px;">Saldo</div>'
-    +'<div style="font-size:2.2rem;font-weight:900;color:var(--accent);">'+fmt(ct.saldo||0)+'</div>'
-    +'<div style="font-size:0.7rem;color:var(--dim);margin-top:4px;">'+ct.tipo+(ct.numCuenta?' · ***'+ct.numCuenta:'')+'</div>'
-    +'<div style="display:flex;gap:8px;justify-content:center;margin-top:10px;">'
-    +'<button class="cred-btn" onclick="editarCuenta('+idx+');goSub(\'cheques\')">✏️ Editar</button>'
-    +'<button class="cred-btn danger" onclick="borrarCuenta('+idx+')">🗑️ Eliminar</button>'
-    +'</div></div>'
-    +'<div class="card" style="margin-bottom:14px;">'
-    +'<div class="card-title">Registrar movimiento</div>'
-    +'<div class="tipo-selector" style="margin-bottom:12px;">'
-    +'<div class="tipo-opt selected" id="bkTipoEnt" onclick="selBkTipo(\'ingreso\','+idx+')">📥 Entrada</div>'
-    +'<div class="tipo-opt" id="bkTipoSal" onclick="selBkTipo(\'gasto\','+idx+')">📤 Salida</div>'
-    +'</div>'
-    +'<label class="inp-label">Descripción</label>'
-    +'<input class="inp" id="bkDesc" placeholder="Ej: Nómina quincenal / Pago luz" autocomplete="off">'
-    +'<div class="form-row">'
-    +'<div><label class="inp-label">Monto ($)</label><input class="inp" id="bkMonto" type="number" inputmode="decimal" placeholder="0.00"></div>'
-    +'<div><label class="inp-label">Categoría</label>'
-    +'<select class="inp" id="bkCat">'
-    +catEnt.map(function(cat){ return '<option>'+cat+'</option>'; }).join('')
-    +'</select><button type="button" class="cat-add-btn" id="bkCatAddBtn" onclick="abrirCatModalBk()">＋ Categoría</button></div></div>'
-    +'<label class="inp-label">Fecha</label>'
-    +'<input class="inp" id="bkFecha" type="date" value="'+today()+'">'
-    +'<button class="btn-main" onclick="guardarMovBanco('+idx+')">💾 Guardar</button>'
-    +'</div>'
-    +'<div class="card"><div class="card-title">Movimientos ('+txs.length+')</div>'+items+'</div>';
-}
-function selBkTipo(t, idx){
-  var esEnt=t==='ingreso';
-  document.getElementById('bkTipoEnt').classList.toggle('selected',esEnt);
-  document.getElementById('bkTipoSal').classList.toggle('selected',!esEnt);
-  var cats=esEnt?getIngresoCats():getGastoCats();
-  var sel=document.getElementById('bkCat'); if(sel) sel.innerHTML=cats.map(function(cat){ return '<option>'+cat+'</option>'; }).join('');
-}
-function guardarMovBanco(idx){
-  var desc=document.getElementById('bkDesc').value.trim();
-  var monto=parseFloat(document.getElementById('bkMonto').value);
-  var fecha=document.getElementById('bkFecha').value||today();
-  var cat=document.getElementById('bkCat').value;
-  var tipo=document.getElementById('bkTipoEnt').classList.contains('selected')?'ingreso':'gasto';
-  if(!desc||!monto||monto<=0){ showToast('⚠ Completa descripción y monto'); return; }
-  var cval='cheque_'+idx;
-  var id=Date.now(); var txs=getTxs();
-  txs.push({id:id,tipo:tipo,desc:desc,monto:monto,cat:cat,fecha:fecha,cuenta:cval});
-  saveTxs(txs);
-  var c=getCuentas();
-  c.cheques[idx].saldo=(c.cheques[idx].saldo||0)+(tipo==='ingreso'?monto:-monto);
-  saveCuentas(c);
-  showToast('✓ '+(tipo==='ingreso'?'Ingreso':'Gasto')+' en '+c.cheques[idx].banco);
-  goSub('banco_'+idx);
-}
-function borrarTxBanco(id,idx){
-  var txs=getTxs(); var t=txs.find(function(x){ return x.id===id; });
-  if(!t) return;
-  var _eliT=JSON.parse(JSON.stringify(t));
-  var c=getCuentas();
-  c.cheques[idx].saldo=(c.cheques[idx].saldo||0)-(t.tipo==='ingreso'?t.monto:-t.monto);
-  saveCuentas(c);
-  saveTxs(txs.filter(function(x){ return x.id!==id; }));
-  goSub('banco_'+idx);
-  mostrarUndo('🏧 Movimiento eliminado', function(){
-    var c2=getCuentas();
-    c2.cheques[idx].saldo=(c2.cheques[idx].saldo||0)+(_eliT.tipo==='ingreso'?_eliT.monto:-_eliT.monto);
-    saveCuentas(c2);
-    var t2=getTxs(); t2.push(_eliT); saveTxs(t2);
-    goSub('banco_'+idx);
-  });
-}
-
-var _editCuentaIdx=null;
-function guardarCuenta(){
-  var banco=document.getElementById('chBanco').value.trim();
-  var tipo=document.getElementById('chTipo').value;
-  var saldo=parseFloat(document.getElementById('chSaldo').value)||0;
-  var num=document.getElementById('chNum').value.trim();
-  var nota=document.getElementById('chNota').value.trim();
-  if(!banco){ showToast('⚠ Escribe el nombre del banco'); return; }
-  var c=getCuentas(); c.cheques=c.cheques||[];
-  if(_editCuentaIdx!==null){
-    c.cheques[_editCuentaIdx]=Object.assign(c.cheques[_editCuentaIdx],{banco:banco,tipo:tipo,saldo:saldo,numCuenta:num,nota:nota});
-    _editCuentaIdx=null; showToast('✓ Cuenta actualizada');
-  } else {
-    c.cheques.push({banco:banco,tipo:tipo,saldo:saldo,numCuenta:num,nota:nota});
-    showToast('✓ Cuenta bancaria agregada');
-  }
-  saveCuentas(c); goSub('cheques');
-}
-function abonarCuenta(i){
-  var nuevo=parseFloat(prompt('Nuevo saldo de la cuenta ($):')); if(isNaN(nuevo)) return;
-  var c=getCuentas(); c.cheques[i].saldo=nuevo; saveCuentas(c); showToast('✓ Saldo actualizado'); goSub('cheques');
-}
-function editarCuenta(i){
-  var c=getCuentas(); var ct=c.cheques[i]; _editCuentaIdx=i;
-  goSub('cheques');
-  setTimeout(function(){
-    document.getElementById('chBanco').value=ct.banco;
-    document.getElementById('chTipo').value=ct.tipo;
-    document.getElementById('chSaldo').value=ct.saldo||0;
-    document.getElementById('chNum').value=ct.numCuenta||'';
-    document.getElementById('chNota').value=ct.nota||'';
-    document.getElementById('chFormTitle').textContent='✏️ Editar cuenta';
-    document.getElementById('chSaveBtn').textContent='💾 Guardar cambios';
-    document.getElementById('chequesForm').scrollIntoView({behavior:'smooth'});
-  },100);
-}
-function borrarCuenta(i){
-  var c=getCuentas(); var _eliBanco=JSON.parse(JSON.stringify(c.cheques[i]));
-  c.cheques.splice(i,1); saveCuentas(c); goSub('cheques');
-  mostrarUndo('🏧 Cuenta eliminada', function(){
-    var c2=getCuentas(); c2.cheques.splice(i,0,_eliBanco); saveCuentas(c2); goSub('cheques');
-  });
-}
-
-// ══════════════════════════════════════════
-// REPORTES (reemplaza Ingresos y Gastos)
-// ══════════════════════════════════════════
-function renderReportes(){
-  var txs = getTxs();
-  var ing = txs.filter(function(t){ return t.tipo==='ingreso'; }).reduce(function(s,t){ return s+Number(t.monto); },0);
-  var gas = txs.filter(function(t){ return t.tipo==='gasto'; }).reduce(function(s,t){ return s+Number(t.monto); },0);
-
-  // Agrupar gastos por categoría
-  var porCat = {};
-  txs.filter(function(t){ return t.tipo==='gasto'; }).forEach(function(t){
-    porCat[t.cat] = (porCat[t.cat]||0) + Number(t.monto);
-  });
-  var catItems = Object.keys(porCat).sort(function(a,b){ return porCat[b]-porCat[a]; }).map(function(cat){
-    var pct = gas>0 ? Math.round((porCat[cat]/gas)*100) : 0;
-    return '<div style="margin-bottom:10px;">'
-      +'<div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:4px;">'
-      +'<span style="font-weight:700;">'+cat+'</span>'
-      +'<span>'+fmt(porCat[cat])+' ('+pct+'%)</span></div>'
-      +'<div class="prog-wrap"><div class="prog-bar" style="width:'+pct+'%;background:var(--danger);"></div></div>'
-      +'</div>';
-  }).join('')||'<div style="color:var(--dim);font-size:0.83rem;">Sin gastos registrados</div>';
-
-  // Agrupar ingresos por categoría
-  var porCatIng = {};
-  txs.filter(function(t){ return t.tipo==='ingreso'; }).forEach(function(t){
-    porCatIng[t.cat] = (porCatIng[t.cat]||0) + Number(t.monto);
-  });
-  var catIngItems = Object.keys(porCatIng).sort(function(a,b){ return porCatIng[b]-porCatIng[a]; }).map(function(cat){
-    var pct = ing>0 ? Math.round((porCatIng[cat]/ing)*100) : 0;
-    return '<div style="margin-bottom:10px;">'
-      +'<div style="display:flex;justify-content:space-between;font-size:0.8rem;margin-bottom:4px;">'
-      +'<span style="font-weight:700;">'+cat+'</span>'
-      +'<span>'+fmt(porCatIng[cat])+' ('+pct+'%)</span></div>'
-      +'<div class="prog-wrap"><div class="prog-bar" style="width:'+pct+'%;background:var(--accent2);"></div></div>'
-      +'</div>';
-  }).join('')||'<div style="color:var(--dim);font-size:0.83rem;">Sin ingresos registrados</div>';
-
-  // Últimas txs completas
-  var ultimas = txs.slice().reverse().slice(0,10).map(function(t){ return txItem(t,true); }).join('')
-    ||'<div style="text-align:center;padding:20px;color:var(--dim);font-size:0.83rem;">Sin movimientos</div>';
-
-  return '<div style="font-size:1.05rem;font-weight:900;margin-bottom:4px;padding-top:4px;">📊 Reportes</div>'
-    +'<div style="font-size:0.74rem;color:var(--dim);margin-bottom:14px;">Resumen de todos tus movimientos</div>'
-    // Resumen
-    +'<div class="stat-grid" style="margin-bottom:14px;">'
-    +'<div class="stat-card"><div class="stat-label">💰 Total ingresos</div><div class="stat-val">'+fmt(ing)+'</div></div>'
-    +'<div class="stat-card"><div class="stat-label">💸 Total gastos</div><div class="stat-val red">'+fmt(gas)+'</div></div>'
-    +'<div class="stat-card full" style="background:'+(ing-gas>=0?'rgba(45,158,95,0.08)':'rgba(229,57,53,0.06)')+';border:1.5px solid '+(ing-gas>=0?'rgba(45,158,95,0.2)':'rgba(229,57,53,0.2)')+';">'
-    +'<div style="display:flex;justify-content:space-between;align-items:center;">'
-    +'<div><div class="stat-label">⚖️ Flujo neto</div><div style="font-size:0.68rem;color:var(--dim);">Ingresos − Gastos</div></div>'
-    +'<div style="font-size:1.4rem;font-weight:900;color:'+(ing-gas>=0?'var(--accent2)':'var(--danger)')+';">'+(ing-gas>=0?'+':'')+fmt(ing-gas)+'</div>'
-    +'</div></div>'
-    +'</div>'
-    // Gastos por categoría
-    +'<div class="card" style="margin-bottom:14px;">'
-    +'<div class="card-title">💸 Gastos por categoría</div>'
-    + catItems
-    +'</div>'
-    // Ingresos por categoría
-    +'<div class="card" style="margin-bottom:14px;">'
-    +'<div class="card-title">💰 Ingresos por fuente</div>'
-    + catIngItems
-    +'</div>'
-    // Historial completo
-    +'<div class="card">'
-    +'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">'
-    +'<div class="card-title" style="margin:0;">Últimos movimientos</div>'
-    +'<button onclick="goSub(\'historial\')" style="font-size:0.72rem;color:var(--accent);background:none;border:none;cursor:pointer;font-weight:700;">Ver todos ›</button>'
-    +'</div>'
-    + ultimas
-    +'</div>';
-}
-
-// ── TARJETAS DE CRÉDITO ──
-function renderTarjetasCredito(){
-  var c=getCuentas(); var tcs=c.tarjetas||[];
-  var txs=getTxs();
-
-  var items=tcs.map(function(t,i){
-    var pct=t.limite>0?Math.min(100,Math.round((t.balance/t.limite)*100)):0;
-    var disp=Math.max(0,(t.limite||0)-(t.balance||0));
-    var color=pct>=90?'var(--danger)':pct>=70?'#f57c00':'var(--accent)';
-    var hoy=new Date(); var diasCorte='';
-
-    // ── Calcular saldo al corte automáticamente ──
-    // Suma todas las compras con esta TC (cuenta='tc_i') hechas hasta la fecha de corte
-    var saldoAutoCorte = 0;
-    if(t.fechaCorte){
-      var fc=new Date(t.fechaCorte.split('-').join('/'));
-      var diff=Math.ceil((fc-hoy)/(1000*60*60*24));
-      diasCorte=diff>0?diff+' días para corte':'Cortó hace '+Math.abs(diff)+' días';
-
-      // Buscar el inicio del período anterior (fecha de corte menos 1 mes aprox)
-      var fcPrev = new Date(fc);
-      fcPrev.setMonth(fcPrev.getMonth()-1);
-
-      txs.forEach(function(tx){
-        if(tx.cuenta==='tc_'+i && tx.tipo==='gasto'){
-          var txDate = new Date(tx.fecha.split('-').join('/'));
-          // Sumar compras del período actual: desde corte anterior hasta corte actual
-          if(txDate >= fcPrev && txDate <= fc){
-            saldoAutoCorte += Number(tx.monto);
-          }
-        }
-      });
-    } else {
-      // Sin fecha de corte: sumar todas las compras de esta TC
-      txs.forEach(function(tx){
-        if(tx.cuenta==='tc_'+i && tx.tipo==='gasto'){
-          saldoAutoCorte += Number(tx.monto);
-        }
-      });
-    }
-
-    return '<div class="cred-item">'
-      +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">'
-      +'<div style="width:42px;height:28px;background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:0.6rem;color:#fff;font-weight:800;">'+t.banco.substring(0,4).toUpperCase()+'</div>'
-      +'<div style="flex:1;"><div style="font-weight:800;font-size:0.9rem;">'+t.banco+'</div>'
-      +'<div style="font-size:0.68rem;color:var(--dim);">'+t.tipo+(t.ultimos?' · ***'+t.ultimos:'')+'</div></div>'
-      +'<span class="cred-badge '+(t.pagoPendiente?'badge-vencido':'badge-pagado')+'">'+(t.pagoPendiente?'⚠ Pago pend.':'✅ Al corriente')+'</span>'
-      +'</div>'
-      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">'
-      +'<div style="background:var(--inp);border-radius:10px;padding:10px;">'
-      +'<div style="font-size:0.6rem;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:0.05em;">Saldo usado</div>'
-      +'<div style="font-size:1rem;font-weight:900;color:var(--danger);">'+fmt(t.balance||0)+'</div></div>'
-      +'<div style="background:var(--inp);border-radius:10px;padding:10px;">'
-      +'<div style="font-size:0.6rem;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:0.05em;">Disponible</div>'
-      +'<div style="font-size:1rem;font-weight:900;color:var(--accent);">'+fmt(disp)+'</div></div>'
-      +'<div style="background:var(--inp);border-radius:10px;padding:10px;">'
-      +'<div style="font-size:0.6rem;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:0.05em;">Límite</div>'
-      +'<div style="font-size:1rem;font-weight:900;">'+fmt(t.limite||0)+'</div></div>'
-      +'<div style="background:var(--inp);border-radius:10px;padding:10px;">'
-      +'<div style="font-size:0.6rem;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:0.05em;">Interés anual</div>'
-      +'<div style="font-size:1rem;font-weight:900;color:#f57c00;">'+(t.interes||0)+'%</div></div>'
-      +'</div>'
-      +'<div class="prog-wrap"><div class="prog-bar" style="width:'+pct+'%;background:'+color+';"></div></div>'
-      +'<div style="display:flex;justify-content:space-between;font-size:0.68rem;color:var(--dim);margin-top:4px;margin-bottom:8px;">'
-      +'<span>Usado: '+pct+'%</span><span>'+(diasCorte||'')+'</span></div>'
-      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;font-size:0.68rem;margin-bottom:8px;">'
-      +(t.fechaCorte?'<div style="background:var(--inp);border-radius:8px;padding:8px;"><div style="color:var(--dim);">✂️ Fecha de corte</div><div style="font-weight:700;margin-top:2px;">'+t.fechaCorte+'</div></div>':'')
-      +(t.diaPago?'<div style="background:rgba(229,57,53,0.06);border-radius:8px;padding:8px;"><div style="color:var(--dim);">📅 Día de pago</div><div style="font-weight:700;color:var(--danger);margin-top:2px;">Día '+t.diaPago+'</div></div>':'')
-      // Saldo al corte automático — naranja con badge "AUTO"
-      +'<div style="background:rgba(245,124,0,0.07);border-radius:8px;padding:8px;grid-column:1/-1;">'
-      +'<div style="display:flex;justify-content:space-between;align-items:center;">'
-      +'<div style="color:var(--dim);">📋 Saldo al corte</div>'
-      +'<span style="font-size:0.55rem;background:rgba(245,124,0,0.2);color:#f57c00;padding:2px 6px;border-radius:8px;font-weight:800;">AUTO</span>'
-      +'</div>'
-      +'<div style="font-weight:900;font-size:1rem;color:#f57c00;margin-top:3px;">'+fmt(saldoAutoCorte)+'</div>'
-      +(saldoAutoCorte===0?'<div style="font-size:0.6rem;color:var(--dim);margin-top:2px;">Sin compras registradas en este período</div>':'')
-      +'</div>'
-      +(t.pagoMinimo?'<div style="background:var(--inp);border-radius:8px;padding:8px;"><div style="color:var(--dim);">💳 Pago mínimo</div><div style="font-weight:700;margin-top:2px;">'+fmt(t.pagoMinimo)+'</div></div>':'')
-      +(t.pagoTotal?'<div style="background:var(--inp);border-radius:8px;padding:8px;"><div style="color:var(--dim);">💰 Para no pagar int.</div><div style="font-weight:700;margin-top:2px;">'+fmt(t.pagoTotal)+'</div></div>':'')
-      +'</div>'
-      +'<div class="cred-btns">'
-      +'<button class="cred-btn" onclick="editarTC('+i+')">✏️ Editar</button>'
-      +'<button class="cred-btn success" onclick="toggleFormCompraTC('+i+')">🛒 Registrar compra</button>'
-      +'<button class="cred-btn" onclick="registrarPagoTC('+i+')" style="background:rgba(45,158,95,0.1);color:var(--accent2);border:1px solid rgba(45,158,95,0.2);">💳 Pago</button>'
-      +'<button class="cred-btn danger" onclick="borrarTC('+i+')">🗑️</button>'
-      +'</div>'
-      // Formulario inline de compra (oculto por defecto)
-      +'<div id="formCompraTC_'+i+'" style="display:none;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);">'
-      +'<div style="font-size:0.75rem;font-weight:800;color:var(--accent);margin-bottom:8px;text-transform:uppercase;letter-spacing:0.05em;">🛒 Nueva compra con '+t.banco+'</div>'
-      +'<input class="inp" id="tcCDesc_'+i+'" placeholder="Descripción (ej: Supermercado, Netflix...)" style="margin-bottom:8px;">'
-      +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">'
-      +'<input class="inp" id="tcCMonto_'+i+'" type="number" inputmode="decimal" placeholder="Monto $">'
-      +'<select class="inp" id="tcCCat_'+i+'">'
-      +'<option>Compras</option><option>Alimentación</option><option>Servicios</option>'
-      +'<option>Transporte</option><option>Entretenimiento</option><option>Salud</option>'
-      +'<option>Ropa</option><option>Pagos</option><option>Otros</option>'
-      +'</select></div>'
-      +'<input class="inp" id="tcCFecha_'+i+'" type="date" value="'+today()+'" style="margin-bottom:8px;">'
-      +'<div style="display:flex;gap:8px;">'
-      +'<button onclick="guardarCompraTC('+i+')" style="flex:1;padding:11px;background:var(--accent);color:var(--navtext);border:none;border-radius:12px;font-family:\'Outfit\',sans-serif;font-weight:700;font-size:0.85rem;cursor:pointer;">✅ Guardar compra</button>'
-      +'<button onclick="toggleFormCompraTC('+i+')" style="padding:11px 14px;background:var(--inp);color:var(--dim);border:none;border-radius:12px;font-family:\'Outfit\',sans-serif;font-weight:700;font-size:0.85rem;cursor:pointer;">✕</button>'
-      +'</div></div>'
-      +'</div>';
-  }).join('')||'<div style="text-align:center;padding:24px;color:var(--dim);font-size:0.83rem;">Sin tarjetas registradas</div>';
-
-  return '<div class="page-header">'+backBtn('cuentas',1)+'<div class="page-title">💳 Tarjetas de Crédito</div></div>'
-    +items
-    +'<div style="height:80px;"></div>'
-    +'<div style="position:fixed;bottom:75px;left:12px;right:12px;z-index:40;">'
-    +'<button onclick="goSub(\'nueva_tc\')" style="width:100%;padding:16px;background:var(--accent);color:var(--navtext);border:none;border-radius:16px;font-family:\'Outfit\',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,0.2);">+ Agregar Tarjeta</button>'
-    +'</div>';
-}
-
-function renderFormTC(data){
-  var d=data||{}; var titulo=d.banco?'Editar tarjeta':'Nueva Tarjeta';
-  return '<div class="page-header">'+backBtn('cuentas',1)+'<div class="page-title">💳 '+titulo+'</div></div>'
-    +'<div class="card">'
-    +'<label class="inp-label">Banco / Emisor</label>'
-    +'<input class="inp" id="tcBanco" placeholder="Ej: BBVA, Santander, Citibanamex..." value="'+(d.banco||'')+'">'
-    +'<div class="form-row">'
-    +'<div><label class="inp-label">Tipo</label>'
-    +'<select class="inp" id="tcTipo">'
-    +'<option'+(d.tipo==='Visa'?' selected':'')+'>Visa</option>'
-    +'<option'+(d.tipo==='Mastercard'?' selected':'')+'>Mastercard</option>'
-    +'<option'+(d.tipo==='Amex'?' selected':'')+'>Amex</option>'
-    +'<option'+(d.tipo==='Otro'?' selected':'')+'>Otro</option>'
-    +'</select></div>'
-    +'<div><label class="inp-label">Últimos 4 dígitos</label>'
-    +'<input class="inp" id="tcUltimos" placeholder="1234" maxlength="4" inputmode="numeric" value="'+(d.ultimos||'')+'">'
-    +'</div></div>'
-    +'<div class="form-row">'
-    +'<div><label class="inp-label">Límite de crédito ($)</label><input class="inp" id="tcLimite" type="number" inputmode="decimal" placeholder="0.00" value="'+(d.limite||'')+'" ></div>'
-    +'<div><label class="inp-label">Saldo usado ($)</label><input class="inp" id="tcBalance" type="number" inputmode="decimal" placeholder="0.00" value="'+(d.balance||'')+'" ></div>'
-    +'</div>'
-    +'<div class="form-row">'
-    +'<div><label class="inp-label">Interés anual (%)</label><input class="inp" id="tcInteres" type="number" inputmode="decimal" placeholder="Ej: 36" value="'+(d.interes||'')+'" ></div>'
-    +'<div><label class="inp-label">Día de pago</label><input class="inp" id="tcDiaPago" type="number" inputmode="numeric" placeholder="Ej: 15" min="1" max="31" value="'+(d.diaPago||'')+'" ></div>'
-    +'</div>'
-    +'<label class="inp-label">Fecha de corte</label>'
-    +'<input class="inp" id="tcFechaCorte" type="date" value="'+(d.fechaCorte||'')+'">'
-    +'<div class="form-row">'
-    +'<div><label class="inp-label">Saldo al corte ($)</label><input class="inp" id="tcSaldoCorte" type="number" inputmode="decimal" placeholder="0.00" value="'+(d.saldoCorte||'')+'" ></div>'
-    +'<div><label class="inp-label">Pago mínimo ($)</label><input class="inp" id="tcPagoMin" type="number" inputmode="decimal" placeholder="0.00" value="'+(d.pagoMinimo||'')+'" ></div>'
-    +'</div>'
-    +'<div class="form-row">'
-    +'<div><label class="inp-label">Para no pagar interés ($)</label><input class="inp" id="tcPagoTotal" type="number" inputmode="decimal" placeholder="0.00" value="'+(d.pagoTotal||'')+'" ></div>'
-    +'<div></div>'
-    +'</div>'
-    +'<div style="display:flex;align-items:center;gap:10px;padding:12px 0;">'
-    +'<input type="checkbox" id="tcPagoPend" style="width:18px;height:18px;accent-color:var(--accent);"'+(d.pagoPendiente?' checked':'')+'>'
-    +'<label for="tcPagoPend" style="font-size:0.85rem;font-weight:600;cursor:pointer;">⚠️ Tiene pago pendiente</label>'
-    +'</div>'
-    +'<button class="btn-main" onclick="guardarTC()">💾 '+(d.banco?'Guardar cambios':'Registrar tarjeta')+'</button>'
-    +'</div>';
-}
-
-var _editTCIdx=null;
-function guardarTC(){
-  var banco=document.getElementById('tcBanco').value.trim();
-  if(!banco){ showToast('⚠ Escribe el banco'); return; }
-  var tc={
-    banco:banco,
-    tipo:document.getElementById('tcTipo').value,
-    ultimos:document.getElementById('tcUltimos').value.trim(),
-    limite:parseFloat(document.getElementById('tcLimite').value)||0,
-    balance:parseFloat(document.getElementById('tcBalance').value)||0,
-    interes:parseFloat(document.getElementById('tcInteres').value)||0,
-    diaPago:document.getElementById('tcDiaPago').value,
-    fechaCorte:document.getElementById('tcFechaCorte').value,
-    pagoMinimo:parseFloat(document.getElementById('tcPagoMin').value)||0,
-    pagoTotal:parseFloat(document.getElementById('tcPagoTotal').value)||0,
-    saldoCorte:parseFloat(document.getElementById('tcSaldoCorte').value)||0,
-    pagoPendiente:document.getElementById('tcPagoPend').checked
-  };
-  var c=getCuentas(); c.tarjetas=c.tarjetas||[];
-  if(_editTCIdx!==null){ c.tarjetas[_editTCIdx]=tc; _editTCIdx=null; showToast('✓ Tarjeta actualizada'); }
-  else { c.tarjetas.push(tc); showToast('✓ Tarjeta registrada'); }
-  saveCuentas(c); goSub('tarjetas_credito');
-}
-function editarTC(i){
-  _editTCIdx=i;
-  var c=getCuentas();
-  document.getElementById('mainContent').innerHTML=renderFormTC(c.tarjetas[i]);
-}
-function toggleFormCompraTC(i){
-  var f = document.getElementById('formCompraTC_'+i);
-  if(!f) return;
-  var abierto = f.style.display !== 'none';
-  f.style.display = abierto ? 'none' : 'block';
-  if(!abierto) document.getElementById('tcCDesc_'+i).focus();
-}
-
-function guardarCompraTC(i){
-  var desc  = (document.getElementById('tcCDesc_'+i).value||'').trim();
-  var monto = parseFloat(document.getElementById('tcCMonto_'+i).value);
-  var cat   = document.getElementById('tcCCat_'+i).value;
-  var fecha = document.getElementById('tcCFecha_'+i).value || today();
-  if(!desc){ showToast('⚠ Escribe una descripción'); return; }
-  if(!monto||monto<=0){ showToast('⚠ Escribe un monto válido'); return; }
-
-  // Crear transacción vinculada a esta TC
-  var txs = getTxs();
-  var id = Date.now();
-  txs.push({ id:id, tipo:'gasto', desc:desc, monto:monto, cat:cat, fecha:fecha, cuenta:'tc_'+i });
-  saveTxs(txs);
-
-  // Actualizar balance de la TC
-  var c = getCuentas();
-  c.tarjetas = c.tarjetas||[];
-  if(c.tarjetas[i]){
-    c.tarjetas[i].balance = (Number(c.tarjetas[i].balance)||0) + monto;
-    c.tarjetas[i].pagoPendiente = true;
-    saveCuentas(c);
-  }
-
-  showToast('✅ Compra de '+fmt(monto)+' registrada en '+( c.tarjetas[i]?c.tarjetas[i].banco:'TC'));
-  goSub('tarjetas_credito');
-}
-
-function registrarPagoTC(i){
-  var pago=parseFloat(prompt('Monto del pago ($):')); if(!pago||pago<=0) return;
-  var c=getCuentas(); c.tarjetas[i].balance=Math.max(0,(c.tarjetas[i].balance||0)-pago);
-  if(c.tarjetas[i].balance===0) c.tarjetas[i].pagoPendiente=false;
-  saveCuentas(c); showToast('✓ Pago registrado'); goSub('tarjetas_credito');
-}
-function borrarTC(i){
-  var c=getCuentas(); var _eliTC=JSON.parse(JSON.stringify(c.tarjetas[i]));
-  c.tarjetas.splice(i,1); saveCuentas(c); goSub('tarjetas_credito');
-  mostrarUndo('💳 Tarjeta eliminada', function(){
-    var c2=getCuentas(); c2.tarjetas.splice(i,0,_eliTC); saveCuentas(c2); goSub('tarjetas_credito');
-  });
-}
-
-function menuAccion(accion){
-  document.getElementById('menuModal').classList.remove('open');
-  var nbs = document.querySelectorAll('.nb');
-  function irMas(sub){
-    nbs.forEach(function(b){ b.classList.remove('active'); });
-    nbs[4].classList.add('active');
-    S.tab='mas'; S.subtab=sub;
-    var renders = {config:renderConfig, codigos:renderCodigos, noticias:renderNoticias};
-    document.getElementById('mainContent').innerHTML = renders[sub] ? renders[sub]() : '';
-  }
-  if(accion==='tema'){ pickTema(); }
-  else if(accion==='salir'){ cerrarSesion(); }
-  else if(accion==='config'){ irMas('config'); }
-  else if(accion==='codigos'){ irMas('codigos'); }
-  else if(accion==='noticias'){ irMas('noticias'); }
-}
-function cerrarMenu(){ var m=document.getElementById('menuModal'); if(m) m.classList.remove('open'); }
-
-var FAQS = [
-  {cat:'🏠 Inicio', q:'¿Qué muestra la pantalla de Inicio?',
-   a:'Tu resumen financiero completo: Total disponible, Patrimonio Neto, Deudas, Pagos Pendientes, últimas transacciones y alertas de seguridad activas.'},
-  {cat:'🏠 Inicio', q:'¿Qué es el botón ⏰ Pago Pendiente?',
-   a:'Muestra cuántos pagos vencen pronto. El badge es rojo si hay vencidos, naranja si vencen esta semana. Tócalo para ver el detalle.'},
-  {cat:'🏠 Inicio', q:'¿Qué es el aviso de seguridad en el inicio?',
-   a:'Si tu cuenta no tiene NIP o bloqueo automático, aparece un banner de alerta. Puedes configurarlo desde ahí mismo o cerrarlo temporalmente.'},
-  {cat:'🏠 Inicio', q:'¿Cómo registro un ingreso o gasto rápido?',
-   a:'Usa el botón U azul flotante para acceder en un toque a Efectivo, Banco o Tarjetas. O di un comando de voz: "gasté 200" o "ingresé 500".'},
-  {cat:'🔵 Botón U', q:'¿Para qué sirve el botón U azul?',
-   a:'Acceso rápido a tus 3 cuentas desde cualquier pantalla. Tócalo y aparece un menú con Efectivo, Banco y Tarjetas con el saldo actual.'},
-  {cat:'🎙️ Voz', q:'¿Cómo funciona el control por voz?',
-   a:'Toca 🎙️ en la barra superior. Se activa y escucha. Di tu comando claramente. Ejecuta la acción al instante. Sin IA, solo acción.'},
-  {cat:'🎙️ Voz', q:'¿Necesita internet para funcionar?',
-   a:'Sí. En Chrome (Android) el reconocimiento de voz envía el audio a Google para procesarlo. Sin conexión el botón 🎙️ no funciona.'},
-  {cat:'🎙️ Voz', q:'¿Qué comandos de navegación puedo usar?',
-   a:'"inicio", "cuentas", "créditos", "reportes", "más", "efectivo", "banco", "tarjetas", "calculadora", "historial", "metas", "presupuesto", "conversor", "ayuda".'},
-  {cat:'🎙️ Voz', q:'¿Puedo registrar gastos con voz?',
-   a:'Sí. "Gasté 200" registra $200 de gasto en Efectivo. "Ingresé 500" registra un ingreso. El saldo se actualiza al instante.'},
-  {cat:'🎙️ Voz', q:'El micrófono está bloqueado, ¿qué hago?',
-   a:'Más → Configuración → 🎤 Restablecer micrófono. O en Chrome: ⋮ → Configuración → Privacidad → Micrófono → busca la app → Permitir.'},
-  {cat:'🏦 Cuentas', q:'¿Qué módulos tiene Cuentas?',
-   a:'3 secciones: 💵 Efectivo, 🏧 Banco y 💳 Tarjetas de Crédito. Cada una con historial y formulario de movimientos.'},
-  {cat:'🏦 Cuentas', q:'¿Cómo transfiero efectivo a mi banco?',
-   a:'Efectivo → Salida → en "¿A qué banco?" elige tu cuenta. Resta de Efectivo y suma al banco destino automáticamente.'},
-  {cat:'🏦 Cuentas', q:'¿Qué pasa si borro una transacción?',
-   a:'El saldo se revierte automáticamente. Tienes 6 segundos para tocar "Deshacer" y restaurar todo.'},
-  {cat:'🏦 Cuentas', q:'¿Las compras con TC afectan mi efectivo?',
-   a:'No. Las compras con tarjeta solo aumentan la deuda de esa TC. Tu efectivo y banco NO se ven afectados.'},
-  {cat:'💳 Tarjetas', q:'¿Qué es el Saldo al Corte AUTO?',
-   a:'Se calcula sumando todas las compras del período actual. Aparece con badge naranja "AUTO". No tienes que calcularlo manualmente.'},
-  {cat:'💳 Tarjetas', q:'¿Cómo registro un pago de TC?',
-   a:'Toca "💳 Pago" en la tarjeta. El saldo se reduce. Al llegar a $0 se marca "Al corriente".'},
-  {cat:'📅 Pagos del Mes', q:'¿Para qué sirven los Pagos del Mes?',
-   a:'Para registrar todos tus pagos fijos: servicios, renta, seguros, TC, etc. Llevas control de cuánto has pagado y cuánto falta cada mes.'},
-  {cat:'📅 Pagos del Mes', q:'¿Cómo agrego un pago fijo?',
-   a:'Créditos → Pagos del Mes → + Agregar. Escribe nombre, categoría, monto estimado, frecuencia y día de vencimiento.'},
-  {cat:'📅 Pagos del Mes', q:'¿Cómo funciona el panel ⏰ de la pantalla principal?',
-   a:'Muestra los pagos que vencen próximamente en 4 vistas: Hoy, Esta semana, Este mes y Este año. Badge rojo = pagos ya vencidos.'},
-  {cat:'📅 Pagos del Mes', q:'¿Los pagos se resetean solos cada mes?',
-   a:'Sí. El estado (pagado/pendiente) se resetea automáticamente cada mes. Tus pagos fijos permanecen.'},
-  {cat:'🤝 Créditos', q:'¿Qué son los Créditos?',
-   a:'"Mis Deudas" = dinero que tú pediste prestado. "Por Cobrar" = dinero que tú prestaste. Con seguimiento de abonos, intereses y fechas límite.'},
-  {cat:'🤝 Créditos', q:'¿Cómo abono a una deuda?',
-   a:'Toca "+ Abonar". La barra de progreso se actualiza. Al 100% se marca como pagado automáticamente.'},
-  {cat:'🔐 Seguridad', q:'¿Por qué me aparece un aviso de seguridad?',
-   a:'Tu cuenta no tiene NIP o bloqueo automático activos. Son medidas opcionales pero muy recomendadas para que nadie más vea tus finanzas.'},
-  {cat:'🔐 Seguridad', q:'¿Qué es el NIP y para qué sirve?',
-   a:'Un código secreto de 4 dígitos. Aunque alguien tenga tu dispositivo o código de invitado, sin el NIP no puede entrar a tus finanzas.'},
-  {cat:'🔐 Seguridad', q:'¿Cómo activo mi NIP?',
-   a:'Más → Configuración → 🔒 NIP de seguridad → escribe 4 dígitos y confirma. Desde ese momento se pedirá cada vez que entres.'},
-  {cat:'🔐 Seguridad', q:'¿Qué es el bloqueo automático?',
-   a:'La app se bloquea sola si no la usas por el tiempo elegido (1 min a 1 hora). Al bloquearse pedirá tu NIP para volver a entrar.'},
-  {cat:'🔐 Seguridad', q:'¿Cómo activo el bloqueo automático?',
-   a:'Más → Configuración → ⏱ Bloqueo automático → elige el tiempo. Cualquier toque reinicia el contador. Recomendamos 5 minutos.'},
-  {cat:'🔐 Seguridad', q:'¿Qué pasa si me bloquea y no tengo NIP?',
-   a:'Aparece un botón "Desbloquear" directo. Por eso recomendamos ambos: NIP + bloqueo automático. Sin NIP el bloqueo no protege realmente.'},
-  {cat:'🔐 Seguridad', q:'¿Puedo cerrar sesión desde la pantalla bloqueada?',
-   a:'Sí. En la pantalla de bloqueo hay un botón "Salir" que cierra sesión completamente.'},
-  {cat:'🔐 Seguridad', q:'Olvidé mi NIP, ¿qué hago?',
-   a:'El admin puede resetearlo: Más → Códigos de Acceso → busca tu código → toca 🔓. El NIP se elimina y puedes configurar uno nuevo.'},
-  {cat:'🔐 Seguridad', q:'¿Mis datos son privados respecto a otros usuarios?',
-   a:'Sí. Cada usuario tiene su espacio completamente aislado. Nadie puede ver los datos de otro, ni el administrador.'},
-  {cat:'🏦 Activos', q:'¿Qué son los Activos Personales?',
-   a:'Todo lo que posees con valor: casa, carro, negocio, inversiones, joyas, etc. Su valor suma a tu Patrimonio Neto.'},
-  {cat:'🏦 Activos', q:'¿Cada cuánto actualizo el valor?',
-   a:'Cuando cambie significativamente. Edita con ✏️ y actualiza el monto. Afectará tu Patrimonio Neto en el siguiente snapshot.'},
-  {cat:'📈 Progreso', q:'¿Qué es el Patrimonio Neto?',
-   a:'Efectivo + Banco + Activos − Total Deudas. Si sube mes a mes, estás progresando financieramente.'},
-  {cat:'📈 Progreso', q:'¿Qué significa el semáforo de salud financiera?',
-   a:'🟢 Progresando = patrimonio sube, deudas bajan. 🟡 Estable = sin cambios. 🔴 Atención = deudas suben o patrimonio baja.'},
-  {cat:'📈 Progreso', q:'¿Cuándo se guarda el snapshot mensual?',
-   a:'Automáticamente al abrir la app, una vez por mes. También puedes forzarlo con 📸 Guardar snapshot ahora dentro del módulo.'},
-  {cat:'🔑 Acceso', q:'¿Cómo entran otras personas?',
-   a:'El admin genera un código en Más → Códigos de Acceso. O el visitante solicita acceso y el admin aprueba desde el badge 🔴.'},
-  {cat:'🔑 Acceso', q:'¿Los códigos de invitado tienen vencimiento?',
-   a:'Sí. El admin define la fecha de vencimiento al crear el código. Pasada esa fecha el código deja de funcionar.'},
-  {cat:'🔑 Acceso', q:'¿Olvidé mi contraseña de admin?',
-   a:'Login → 🔐 Admin → "¿Olvidaste tu contraseña?". Usa la clave maestra admin1234 para recuperar el acceso.'},
-  {cat:'⚙️ Config', q:'¿Cómo cambio el tema visual?',
-   a:'Más → Configuración → 🎨 Cambiar tema. 5 temas: Verde Natural, Oscuro Pro, Dorado Élite, Océano y Rosa Elegante.'},
-  {cat:'⚙️ Config', q:'¿Cómo cambio la moneda?',
-   a:'Más → Configuración → 💱 Moneda. 9 monedas disponibles: MXN, USD, EUR, CAD, GBP, COP, ARS, GTQ, PEN.'},
-  {cat:'⚙️ Config', q:'¿Cómo agrego categorías personalizadas?',
-   a:'Más → Configuración → 🏷️ Mis categorías. Categorías ilimitadas para Gastos, Ingresos, Activos y Pagos fijos.'},
-  {cat:'⚙️ Config', q:'¿Cómo borro mis datos?',
-   a:'Más → Configuración → Zona de peligro. Borra transacciones o restablece toda la cuenta. ⚠️ No se puede deshacer.'},
-  {cat:'↩️ General', q:'¿Puedo deshacer un borrado?',
-   a:'Sí. Tienes 6 segundos para tocar "Deshacer". El saldo también se restaura automáticamente.'},
-  {cat:'↩️ General', q:'¿Funciona sin internet?',
-   a:'Sí, casi todo. Solo el reconocimiento de voz y el conversor de monedas requieren conexión.'},
-  {cat:'↩️ General', q:'¿Cómo uso la calculadora?',
-   a:'Toca 🔢 en la barra superior. Arrástrala, minimízala con − sin perder el cálculo, o ciérrala con ×.'},
-];
-
-
-function renderAyuda(){
-  var st = _getSecurityStatus();
-  var nipOk   = st.nip;
-  var lockOk  = st.autolock;
-  var ambos   = nipOk && lockOk;
-
-  // Tarjeta de estado de seguridad
-  var secCard = '<div style="border-radius:18px;padding:16px;margin-bottom:16px;'
-    +(ambos
-      ? 'background:rgba(45,158,95,0.08);border:1.5px solid rgba(45,158,95,0.25);'
-      : 'background:rgba(229,57,53,0.06);border:1.5px solid rgba(229,57,53,0.2);')
-    +'">'
-    +'<div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">'
-      +'<div style="font-size:2rem;line-height:1;">'+(ambos?'🛡️':'⚠️')+'</div>'
-      +'<div>'
-        +'<div style="font-weight:900;font-size:0.9rem;">'
-          +(ambos?'Tu cuenta está protegida ✓':'Tu seguridad necesita atención')
-        +'</div>'
-        +'<div style="font-size:0.72rem;color:var(--dim);margin-top:2px;">'
-          +(ambos?'NIP activo + bloqueo automático configurado':'Configura NIP y bloqueo para proteger tus datos')
-        +'</div>'
-      +'</div>'
-    +'</div>'
-    // Checks de estado
-    +'<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;">'
-      +'<div style="display:flex;align-items:center;gap:5px;font-size:0.72rem;font-weight:700;padding:5px 10px;border-radius:20px;'
-        +(nipOk?'background:rgba(45,158,95,0.12);color:#2d7a4f;':'background:rgba(229,57,53,0.1);color:#c62828;')
-        +'">'+( nipOk?'✅':'❌')+' NIP de seguridad</div>'
-      +'<div style="display:flex;align-items:center;gap:5px;font-size:0.72rem;font-weight:700;padding:5px 10px;border-radius:20px;'
-        +(lockOk?'background:rgba(45,158,95,0.12);color:#2d7a4f;':'background:rgba(229,57,53,0.1);color:#c62828;')
-        +'">'+( lockOk?'✅':'❌')+' Bloqueo automático</div>'
-    +'</div>';
-
-  if(!ambos){
-    secCard += '<div style="display:flex;gap:8px;flex-wrap:wrap;">'
-      +(!nipOk?'<button onclick="goSub(\'config_nip\')" style="background:#c62828;color:#fff;border:none;border-radius:20px;padding:7px 14px;font-family:Outfit,sans-serif;font-size:0.72rem;font-weight:800;cursor:pointer;">🔒 Activar NIP</button>':'')
-      +(!lockOk?'<button onclick="abrirConfigAutolock()" style="background:#e65100;color:#fff;border:none;border-radius:20px;padding:7px 14px;font-family:Outfit,sans-serif;font-size:0.72rem;font-weight:800;cursor:pointer;">⏱ Bloqueo auto</button>':'')
-    +'</div>';
-  }
-  secCard += '</div>';
-
-  var html = '<div class="page-header">'+backBtn('mas',4)+'<div class="page-title">❓ Ayuda</div></div>'
-    // Tarjeta seguridad al tope
-    + secCard
-    // Buscador
-    +'<div style="position:relative;margin-bottom:16px;">'
-      +'<input class="inp" id="ayudaBusca" placeholder="🔍 Buscar en la ayuda..." oninput="filtrarAyuda()" style="padding-left:16px;">'
-    +'</div>'
-    // Accesos rápidos por tema
-    +'<div style="display:flex;gap:7px;overflow-x:auto;padding-bottom:8px;margin-bottom:10px;scrollbar-width:none;">'
-      +'<div style="display:flex;gap:7px;overflow-x:auto;padding-bottom:8px;margin-bottom:10px;scrollbar-width:none;">'
-      +'<button class="ayuda-chip active" id="chip_todos" data-cat="" onclick="ayudaChipEv(this)">Todos</button>'
-      +'<button class="ayuda-chip" data-cat="Seguridad" onclick="ayudaChipEv(this)">🔐 Seguridad</button>'
-      +'<button class="ayuda-chip" data-cat="Pagos" onclick="ayudaChipEv(this)">📅 Pagos</button>'
-      +'<button class="ayuda-chip" data-cat="Cuentas" onclick="ayudaChipEv(this)">🏦 Cuentas</button>'
-      +'<button class="ayuda-chip" data-cat="Créditos" onclick="ayudaChipEv(this)">🤝 Créditos</button>'
-      +'<button class="ayuda-chip" data-cat="Voz" onclick="ayudaChipEv(this)">🎙️ Voz</button>'
-      +'<button class="ayuda-chip" data-cat="Config" onclick="ayudaChipEv(this)">⚙️ Config</button>'
-    +'</div>'
-    +'<div id="ayudaLista">'+renderFaqs('')+'</div>';
-  return html;
-}
-function renderFaqs(q, catFiltro){
-  var term = (q||'').toLowerCase().trim();
-  var filtrados = FAQS.filter(function(f){
-    var matchQ   = !term || f.q.toLowerCase().includes(term) || f.a.toLowerCase().includes(term) || f.cat.toLowerCase().includes(term);
-    var matchCat = !catFiltro || f.cat.toLowerCase().includes(catFiltro.toLowerCase());
-    return matchQ && matchCat;
-  });
-  if(!filtrados.length) return '<div style="text-align:center;padding:24px;color:var(--dim);font-size:0.83rem;">No se encontraron resultados para "'+q+'"</div>';
-  var porCat = {};
-  filtrados.forEach(function(f){ if(!porCat[f.cat]) porCat[f.cat]=[]; porCat[f.cat].push(f); });
-  return Object.keys(porCat).map(function(cat){
-    return '<div style="font-size:0.65rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--accent);margin:14px 0 6px;">'+cat+'</div>'
-      + porCat[cat].map(function(f,i){
-          var id='faq_'+cat.replace(/\W/g,'')+'_'+i;
-          return '<div class="card" style="margin-bottom:6px;cursor:pointer;" onclick="toggleFaq(\''+id+'\')">'
-            +'<div style="display:flex;justify-content:space-between;align-items:center;">'
-            +'<div style="font-weight:700;font-size:0.85rem;flex:1;padding-right:8px;">'+f.q+'</div>'
-            +'<div id="arr_'+id+'" style="color:var(--dim);font-size:1rem;flex-shrink:0;">›</div>'
-            +'</div>'
-            +'<div id="'+id+'" style="display:none;font-size:0.78rem;color:var(--dim);line-height:1.6;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);">'+f.a+'</div>'
-            +'</div>';
-        }).join('');
-  }).join('');
-}
-function ayudaChipEv(btn){
-  ayudaChip(btn, btn.getAttribute('data-cat')||'');
-}
-function ayudaChip(btn, cat){
-  document.querySelectorAll('.ayuda-chip').forEach(function(b){ b.classList.remove('active'); });
-  btn.classList.add('active');
-  var q = document.getElementById('ayudaBusca').value;
-  document.getElementById('ayudaLista').innerHTML = renderFaqs(q, cat);
-}
-function filtrarAyuda(){
-  var q=document.getElementById('ayudaBusca').value;
-  var chipActivo = document.querySelector('.ayuda-chip.active');
-  var cat = chipActivo ? (chipActivo.id==='chip_todos'?'':chipActivo.textContent.replace(/[^a-zA-ZáéíóúÁÉÍÓÚ ]/g,'').trim()) : '';
-  document.getElementById('ayudaLista').innerHTML=renderFaqs(q, cat);
-}
-function toggleFaq(id){
-  var el=document.getElementById(id);
-  var arr=document.getElementById('arr_'+id);
-  if(!el) return;
-  var open=el.style.display==='block';
-  el.style.display=open?'none':'block';
-  arr.textContent=open?'›':'↓';
-}
-
-// ══════════════════════════════════════════
-// COMANDOS DE VOZ
-// ══════════════════════════════════════════
-var _vozRec = null, _vozActivo = false;
-
-function toggleVoz(){
-  if(_vozActivo){ detenerVoz(); return; }
-  iniciarVoz();
-}
-function iniciarVoz(){
-  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if(!SR){ showToast('⚠ Tu navegador no soporta voz'); return; }
-  _vozRec = new SR();
-  _vozRec.lang = 'es-MX';
-  _vozRec.continuous = false;
-  _vozRec.interimResults = false;
-  _vozRec.onstart = function(){
-    _vozActivo = true;
-    var btn = document.getElementById('btnVoz');
-    if(btn){ btn.style.background='#ff3b30'; btn.style.color='#fff'; btn.textContent='🔴'; }
-    showToast('🎤 Escuchando...');
-  };
-  _vozRec.onend = function(){ detenerVoz(); };
-  _vozRec.onerror = function(e){
-    detenerVoz();
-    if(e.error === 'not-allowed') showToast('🔒 Micrófono bloqueado. Actívalo en Configuración del sitio.');
-    else if(e.error !== 'no-speech') showToast('⚠ Error de voz: ' + e.error);
-  };
-  _vozRec.onresult = function(e){
-    var t = e.results[0][0].transcript.toLowerCase().trim();
-    showToast('🎤 "' + t + '"');
-    procesarComandoVoz(t);
-  };
-  try{ _vozRec.start(); } catch(e){ showToast('⚠ No se pudo iniciar el mic'); }
-}
-function detenerVoz(){
-  _vozActivo = false;
-  var btn = document.getElementById('btnVoz');
-  if(btn){ btn.style.background=''; btn.style.color=''; btn.textContent='🎙️'; }
-  if(_vozRec){ try{ _vozRec.stop(); }catch(e){} _vozRec = null; }
-}
-function procesarComandoVoz(t){
-  var nb = document.querySelectorAll('.nb');
-  if(/\binicio\b|\bhome\b/.test(t)){ goTab('inicio',nb[0]); showToast('🏠 Inicio'); return; }
-  if(/\bcuentas?\b/.test(t) && !/tarjeta|tc\b/.test(t)){ goTab('cuentas',nb[1]); showToast('🏦 Cuentas'); return; }
-  if(/\bcr[eé]ditos?\b|\bpr[eé]stamo\b/.test(t)){ goTab('creditos',nb[2]); showToast('🤝 Créditos'); return; }
-  if(/\breportes?\b/.test(t)){ goTab('reportes',nb[3]); showToast('📊 Reportes'); return; }
-  if(/\bm[aá]s\b|\bajuste\b|\bconfig\b/.test(t)){ goTab('mas',document.querySelectorAll('.nb')[4]); showToast('⋯ Más'); return; }
-  if(/\befectivo\b/.test(t)){ goTab('cuentas',nb[1]); setTimeout(function(){ goSub('efectivo'); },60); showToast('💵 Efectivo'); return; }
-  if(/\bbanco\b|\bcheque\b/.test(t)){ goTab('cuentas',nb[1]); setTimeout(function(){ goSub('cheques'); },60); showToast('🏦 Banco'); return; }
-  if(/\btarjeta\b|\btc\b/.test(t)){ goTab('cuentas',nb[1]); setTimeout(function(){ goSub('tarjetas_credito'); },60); showToast('💳 Tarjetas'); return; }
-  if(/\bcalculadora\b|\bcalc\b/.test(t)){ abrirCalc(); showToast('🔢 Calculadora'); return; }
-  if(/\bhistorial\b/.test(t)){ goTab('mas',document.querySelectorAll('.nb')[4]); setTimeout(function(){ goSub('historial'); },60); showToast('📋 Historial'); return; }
-  if(/\bayuda\b/.test(t)){ goTab('mas',document.querySelectorAll('.nb')[4]); setTimeout(function(){ goSub('ayuda'); },60); showToast('❓ Ayuda'); return; }
-  if(/\bmetas?\b/.test(t)){ goTab('mas',document.querySelectorAll('.nb')[4]); setTimeout(function(){ goSub('metas'); },60); showToast('🎯 Metas'); return; }
-  if(/\bpresupuesto\b/.test(t)){ goTab('mas',document.querySelectorAll('.nb')[4]); setTimeout(function(){ goSub('presupuesto'); },60); showToast('💰 Presupuesto'); return; }
-  if(/\bconversor\b|\btipo de cambio\b/.test(t)){ goTab('mas',document.querySelectorAll('.nb')[4]); setTimeout(function(){ goSub('conversor'); },60); showToast('💱 Conversor'); return; }
-  var mG = t.match(/gast[eé]\s+(\d+[\.,]?\d*)/);
-  var mI = t.match(/ingres[eé]\s+(\d+[\.,]?\d*)/);
-  if(mG){
-    var m = parseFloat(mG[1].replace(',','.'));
-    if(m > 0){
-      var c = getCuentas(); c.efectivo = (c.efectivo||0) - m; saveCuentas(c);
-      var txs = getTxs(); txs.push({id:Date.now(),tipo:'gasto',desc:'Voz',monto:m,cat:'Otros gastos',fecha:today(),cuenta:'efectivo'}); saveTxs(txs);
-      showToast('💸 Gasto ' + getSimboloMoneda() + m.toFixed(2) + ' en Efectivo'); renderTab(S.tab); return;
-    }
-  }
-  if(mI){
-    var m2 = parseFloat(mI[1].replace(',','.'));
-    if(m2 > 0){
-      var c2 = getCuentas(); c2.efectivo = (c2.efectivo||0) + m2; saveCuentas(c2);
-      var txs2 = getTxs(); txs2.push({id:Date.now(),tipo:'ingreso',desc:'Voz',monto:m2,cat:'Otros ingresos',fecha:today(),cuenta:'efectivo'}); saveTxs(txs2);
-      showToast('💰 Ingreso ' + getSimboloMoneda() + m2.toFixed(2) + ' en Efectivo'); renderTab(S.tab); return;
-    }
-  }
-  showToast('❓ No entendí: "' + t + '"');
-}
 </script>
 </body>
 </html>
