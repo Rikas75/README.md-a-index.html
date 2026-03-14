@@ -7461,7 +7461,7 @@ function initDashboard(){
   }
   var u = S.user;
   var un = document.getElementById('topUserName');
-  if(un) un.textContent = u.isAdmin ? '⚙️ Admin' : '👤 ' + u.nombre;
+  if(un) un.textContent = u.isAdmin ? '⚙️ Admin' : '👤 ' + (u.nombre||'Usuario');
   var vb = document.getElementById('verBadge'); if(vb) vb.textContent = 'v' + APP_VERSION;
   if(u.isAdmin){
     actualizarBadgeSolicitudes();
@@ -7473,7 +7473,7 @@ function initDashboard(){
     if(!localStorage.getItem(keyVisto)){
       setTimeout(function(){
         var wn = document.getElementById('welcomeName');
-        if(wn) wn.textContent = '¡Bienvenid@, ' + u.nombre.split(' ')[0] + '! 👋';
+        if(wn) wn.textContent = '¡Bienvenid@, ' + ((u.nombre||'').split(' ')[0]||'') + '! 👋';
         var m = document.getElementById('welcomeModal');
         var bd = document.getElementById('welcomeBackdrop');
         var sh = document.getElementById('welcomeSheet');
@@ -9127,7 +9127,7 @@ function renderInicio(){
   var totalDisp = efec + banco;
   var actP = load('activos_personales',[]).reduce(function(s,a){ return s+(a.valor||0); },0);
   var pn = (efec+banco+actP)-(deudaTC+debo);
-  var nombre = S.user.nombre.split(' ')[0];
+  var nombre = (S.user.nombre||'').split(' ')[0] || 'tú';
   var hora = new Date().getHours();
   var saludo = hora<12 ? '☀️ Buenos días' : hora<19 ? '👋 Buenas tardes' : '🌙 Buenas noches';
   var _u=S.user, _prefix=(_u?(_u.isAdmin?'usala_admin':'usala_u_'+_u.codigo)+'_snap_':'');
@@ -9278,7 +9278,7 @@ function renderInicio(){
   if(S.user.isAdmin){
     var codigos = JSON.parse(localStorage.getItem('usala_codigos')||'[]');
     var hoy2 = new Date();
-    var codActivos = codigos.filter(function(c){ return c.activo && new Date(c.vencimiento.split('-').join('/'))>=hoy2; });
+    var codActivos = codigos.filter(function(c){ return c.activo && c.vencimiento && new Date(c.vencimiento.split('-').join('/'))>=hoy2; });
     var codUsados  = codigos.filter(function(c){ return c.usado; });
     invCard = '<div class="sec-title">👥 Invitados</div>'
       +'<div class="insight-card full" onclick="goSub(\'codigos\')" style="margin-bottom:10px;">'
@@ -9316,12 +9316,12 @@ function renderInicio(){
 
 function renderMas(){
   var isAdmin = S.user && S.user.isAdmin;
-  var inicialNombre = S.user ? S.user.nombre.charAt(0).toUpperCase() : '?';
+  var inicialNombre = S.user && S.user.nombre ? S.user.nombre.charAt(0).toUpperCase() : '?';
   var rolLabel = isAdmin ? 'Administrador' : 'Invitado';
   var rolBadge = isAdmin ? '👑 Admin' : '🔑 Invitado';
   var profileSection = '<div class="profile-header">'
     +'<div class="profile-avatar">'+inicialNombre+'</div>'
-    +'<div><div class="profile-name">'+S.user.nombre+'</div>'
+    +'<div><div class="profile-name">'+(S.user&&S.user.nombre?S.user.nombre:'Usuario')+'</div>'
     +'<div class="profile-role">'+rolLabel+' · USALA Finanzas</div></div>'
     +'<div class="profile-badge">'+rolBadge+'</div>'
     +'</div>';
@@ -10029,7 +10029,7 @@ function borrarActivo(i){
 }
 
 function renderConsejero(ing, gas, debo, totalDisp, pn){
-  var nombre = S && S.user ? S.user.nombre.split(' ')[0] : 'tú';
+  var nombre = S && S.user && S.user.nombre ? S.user.nombre.split(' ')[0] : 'tú';
   var balance      = ing - gas;           // flujo neto del periodo
   var balanceLibre = ing - gas - debo;    // flujo descontando deudas
   var tasaAhorro = ing > 0 ? (balance / ing) * 100 : (balance > 0 ? 100 : -100);
